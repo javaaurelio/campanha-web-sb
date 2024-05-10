@@ -146,23 +146,21 @@
 	    '    </td>' +
 	    ' </tr> ';
 		
-		 var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+		 var hashParam = (new URL(location.href)).searchParams.get('hash');
 		
 		 carregarDadosVotacao();
 		 function carregarDadosVotacao() {
 	        
 	    	$(".linhaPesquisaPainelVisualizacao").html('');
-	    	
-	    	
-	    	if (JSON.stringify(idEventoParam)=="null") {
-	    		$("#popupCampanhaMsgErro").html("Erro ! ");
-            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+	    	if (JSON.stringify(hashParam)=="null") {
+	    		$("#popupCampanhaMsgErro").html("Parametro invalido !");
+            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 3000).effect("scale", { times: 1 }, 900).fadeOut('slow');
 	    		
 	    	} else {
 	    		
 				$.ajax({
 		            type: "GET",
-		            url: "${urlApi}/campanha/voto/painelvotacao/evento/"+idEventoParam,
+		            url: "${urlApi}/campanha/voto/painelvotacao/evento/"+hashParam,
 		            success: function(data)
 		            {
 		            	$(".linhaPesquisa").html('');
@@ -194,9 +192,15 @@
 		            },
 		            error: function(data)
 		          	  {
-		            	$("#popupCampanhaMsgErro").html("Evento nao contrado!");
-		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-			            }
+		            	if (data.responseJSON.status == 400) {
+			           	    $("#popupCampanhaMsgAlerta").html(data.responseJSON.message);
+			            	$("#popupCampanhaAlerta").fadeIn('slow').animate({opacity: 1.0}, 3000).effect("scale", { times: 1 }, 900).fadeOut('slow');
+			                
+		            	} else {
+		            		$("#popupCampanhaMsgErro").html("Falha na operacao");
+			                $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 3500).effect("fade", { times: 1}, 10).fadeOut('fade');
+			           	}		            	
+			           }
 			        });
 			 }
 		 }
@@ -234,11 +238,10 @@
 	    		 dadosVotoParam.coordenadas = coordenadas;
 	    		 dadosVotoParam.idMetadadoVoto = $(".idMetadadosVoto").val();
 	    		 dadosVotoParam.dataTela = moment().format();
-		    	
+
+	    		
 	    		 
-	    		//alert(JSON.stringify(dadosVotoParam))
-		    	if (itemSemVoto) {
-		    		
+	    		 if (itemSemVoto) {
 		    		event.preventDefault();
 		    	} else {
 		    		
@@ -249,12 +252,14 @@
 		                contentType: "application/json; charset=utf-8",
 		                success: function(data)
 		                {
+		                	//alert("OK "+JSON.stringify(data));
 		                	$("#qtdPesquisa").html($(".linhaPesquisa tr").length);		
 		                	$("#popupCampanhaSucesso").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
 		                },
 		                
 		                error: function(data)
 		                {
+		                	//alert(JSON.stringify(data))
 		                	$("#popupCampanhaMsgErro").html("Erro ao registrar voto! " + JSON.stringify(data));
 		                    $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
 		                }
@@ -267,26 +272,54 @@
 <body>
 
 
+	<div id="popupCampanhaSucesso" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
+	  <div class="modal-dialog modal-dialog-centered" >
+	    <!-- Modal content-->
+	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
+	      <div class="modal-body">
+	      	  <div class="alert alert-success" role="alert">
+                <i class="bi bi-check-circle me-1"></i>
+                <span id="popupCampanhaMsgSucesso">Sucesso</span>
+              </div>
+	      </div>      
+	    </div>
+	  </div>
+	</div>
+	
 	<div id="popupCampanhaErro" class="modal fade " data-bs-backdrop="static" role="dialog" 
 		style="text-align: center; z-index: 100; ">
-		  <div class="modal-dialog" >
-		    <!-- Modal content-->
-		    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
-		      <div class="modal-body">
-		      	  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-	                <i class="bi bi-exclamation-octagon me-1"></i>
-	                <span id="popupCampanhaMsgErro">Erro</span>
-	              </div>
-		      </div>      
-		    </div>
-		  </div>
-		</div>
+	  <div class="modal-dialog modal-dialog-centered" >
+	    <!-- Modal content-->
+	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
+	      <div class="modal-body">
+	      	  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+	               <i class="bi bi-exclamation-octagon me-1"></i>
+	               <span id="popupCampanhaMsgErro">Erro</span>
+	             </div>
+	      </div>      
+	    </div>
+	  </div>
+	</div>
+	
+	<div id="popupCampanhaAlerta" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
+	  <div class="modal-dialog modal-dialog-centered" >
+	    <!-- Modal content-->
+	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
+	      <div class="modal-body">
+	      	  <div class="alert alert-warning" role="alert">
+                <i class="bi bi-check-circle me-1"></i>
+                <span id="popupCampanhaMsgAlerta">Sucesso</span>
+              </div>
+	      </div>      
+	    </div>
+	  </div>
+	</div>
 
       <div class="modal fade" id="smallModalVotacao" tabindex="-1">
          <div class="modal-dialog ">
            <div class="modal-content">
              <div class="modal-header">
-               <h5 class="modal-title">Votacao</h5>
+               <h5 class="modal-title">Votacao - <i class="bi bi-grid idMetadadosVoto"></i> </h5>
              </div>
              <div class="modal-body">
                

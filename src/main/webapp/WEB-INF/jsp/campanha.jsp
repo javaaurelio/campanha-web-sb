@@ -63,23 +63,33 @@
 		})
  
 		var actions = 
-    		 '<i class="bi bi-arrow-bar-up"></i>'
-    		 +'<i class="bi bi-arrow-bar-down"></i>'
+    		 '<i class="bi bi-arrow-bar-up pesquisaUP"></i>'
+    		 +'<i class="bi bi-arrow-bar-down pesquisaDOWN"></i>'
     	     +' <i class="bi bi-trash deleteItem"></i>'
     	     +'';
         
        var row =     	   
-		    '<tr>'
+		    '<tr data-id="_id_">'
 		    +'   <th scope="row" style="width: 5%">_id_</th>'
-		   + '   <td>_campanha_  <img src="_imagemUrl_" width="70" height="70" alt="...">  </td>'
-		    +'   <td data-datainicio="_dtInicio_" data-datafim="_dtFim_">_dtInicio_ \u00E0 _dtFim_</td>'
-		    +'   <td class="text-center" style="width: 5%" >'
-			    +'<div class="form-check form-switch">'
-			    +'<input class="form-check-input publicar" type="checkbox" id="flexSwitchCheckChecked">'
-			    +'<i class="bi bi-speedometer mostrarDashboard"></i>'
-			    +'<i class="bi bi-tv mostrarPainelVotacao" title="Visualizar painel de votacao"></i>'
-			    +'</div>'
+		   + '   <td data-imagemurl="_imagemUrl_">_campanha_ </td>'
+		   
+		    +'   <td data-datainicio="_dtInicio_" data-datafim="_dtFim_" style="width:15%">_dtInicio_ \u00E0 _dtFim_'
 		    
+		   	+ '<div class="progress">'
+		   	+ '<div class="progress-bar _statusPorcentagemdias_" role="progressbar" style="width: _porcentagemDias_%">_porcentagemDias_%</div>'
+		   	+ '</div>'
+		   	+ '</td>'
+		   	
+		   	
+		    +'   <td class="text-center" style="width: 5%" >'
+				    +'<div class="form-check form-switch">'
+				    +'<input class="form-check-input publicar" type="checkbox" id="flexSwitchCheckChecked__id_" _publicado_>'
+				    +'<div class="spinner-border  text-success spinner-border-sm iconpublicacao__id_" role="status" style="visibility: _visivel_">'
+				    +'<span class="visually-hidden">Loading...</span>'
+				    +'</div>'
+				    +'<i class="bi bi-speedometer mostrarDashboard"></i>'
+				    +'<i class="bi bi-tv mostrarPainelVotacao" title="Visualizar painel de votacao"></i>'
+				    +'</div>'
 		    +'</td>'
 		    +'   <td class="text-center" style="width: 5%"><i class="bi bi-search-heart eventoIcon" id=\'mostrarModalPesquisaCampanha\' "></i> 	</td>'
 		    +'   <td class="text-center" style="width: 5%">                    	  '
@@ -90,7 +100,7 @@
 		    
 		    
        var rowPesquisa =     	   
-    	   '<tr data-codevento="_idEvento_" data-codpesquisa="_idPesquisa_"> ' +
+    	   '<tr data-codevento="_idEvento_" data-codpesquisa="_idPesquisa_" data-ordem="_ordem_" > ' +
 	           '<td> _ordem_ </td>' +
 	           '<td> _pesquisa_ </td>' +
 			   '<td>' + actions + '</td>' +
@@ -115,35 +125,106 @@
 	    '    </td>' +
 	    ' </tr> ';
 
-	    $(document).on("click", ".deleteItemCampanha", function(){
+	    $(document).on("click", ".pesquisaUP", function(){
+
+            var id = $(this).parents("tr").data("codpesquisa");
+                        
+            var method = "PUT";
+   	        var	urlCustomizada="${urlApi}/campanha/pesquisa/ordem/"+id+"/up";
+
+   	        $.ajax({
+               type: method,
+               url: urlCustomizada,
+               success: function(data)
+               {
+	                $("#popupCampanhaSucesso").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
+	               	atualizarTabelasPesquisa();
+               },
+               
+               error: function(data)
+               {
+            	 //alert(JSON.stringify(data.responseJSON.status))   ;
+               	if (data.responseJSON.status == 400) {
+   	           	    $("#popupCampanhaMsgAlerta").html(data.responseJSON.message);
+   	                $("#popupCampanhaAlerta").fadeIn('fade').animate({opacity: 2.0}, 3500).effect("fade", { times: 1}, 10).fadeOut('fade');
+               	} else {
+               		$("#popupCampanhaMsgErro").html("Falha na operacao");
+   	                $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 3500).effect("fade", { times: 1}, 10).fadeOut('fade');
+   	           	}
+               }
+           });
+	    });
+	    
+	    $(document).on("click", ".pesquisaDOWN", function(){
+
+            var id = $(this).parents("tr").data("codpesquisa");
+                        
+            var method = "PUT";
+   	        var	urlCustomizada="${urlApi}/campanha/pesquisa/ordem/"+id+"/down";
+
+   	        $.ajax({
+               type: method,
+               url: urlCustomizada,
+               success: function(data)
+               {
+	                $("#popupCampanhaSucesso").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
+	               	atualizarTabelasPesquisa();
+               },
+               
+               error: function(data)
+               {
+            	   
+            	//alert(JSON.stringify(data.responseJSON.status))   ;
+            	if (data.responseJSON.status == 400) {
+	           	    $("#popupCampanhaMsgAlerta").html(data.responseJSON.message);
+	                $("#popupCampanhaAlerta").fadeIn('fade').animate({opacity: 2.0}, 3500).effect("fade", { times: 1}, 10).fadeOut('fade');
+            	} else {
+            		$("#popupCampanhaMsgErro").html("Falha na operacao");
+	                $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 3500).effect("fade", { times: 1}, 10).fadeOut('fade');
+	           	}
+            	
+               }
+           });
+	    });
+	    
+	    $(document).on("click", ".deleteItemCampanha", function() {
+	    	
+	    	 var idEvento = $(this).parents("tr").find('th').eq(0).html();
+	         var campanha = $(this).parents("tr").find('td').eq(0).html();
+	    	$('#modalDialogo').modal('show');	    	
+	    	
+	    	$('.modalDialogoPerguntaCabecalho').data("idObject", idEvento);
+    		$('.modalDialogoPerguntaCabecalho').data("eventoCustomizado", "deleteItemCampanhaSim");
+    		
+	    	$('.modalDialogoTitulo').html('Deletar campanha');
+	    	$('.modalDialogoPerguntaCabecalho').html("<strong>"+campanha+"</strong>");
+    		$('.modalDialogoPergunta').html('Deseja excluir a campanha ?');	
+	    });
+	    
+	    
+	    $(document).on("deleteItemCampanhaSim", function(event, idObject) {
             
-            var id = $(this).parents("tr").find('th').eq(0).html();
+//             var id = $(this).parents("tr").find('th').eq(0).html();
+            var id = idObject;
             var campanha = $(this).parents("tr").find('td').eq(0).html();
-
+			
    	        var method = "DELETE";
-//   	        var	urlCustomizada="https://64acce2b9edb4181202fd445.mockapi.io/usuario/campanha/"+id;
    	        var	urlCustomizada="${urlApi}/campanha/evento/"+id;
-
    	        //alert (method +  JSON.stringify(id) + urlCustomizada);
    	        $.ajax({
                type: method,
                url: urlCustomizada,
                success: function(data)
                {
-                //console.log(JSON.stringify(data))
-               	$("#popupCampanhaMsgSucesso").html("Excluido com sucesso!");
-            	$("#popupCampanhaSucesso").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
-               	//$(this).parents("tr").remove();
-               	atualizarTabela();
-
+        	       	$("#popupCampanhaMsgSucesso").html("Excluido com sucesso!");
+            		$("#popupCampanhaSucesso").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
+               		atualizarTabela();
                },
                
                error: function(data)
                {
-               	//console.log(JSON.stringify(data))
-               	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-               	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-               
+	               	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+    	           	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
                }
            });
    	        
@@ -172,11 +253,14 @@
 		// #################################################################
 		$(document).on("click", "#mostrarModalPesquisaCampanha", function(){
 
-			var idEvento = $(this).parents('tr').find('th').eq(0).html()
+			var idEvento = $(this).parents('tr').find('th').eq(0).html();
+			
 			$('#nomeCampanhaPergunta').html(
-					idEvento + " - "+$(this).parents('tr').find('td').eq(0).html());
+					idEvento + " - " + $(this).parents('tr').find('td').eq(0).html());
 			
 			$('#nomeCampanhaPergunta').attr("data-codevento", idEvento);
+			$('#nomeCampanhaPergunta').data("codevento", idEvento);
+			$(".linhaPesquisa").html('');
 			$('#PesquisaModal').modal('show');
 			atualizarTabelasPesquisa();
 		});
@@ -187,13 +271,12 @@
 			var qtdPesquisas = 0;
 			$.ajax({
 	            type: "GET",
-	            url: "${urlApi}/campanha/pesquisa",
+	            url: "${urlApi}/campanha/pesquisa/"+idEvento,
 	            success: function(data)
 	            {
 	            	$(".linhaPesquisa").html('');
 	    			//alert(JSON.stringify(data))
-	            	$.each(data.content, function(i, item) {	            		
-	            		if (item.evento.id == idEvento) {
+	            	$.each(data, function(i, item) {	            		
 	            			
 	            			var temp = rowPesquisa;
 	            			
@@ -203,7 +286,6 @@
 							temp = temp.replaceAll("_idEvento_", item.evento.id);
 		        			$(".linhaPesquisa").append(temp);
 		        			qtdPesquisas = qtdPesquisas+1;
-	            		}
 		        		$("#qtdPesquisa").html(qtdPesquisas);
 	            	});
 	            },
@@ -220,9 +302,6 @@
 			
 		}
 		
-		
-		
-		
 	    $(document).on("click", ".mostrarDashboard", function(){
 	    	
 	    	var idEvento = $(this).parents('tr').find('th').eq(0).html()
@@ -230,44 +309,33 @@
 		  
 	    });
 	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
 // 	    ################################################
 // 	    ################ Painel      Votacao############
 // 	    ################################################
 	    $(document).on("click", ".mostrarPainelVotacao", function(){
 		  
 	    	var idEvento = $(this).parents('tr').find('th').eq(0).html();
-	    	var src = $(this).parents('tr').find('img').eq(0).attr('src');
+//	    	var src = $(this).parents('tr').find('img').eq(0).attr('src');
+	    	var src = $(this).parents('tr').find('td[data-imagemurl]').data('imagemurl');
 	    	
 	    	$('.imagemUrl').attr('src', src);
 	    	$(".linhaPesquisaPainelVisualizacao").html('');
 			$.ajax({
 	            type: "GET",
-	            url: "${urlApi}/campanha/pesquisa",
+	            url: "${urlApi}/campanha/pesquisa/"+idEvento,
 	            success: function(data)
 	            {
 	            	$(".linhaPesquisa").html('');
 	    			//alert(JSON.stringify(data))
-	            	$.each(data.content, function(i, item) {	            		
-	            		if (item.evento.id == idEvento) {
-	            			var temp = rowPesquisaPainelVotacao;
-							temp = temp.replaceAll("_codpesquisa_", item.id);	
-							temp = temp.replaceAll("_pesquisa_", item.pesquisa);
-		        			$(".linhaPesquisaPainelVisualizacao").append(temp);
-
-		        			$(".tituloPainelVotacao").text(item.evento.nome);
-		        			$(".descricaoPainelVotacao").text(item.evento.descricao);
-		        			
-		        			reloaddd();
-	            		}
+	            	$.each(data, function(i, item) {	            		
+            			var temp = rowPesquisaPainelVotacao;
+						temp = temp.replaceAll("_codpesquisa_", item.id);	
+						temp = temp.replaceAll("_pesquisa_", item.pesquisa);
+						
+	        			$(".linhaPesquisaPainelVisualizacao").append(temp);
+	        			$(".tituloPainelVotacao").text(item.evento.nome);
+	        			$(".descricaoPainelVotacao").text(item.evento.descricao);
+	        			reloaddd();
 	            	});
 	            },
 	            error: function(data)
@@ -313,18 +381,90 @@
                     $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
                 }
             });
-		     
-		     
-		     
     	});
 	    
-	    
-	    $(document).on("click", ".publicar", function(){
-	    	 
+	    $(document).on("publicarCampanhaSim", function(event, idObject, elementoAlterado){
+	    	$('#modalDialogo').modal('hide');
+	    	var status = $(".publicar").is(":checked");
 	    	
-	    	//smallModalVotacao
-		   
+	    	publicarCampanha(idObject, status, true);
 	    });
+	    
+	    $(document).on("suspenderCampanhaSim", function(event, idObject, elementoAlterado){
+	    	$('#modalDialogo').modal('hide');
+	    	var status = $(".publicar").is(":checked");
+	    	
+	    	publicarCampanha(idObject, status, false);
+	    });
+	    
+        $(document).on("click", ".publicar", function(){
+        	        	
+        	var idEvento = $(this).parents('tr').find('th').eq(0).html();
+	    	var status = $(this).is(":checked");
+	    	
+	    	document.getElementById("flexSwitchCheckChecked_"+idEvento).checked = !status;
+
+	    	$('#modalDialogo').modal('show');
+	    	
+    		   	
+	    	$('.modalDialogoTitulo').val('Publicar campanha');
+	    	$('.modalDialogoPerguntaCabecalho').html($(this).parents('tr').find('td').eq(0).html());
+	    	
+	    	$('.modalDialogoPerguntaCabecalho').data("idObject", idEvento);
+	    	$('.modalDialogoPerguntaCabecalho').html("<strong>"+$(this).parents('tr').find('td').eq(0).html()+"</strong>");
+	    	
+	    	if ( status) {
+	    		$('.modalDialogoPerguntaCabecalho').data("eventoCustomizado", "publicarCampanhaSim");	    		
+	    		$('.modalDialogoPergunta').html('Deseja publicar a campanha ?');	
+	    	} else {
+	    		$('.modalDialogoPerguntaCabecalho').data("eventoCustomizado", "suspenderCampanhaSim");
+	    		$('.modalDialogoPergunta').html('Deseja SUSPENSA a publicacao da campanha ?');
+	    	}
+        });
+     	
+        
+	    
+	    function publicarCampanha(idEvento, statusAtual, statusDesejado) {
+	    	
+	    	$.ajax({
+	            type: "PUT",
+	            url: "${urlApi}/campanha/evento/publicar/"+ idEvento + "/" + statusDesejado,
+                data: "",
+	            success: function(data)
+	            {
+	            	document.getElementById("flexSwitchCheckChecked_"+idEvento).checked = statusDesejado;
+	            	if (statusDesejado) {
+	            	
+	            		$("#popupCampanhaMsgSucesso").html("Publicado com sucesso ! ");
+		            	$("#popupCampanhaSucesso").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+		            	
+		            	
+		            	// Mostrar Modal Informacao
+		            	$('#modalInformacao').modal('show');
+		    	    	$('.modalInformacaoTitulo').val('Publicacao de campanha');
+		    	    	$('.modalInformacaoMensagem1').html("Link painel votacao publica:");
+		    	    	$('.modalInformacaoMensagem2').html(data);
+		    	    	
+		    	    	$('.iconpublicacao_'+idEvento).css('visibility', 'visible');
+		            	// Mostrar Modal Informacao
+		            	
+	            	} else {
+	            		$('.iconpublicacao_'+idEvento).css('visibility', 'hidden');
+	            		$("#popupCampanhaMsgAlerta").html("Publicacao SUSPENSA com sucesso ! ");
+		            	$("#popupCampanhaAlerta").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+	            	}
+	            },
+	            error: function(data)
+	            {
+	            	document.getElementById("flexSwitchCheckChecked_"+idEvento).checked = statusAtual;
+	            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+	            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+	            
+	            }
+	        });
+	    	
+	    }
+	    
 	    
 	    //
 	    //
@@ -333,42 +473,60 @@
 	    // ################################################
 	    $(document).on("click", ".editarItemCampanha", function(){
 	    	
-	    	//alert(JSON.stringify($(this).parents("tr").find('td:eq( 2 )').data('valor')))
-	    	
-	    	
            //	$("#formCampanha :input[name='codigoCampanha']").val( $(this).parents("tr").find('th').eq(0).html() );
+           	$("#formCampanha").find(".btn-primary").html('Atualizar');
            	$(".codigoCampanha").html( 	$(this).parents("tr").find('th').eq(0).html() );
            	
            	$("#formCampanha :input[name='campanha']").val( $(this).parents("tr").find('td').eq(0).html());
-           	$("#formCampanha :input[name='dataInicio']").val( $(this).parents("tr").find('td').eq(1).data('datainicio') );
            	
-           	$("#formCampanha").find(".btn-primary").html('Atualizar');
-           	$("#formCampanha :input[name='dataFim']").val( $(this).parents("tr").find('td').eq(1).data('datafim') );
+           	
+           	var datainicio = $(this).parents("tr").find('td').eq(1).data('datainicio');
+           	$("#formCampanha :input[name='dataInicio']").val( datainicio.split("/").reverse().join("-") );
+           	
+           	var datafim = $(this).parents("tr").find('td').eq(1).data('datafim');
+           	$("#formCampanha :input[name='dataFim']").val( datafim.split("/").reverse().join("-") );
+           	
+           	var src = $(this).parents('tr').find('td[data-imagemurl]').data('imagemurl');           	
+           	$("#formCampanha :input[name='imagemUrl']").val( src );
            	
            	$('.btNovaCampanha').trigger('click', 'edicao');
         });
-		    
+	    
 	    //setTimeout(atualizarTabela, 3000);
 	    
 	    atualizarTabela();
 	    function atualizarTabela() {
 	    	$("#dadosEventosLinhas").html('');
-	    	//alert('atulizar')
 	        $.ajax({
 	            type: "GET",
-	            //url: "https://64acce2b9edb4181202fd445.mockapi.io/usuario/campanha",
 	            url: "${urlApi}/campanha/evento",
 	            success: function(data)
 	            {
-	    			
 	            	$.each(data.content, function(i, item) {
-	            		
 						var temp = row;
 						temp = temp.replaceAll("_id_", item.id);           	
 						temp = temp.replaceAll("_campanha_", item.campanha);           	
 						temp = temp.replaceAll("_dtInicio_", item.dataInicio);           	
 						temp = temp.replaceAll("_dtFim_", item.dataFim);
 						temp = temp.replaceAll("_imagemUrl_", item.imagemUrl);
+						temp = temp.replaceAll("_porcentagemDias_", item.porcentagemDias);
+						
+						if (item.porcentagemDias >= 80 && item.porcentagemDias < 90) {
+							temp = temp.replaceAll("_statusPorcentagemdias_", "bg-warning");
+						} else if (item.porcentagemDias >= 90) {
+							temp = temp.replaceAll("_statusPorcentagemdias_", "bg-danger");
+						}
+						
+						
+						if (item.publicado === true) {
+							temp = temp.replaceAll("_publicado_", "checked");
+							temp = temp.replaceAll("_visivel_", "visible");  
+							
+						} else {
+							temp = temp.replaceAll("_publicado_", "");
+							temp = temp.replaceAll("_visivel_", "hidden");
+						}
+						
 	        			$("#dadosEventosLinhas").append(temp);
 	            	});
 	            },
@@ -448,14 +606,40 @@
      	// ##################   DELETAR PESQUISA ###################
      	// #########################################################
         $(document).on("click", ".deleteItem", function(){
-            
+        	
+        	var id = $(this).parents("tr").data("codpesquisa");
+	    	$('#modalDialogo').modal('show');
+	    	
+    		$('.modalDialogoPergunta').html('Deseja excluir a pesquisa ?');	
+	    	
+	    	$('.modalDialogoTitulo').html('Excluir pesquisa');
+	    	$('.modalDialogoPerguntaCabecalho').data("idObject", id);
+	    	$('.modalDialogoPerguntaCabecalho').data("eventoCustomizado", "deleteItemPesquisa");
+	    	$('.modalDialogoPerguntaCabecalho').html("<strong>"+$(this).parents('tr').find('td').eq(1).html()+"</strong>");
+        	
+        });
+     	
+
+     	//      	############################# Modal Dialogo Acao
+        $(document).on("click", ".executarSim", function(){
+	    	$('#modalDialogo').modal('hide');
+	    	
+	    	var id = $('.modalDialogoPerguntaCabecalho').data("idObject");
+	    	var evento = $('.modalDialogoPerguntaCabecalho').data("eventoCustomizado");
+	    	$(document).trigger(evento,  id);
+	    });
+	   //          ############################ Modal Dialogo Acao
+
+
+     	
+        $(document).on("deleteItemPesquisa", function(event, idObject){
         	//$(this).parents("tr").remove();
             
             $("#qtdPesquisa").html($(".linhaPesquisa tr").length);
             var id = $(this).parents("tr").data("codpesquisa");
             
             var method = "DELETE";
-   	        var	urlCustomizada="${urlApi}/campanha/pesquisa/"+id;
+   	        var	urlCustomizada="${urlApi}/campanha/pesquisa/"+idObject;
 
    	        //alert (method +  JSON.stringify(id) + urlCustomizada);
    	        $.ajax({
@@ -545,11 +729,10 @@
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
 
-    <ul class="sidebar-nav" id="sidebar-nav">
+    
 
         <%@include file="menu.jsp" %>
         
-    </ul>
 
   </aside><!-- End Sidebar-->
 
@@ -567,12 +750,12 @@
     </div><!-- End Page Title -->
     
     
-    <!-- Small Modal -->
+    <!-- Small Modal Painel Votacao -->
        <div class="modal fade" id="smallModalVotacao" tabindex="-1">
          <div class="modal-dialog ">
            <div class="modal-content">
              <div class="modal-header">
-               <h5 class="modal-title">Votacao</h5>
+               <h5 class="modal-title">Votação</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
              </div>
              <div class="modal-body">
@@ -598,7 +781,7 @@
                
              </div>
              <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" id="salvarVotar" data-bs-dismiss="modal">VOTAR</button>
+               <button type="button" class="btn btn-secondary" id="salvarVotar" data-bs-dismiss="modal">FECHAR</button>
              </div>
            </div>
          </div>
@@ -638,20 +821,20 @@
 					              <h5 class="card-title">Eventos</h5>
 					              <p>For custom Bootstrap form validation messages, youâll need to add the <code>novalidate</code> boolean attribute to your <code>&lt;form&gt;</code>. This disables the browser default feedback tooltips, but still provides access to the form validation APIs in JavaScript. </p>
 								
-								<div id="popupCampanhaErro" class="modal fade " data-bs-backdrop="static" role="dialog" 
-								style="text-align: center; z-index: 100; ">
-								  <div class="modal-dialog" >
-								    <!-- Modal content-->
-								    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
-								      <div class="modal-body">
-								      	  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-							                <i class="bi bi-exclamation-octagon me-1"></i>
-							                <span id="popupCampanhaMsgErro">Erro</span>
-							              </div>
-								      </div>      
-								    </div>
-								  </div>
-								</div>
+<!-- 								<div id="popupCampanhaErro" class="modal fade " data-bs-backdrop="static" role="dialog"  -->
+<!-- 								style="text-align: center; z-index: 100; "> -->
+<!-- 								  <div class="modal-dialog" > -->
+<!-- 								    Modal content -->
+<!-- 								    <div class="modal-content" style="border-style: hidden; background-color: transparent;"> -->
+<!-- 								      <div class="modal-body"> -->
+<!-- 								      	  <div class="alert alert-danger alert-dismissible fade show" role="alert"> -->
+<!-- 							                <i class="bi bi-exclamation-octagon me-1"></i> -->
+<!-- 							                <span id="popupCampanhaMsgErro">Erro</span> -->
+<!-- 							              </div> -->
+<!-- 								      </div>       -->
+<!-- 								    </div> -->
+<!-- 								  </div> -->
+<!-- 								</div> -->
 					              
 					              <!-- Custom Styled Validation -->
 					              <form id="formCampanha" class="row g-3 needs-validation" novalidate>
@@ -780,7 +963,7 @@
                   <div class="modal-content">
                     <div class="modal-header">
                     
-                    <h5 class="modal-title">Pesquisa</h5>
+                    <h5 class="modal-title">Cadastros de pesquisa</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     
@@ -823,16 +1006,6 @@
 												  </div>
 												  
 							                </div>
-										
-										
-										
-<!-- 									    <div class="rating"> -->
-<!-- 										  <span valor="5" class="bi-star " id="star11"></span> -->
-<!-- 										  <span valor="4" class="bi-star bi-star-fill" id="star12"></span> -->
-<!-- 										  <span valor="3" class="bi-star bi-star-fill" id="star13"></span> -->
-<!-- 										  <span valor="2" class="bi-star bi-star-fill" id="star14"></span> -->
-<!-- 										  <span valor="1" class="bi-star bi-star-fill" id="star15"></span> -->
-<!-- 										</div> -->
 					                </div>
 					                
 					                <!-- End Custom Styled Validation -->
@@ -911,7 +1084,7 @@
   <!-- ======= Footer ======= -->
   
   <div id="popupCampanhaSucesso" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
-	  <div class="modal-dialog" >
+	  <div class="modal-dialog modal-dialog-centered" >
 	    <!-- Modal content-->
 	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
 	      <div class="modal-body">
@@ -924,12 +1097,26 @@
 	  </div>
 	</div>
 	
+  <div id="popupCampanhaAlerta" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
+	  <div class="modal-dialog " >
+	    <!-- Modal content-->
+	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
+	      <div class="modal-body">
+	      	  <div class="alert alert-warning" role="alert">
+                <i class="bi bi-check-circle me-1"></i>
+                <span id="popupCampanhaMsgAlerta">Sucesso</span>
+              </div>
+	      </div>      
+	    </div>
+	  </div>
+	</div>
+	
   <div id="popupCampanhaErro" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
 	  <div class="modal-dialog" >
 	    <!-- Modal content-->
 	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
 	      <div class="modal-body">
-	      	  <div class="alert alert-erro" role="alert">
+	      	  <div class="alert alert-danger" role="alert">
                 <i class="bi bi-check-circle me-1"></i>
                 <span id="popupCampanhaMsgErro">Erro</span>
               </div>
@@ -937,6 +1124,47 @@
 	    </div>
 	  </div>
 	</div>
+	
+	
+	<div class="modal fade " id="modalDialogo" tabindex="-1">
+     <div class="modal-dialog modal-dialog-centered">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title modalDialogoTitulo"></h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body modalDialogoPerguntaCabecalho">
+         </div>
+         <div class="modal-body modalDialogoPergunta">
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-primary executarSim">Sim</button>
+           <button type="button" class="btn btn-secondary executarNao" data-bs-dismiss="modal">Nao</button>
+         </div>
+       </div>
+     </div>
+   </div><!-- End Modal Dialog Scrollable-->
+   
+   
+   <div class="modal fade" id="modalInformacao" tabindex="-1">
+       <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modalInformacaoTitulo"><strong>Informacao</strong></h5>
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modalInformacaoMensagem1">             
+           </div>
+           <br>
+           <div class="modalInformacaoMensagem2">             
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+           </div>
+         </div>
+       </div>
+     </div>
+   
   
   <%@include file="footer.jsp" %>
 

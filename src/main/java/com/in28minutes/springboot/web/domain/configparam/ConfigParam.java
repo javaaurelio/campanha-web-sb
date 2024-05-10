@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "configparam")
 @Entity(name = "configparam")
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "nome")
 public class ConfigParam {
 	
@@ -21,6 +19,9 @@ public class ConfigParam {
 		super();
 		this.nome = cadastroConfigParam.parametro();
 		this.valor = cadastroConfigParam.valor();
+	}
+	
+	public ConfigParam() {
 	}
 	
 	@NotNull
