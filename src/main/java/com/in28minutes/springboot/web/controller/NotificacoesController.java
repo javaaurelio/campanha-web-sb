@@ -1,7 +1,6 @@
 package com.in28minutes.springboot.web.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

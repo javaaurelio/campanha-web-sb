@@ -14,6 +14,8 @@ import com.in28minutes.springboot.web.controller.infra.ParametrosUtil;
 import com.in28minutes.springboot.web.domain.configparam.ConfigParamRepository;
 import com.in28minutes.springboot.web.service.LoginService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 @SessionAttributes("email")
 public class HomeController {
@@ -32,6 +34,14 @@ public class HomeController {
 	}
 	@RequestMapping(value="/index", method = RequestMethod.GET)
 	public String index(Model model){
+		model.addAttribute("data", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+		model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
+		return "signin";
+	}
+	@RequestMapping(value="/sair", method = RequestMethod.GET)
+	public String sair(Model model, HttpServletRequest request){
+		
+		request.getSession().invalidate();
 		model.addAttribute("data", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 		model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
 		return "signin";

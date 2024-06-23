@@ -2,81 +2,33 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-   <title>Dashboard - NiceAdmin Bootstrap Template</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  
-  
-  <!-- rating -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"/>
-
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-   
-    <style>
-  
-  .modal-backdrop {
-	width: 200vw;
-	height: 200vw;
-  }
-  
-    body { 
-    zoom: 65%; 
-	} 
-	
-	.#center {
-	  text-align: center;
-	}
-	.fa-star {
-	  font-size: 20px;
-	  cursor: pointer;
-	}
-	.checked {
-	  color: green;
-	}
-	
-	.rating span:hover, .rating span:hover ~ span {
-	    color: green;
-	    font-size: 25px;
-	}
-	
-	.rating {
-	    float: left;
-	}
-	.rating span {
-	    font-size: 25px;
-	    cursor: pointer;
-	    float: right;
-	}
-  
-</style>
-   
+	<%@include file="head.jsp" %>  
 </head>
   
   <script>
 	$(document).ready(function() {
+	    $("#smallModalVotacao").modal({
+	        show: false,
+	        backdrop: 'static'
+	    });
 		
 		var coordenadas = {};
-		navigator.geolocation.getCurrentPosition(
+		
+		try {
+			navigator.geolocation.getCurrentPosition(
 					function(data){
 						    coordenadas.timestamp=data.timestamp;
 						    coordenadas.latitude=data.coords.latitude;
 						    coordenadas.longitude=data.coords.longitude;
-							
+						}, function error(err) {
+							  alert("Erro Geo:" + err.code + " - "+ err.message);
 						}
-					)
+				)	
+			
+		} catch(err) {
+		   alert("Erro geolocation:"+JSON.stringify(err));
+		   alert("Erro geolocation-MSG:"+err.message);
+		 }		
 		
 		function reloaddd() {
 		     $(".star1").click(function(){
@@ -161,6 +113,10 @@
 				$.ajax({
 		            type: "GET",
 		            url: "${urlApi}/campanha/voto/painelvotacao/evento/"+hashParam,
+		            headers: {
+		                "ngrok-skip-browser-warning":"69420",
+		                "Aurelio":"Teste"
+		            },
 		            success: function(data)
 		            {
 		            	$(".linhaPesquisa").html('');
@@ -176,7 +132,8 @@
 								temp = temp.replaceAll("_codpesquisa_", item.id);	
 								temp = temp.replaceAll("_pesquisa_", item.pesquisa);
 								
-								$(".idMetadadosVoto").val(item.idMetadadosVoto);
+								$(".idMetadadosVoto").html(item.idMetadadosVoto);
+								
 			        			$(".linhaPesquisaPainelVisualizacao").append(temp);
 		            	});
 		    			
@@ -193,12 +150,18 @@
 		            error: function(data)
 		          	  {
 		            	if (data.responseJSON.status == 400) {
-			           	    $("#popupCampanhaMsgAlerta").html(data.responseJSON.message);
-			            	$("#popupCampanhaAlerta").fadeIn('slow').animate({opacity: 1.0}, 3000).effect("scale", { times: 1 }, 900).fadeOut('slow');
-			                
+			           	    
+		            		Swal.fire({
+		            			  title: "Votacao indisponivel",
+		            			  text: "Obrigado pela sua atencao!",
+		            			  icon: "warning"
+		            			});
 		            	} else {
-		            		$("#popupCampanhaMsgErro").html("Falha na operacao");
-			                $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 3500).effect("fade", { times: 1}, 10).fadeOut('fade');
+		            		Swal.fire({
+		            			  icon: "error",
+		            			  title: "Falha na operacao...",
+		            			  text: "Ja estamos trabalhando para corrigir!"
+		            			});
 			           	}		            	
 			           }
 			        });
@@ -206,6 +169,8 @@
 		 }
 		 
 		 $("#formVoto" ).on("submit", function( event ) {
+			 
+			 try {
 			    
 			 	var itemSemVoto = false;
 		    	votos = [];
@@ -236,35 +201,85 @@
 		    	 dadosVotoParam.listaVoto = votos;
 		    	 dadosVotoParam.pessoa = pessoa;
 	    		 dadosVotoParam.coordenadas = coordenadas;
-	    		 dadosVotoParam.idMetadadoVoto = $(".idMetadadosVoto").val();
+	    		 dadosVotoParam.idMetadadoVoto = $(".idMetadadosVoto").html();
 	    		 dadosVotoParam.dataTela = moment().format();
 
-	    		
+	    		 //alert("Request1 "+JSON.stringify(dadosVotoParam));
 	    		 
 	    		 if (itemSemVoto) {
 		    		event.preventDefault();
 		    	} else {
-		    		
+		    		event.preventDefault();
 			    	$.ajax({
 		                type: "POST",
 		                url: "${urlApi}/campanha/voto",
 		                data: JSON.stringify(dadosVotoParam),
 		                contentType: "application/json; charset=utf-8",
+		                headers: {
+			                "ngrok-skip-browser-warning":"69420",
+			                "Aurelio":"Teste"
+			            },
+		                statusCode: {
+		                    404: function() {
+		                      alert( "page not found" );
+		                    }
+		                  },
+		                beforeSend: function( xhr ) {
+		                	$("#popupCarregando").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
+		                },
 		                success: function(data)
 		                {
 		                	//alert("OK "+JSON.stringify(data));
 		                	$("#qtdPesquisa").html($(".linhaPesquisa tr").length);		
 		                	$("#popupCampanhaSucesso").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
+		                	$('#smallModalVotacao').modal('hide');
+		                	
+		                	
+		                	let timerInterval;
+		                	Swal.fire({
+		                	  title: "Obrigado pelo seu voto!",
+		                	  html: "Ate a proxima votacao...",
+		                	  timer: 3000,
+		                	  timerProgressBar: true,
+		                	  didOpen: () => {
+		                	    Swal.showLoading();
+		                	    const timer = Swal.getPopup().querySelector("b");
+		                	    timerInterval = setInterval(() => {
+		                	      timer.textContent = `${Swal.getTimerLeft()}`;
+		                	    }, 100);
+		                	  },
+		                	  willClose: () => {
+		                	    clearInterval(timerInterval);
+		                	  }
+		                	}).then((result) => {
+		                	  /* Read more about handling dismissals below */
+		                	  if (result.dismiss === Swal.DismissReason.timer) {
+		                	      console.log("I was closed by the timer");
+		                	    }
+		                	});
+		                	
+		                	
+		                	
 		                },
 		                
-		                error: function(data)
+		                error: function(jqXHR, exception)
 		                {
-		                	//alert(JSON.stringify(data))
-		                	$("#popupCampanhaMsgErro").html("Erro ao registrar voto! " + JSON.stringify(data));
+		                	
+		                	alert("Erro1"+JSON.stringify(exception))
+		                	alert("Erro2"+JSON.stringify(jqXHR))
+		                	$("#popupCampanhaMsgErro").html("Erro ao registrar voto! " + JSON.stringify(jqXHR));
 		                    $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
 		                }
 		            });
 		    	}
+	    		 
+				 }
+				 catch(err) {
+				   alert("ErroTry:"+JSON.stringify(err));
+				   alert("ErroTry-MSG:"+err.message);
+				 }
+	    		 
+	    		 
 	    	});
     });
 </script>
@@ -272,48 +287,7 @@
 <body>
 
 
-	<div id="popupCampanhaSucesso" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
-	  <div class="modal-dialog modal-dialog-centered" >
-	    <!-- Modal content-->
-	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
-	      <div class="modal-body">
-	      	  <div class="alert alert-success" role="alert">
-                <i class="bi bi-check-circle me-1"></i>
-                <span id="popupCampanhaMsgSucesso">Sucesso</span>
-              </div>
-	      </div>      
-	    </div>
-	  </div>
-	</div>
 	
-	<div id="popupCampanhaErro" class="modal fade " data-bs-backdrop="static" role="dialog" 
-		style="text-align: center; z-index: 100; ">
-	  <div class="modal-dialog modal-dialog-centered" >
-	    <!-- Modal content-->
-	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
-	      <div class="modal-body">
-	      	  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-	               <i class="bi bi-exclamation-octagon me-1"></i>
-	               <span id="popupCampanhaMsgErro">Erro</span>
-	             </div>
-	      </div>      
-	    </div>
-	  </div>
-	</div>
-	
-	<div id="popupCampanhaAlerta" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
-	  <div class="modal-dialog modal-dialog-centered" >
-	    <!-- Modal content-->
-	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
-	      <div class="modal-body">
-	      	  <div class="alert alert-warning" role="alert">
-                <i class="bi bi-check-circle me-1"></i>
-                <span id="popupCampanhaMsgAlerta">Sucesso</span>
-              </div>
-	      </div>      
-	    </div>
-	  </div>
-	</div>
 
       <div class="modal fade" id="smallModalVotacao" tabindex="-1">
          <div class="modal-dialog ">
@@ -439,6 +413,10 @@
            </div>
          </div>
        </div><!-- End Small Modal-->
+       
+       <!-- ======= Modal ======= -->
+  <%@include file="modal.jsp" %>
+  <!-- ======= Modal ======= -->
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

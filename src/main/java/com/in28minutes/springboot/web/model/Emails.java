@@ -1,7 +1,5 @@
 package com.in28minutes.springboot.web.model;
 
-import java.util.Date;
-
 public class Emails {
 	private String user;
 	private String desc;

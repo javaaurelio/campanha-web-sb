@@ -71,7 +71,7 @@
        var row =     	   
 		    '<tr data-id="_id_">'
 		    +'   <th scope="row" style="width: 5%">_id_</th>'
-		   + '   <td data-imagemurl="_imagemUrl_">_campanha_ </td>'
+		   + '   <td data-imagemurl="_imagemUrl_" data-layout="_layoutPainelVotacao_" data-descricao="_descricao_">_campanha_</td>'
 		   
 		    +'   <td data-datainicio="_dtInicio_" data-datafim="_dtFim_" style="width:15%">_dtInicio_ \u00E0 _dtFim_'
 		    
@@ -80,21 +80,28 @@
 		   	+ '</div>'
 		   	+ '</td>'
 		   	
-		   	
+		  	+ '<td>'
+		  	+ 'Compartilhar link:  <i class="bi bi-copy" data-urlpublicacao="_urlpublicacao_" title="_urlpublicacao_" ></i> <i class="bi bi-facebook"></i> <i class="bi bi-whatsapp"></i>  <br>'
+		  	+ 'Publicado :  <i class="bi bi-sign-stop-fill iconpublicacaostop__id_" style="color: red;  visibility: _visivelstop_"></i> <div class="spinner-border text-success spinner-border-sm iconpublicacao__id_" role="status" style="visibility: _visivel_"></div> <br>'
+		  	+ 'Votos: _qtdVotos_ <br>'
+		  	+ 'Perg Basicas: SIM <br>'
+		  	+ 'Qtd Finaliza: SIM <br>'
+		  	+ 'Qtd Perguntas: _qtdPerguntas_ <br>'
+		  	+ 'Layout Painel Votacao: _layoutPainelVotacao_ <br>'
+		  	+ '</td>' 	
 		    +'   <td class="text-center" style="width: 5%" >'
 				    +'<div class="form-check form-switch">'
-				    +'<input class="form-check-input publicar" type="checkbox" id="flexSwitchCheckChecked__id_" _publicado_>'
-				    +'<div class="spinner-border  text-success spinner-border-sm iconpublicacao__id_" role="status" style="visibility: _visivel_">'
-				    +'<span class="visually-hidden">Loading...</span>'
-				    +'</div>'
-				    +'<i class="bi bi-speedometer mostrarDashboard"></i>'
-				    +'<i class="bi bi-tv mostrarPainelVotacao" title="Visualizar painel de votacao"></i>'
+					    +'<input class="form-check-input publicar" type="checkbox" id="flexSwitchCheckChecked__id_" _publicado_>'
 				    +'</div>'
 		    +'</td>'
 		    +'   <td class="text-center" style="width: 5%"><i class="bi bi-search-heart eventoIcon" id=\'mostrarModalPesquisaCampanha\' "></i> 	</td>'
-		    +'   <td class="text-center" style="width: 5%">                    	  '
+		    
+		    +'  <td class="text-center" style="width: 10%">                    	  '
 		    +'		  <i class="bi bi-pencil editarItemCampanha"></i>'
 		    +'        <i class="bi bi-trash deleteItemCampanha"></i>	'					
+		    +'        <br>	'					
+		    +'        <i class="bi bi-tv mostrarPainelVotacao" title="Visualizar painel de votacao"></i>'
+		    +'        <i class="bi bi-speedometer mostrarDashboard"></i>'
 		    +'   </td>'
 		    +' </tr>';
 		    
@@ -124,7 +131,16 @@
 	    '    <td style="width: 50%">' +	rating +				        
 	    '    </td>' +
 	    ' </tr> ';
-
+	    
+	    
+	    $(document).on("click", ".bi-copy", function() {
+	    	mostrarToastSucesso("Copiado !");
+	    	var urlPublicacao = $(this).data("urlpublicacao");
+	    	navigator.clipboard.writeText(urlPublicacao);
+	    	document.execCommand('copy');
+	    	
+	    });
+	    
 	    $(document).on("click", ".pesquisaUP", function(){
 
             var id = $(this).parents("tr").data("codpesquisa");
@@ -345,7 +361,6 @@
 	            
 	            }
 	        });
-//	    	$('#painelVotacao').modal('show');
 	    	$('#smallModalVotacao').modal('show');
 	    });
 	    
@@ -387,6 +402,22 @@
 	    	$('#modalDialogo').modal('hide');
 	    	var status = $(".publicar").is(":checked");
 	    	
+// 	    	Swal.fire({
+// 		        title: 'Do you want to get data from Github?',
+// 		        text: "Voce quer publicar ?",
+// 		        type: 'warning',
+// 		        showCancelButton: true,
+// 		        allowOutsideClick: false,
+// 		        confirmButtonColor: '#3085d6',
+// 		        cancelButtonColor: '#d33',
+// 		        confirmButtonText: 'Sim',
+// 		        showLoaderOnConfirm: true,
+// 		        allowOutsideClick: () => !Swal.isLoading(),
+// 		        preConfirm: function(){
+// 		            return publicarCampanha(idObject, status, true); //Your ajax function here
+// 		        }
+// 		    });
+
 	    	publicarCampanha(idObject, status, true);
 	    });
 	    
@@ -426,36 +457,56 @@
 	    
 	    function publicarCampanha(idEvento, statusAtual, statusDesejado) {
 	    	
+	    	//mostrarCarregando("Publicando", "Aguarde...", 20000);
+	    	
 	    	$.ajax({
 	            type: "PUT",
 	            url: "${urlApi}/campanha/evento/publicar/"+ idEvento + "/" + statusDesejado,
-                data: "",
+                data: ""+$(location).attr('protocol')+ "//"+$(location).attr('host') + "/painelvotacao?hash=" ,
 	            success: function(data)
 	            {
+	            	swal.close();
+	            	
 	            	document.getElementById("flexSwitchCheckChecked_"+idEvento).checked = statusDesejado;
 	            	if (statusDesejado) {
 	            	
-	            		$("#popupCampanhaMsgSucesso").html("Publicado com sucesso ! ");
-		            	$("#popupCampanhaSucesso").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-		            	
-		            	
-		            	// Mostrar Modal Informacao
-		            	$('#modalInformacao').modal('show');
-		    	    	$('.modalInformacaoTitulo').val('Publicacao de campanha');
-		    	    	$('.modalInformacaoMensagem1').html("Link painel votacao publica:");
-		    	    	$('.modalInformacaoMensagem2').html(data);
+// 	            		$("#popupCampanhaMsgSucesso").html("Publicado com sucesso ! ");
+// 		            	$("#popupCampanhaSucesso").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
 		    	    	
 		    	    	$('.iconpublicacao_'+idEvento).css('visibility', 'visible');
+		    	    	$('.iconpublicacaostop_'+idEvento).css('visibility', 'hidden');
 		            	// Mostrar Modal Informacao
+		            	
+		    	    	Swal.fire({
+		    	    		  title: "Realizado",
+		    	    		  text: "Publicacao efetivada",
+		    	    		  icon: "success",
+		    	    		  timer: 2000,
+		    				  timerProgressBar: true,
+		    	    		}); 
 		            	
 	            	} else {
 	            		$('.iconpublicacao_'+idEvento).css('visibility', 'hidden');
-	            		$("#popupCampanhaMsgAlerta").html("Publicacao SUSPENSA com sucesso ! ");
-		            	$("#popupCampanhaAlerta").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+		    	    	$('.iconpublicacaostop_'+idEvento).css('visibility', 'visible');
+		    	    	
+		    	    	
+		    	    	Swal.fire({
+		    	    		  title: "Realizado",
+		    	    		  text: "Publicacao SUSPENSA com sucesso!",
+		    	    		  icon: "success",
+		    	    		  timer: 2000,
+		    				  timerProgressBar: true,
+		    	    		}); 
 	            	}
 	            },
 	            error: function(data)
 	            {
+	            	Swal.fire({
+	            		  title: "Erro",
+	            		  text: "You clicked the button!",
+	            		  icon: "error"
+	            		});
+	            	
 	            	document.getElementById("flexSwitchCheckChecked_"+idEvento).checked = statusAtual;
 	            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
 	            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
@@ -489,6 +540,12 @@
            	var src = $(this).parents('tr').find('td[data-imagemurl]').data('imagemurl');           	
            	$("#formCampanha :input[name='imagemUrl']").val( src );
            	
+           	var layout = $(this).parents('tr').find('td[data-imagemurl]').data('layout');           	
+           	$('.layoutPainelVotacao').val(layout);
+           	
+           	var descricao = $(this).parents('tr').find('td[data-descricao]').data('descricao');           	
+           	$('.descricao').val(descricao);
+           	
            	$('.btNovaCampanha').trigger('click', 'edicao');
         });
 	    
@@ -500,16 +557,25 @@
 	        $.ajax({
 	            type: "GET",
 	            url: "${urlApi}/campanha/evento",
+	            headers: {
+	                "ngrok-skip-browser-warning":"69420",
+	                "Aurelio":"Teste"
+	            },
 	            success: function(data)
 	            {
 	            	$.each(data.content, function(i, item) {
 						var temp = row;
+						
 						temp = temp.replaceAll("_id_", item.id);           	
 						temp = temp.replaceAll("_campanha_", item.campanha);           	
+						temp = temp.replaceAll("_descricao_", item.descricao);           	
 						temp = temp.replaceAll("_dtInicio_", item.dataInicio);           	
 						temp = temp.replaceAll("_dtFim_", item.dataFim);
 						temp = temp.replaceAll("_imagemUrl_", item.imagemUrl);
+						temp = temp.replaceAll("_urlpublicacao_", item.urlPublicacao);
 						temp = temp.replaceAll("_porcentagemDias_", item.porcentagemDias);
+						temp = temp.replaceAll("_qtdPerguntas_", item.qtdPerguntas);
+						temp = temp.replaceAll("_layoutPainelVotacao_", item.layoutPainelVotacao);
 						
 						if (item.porcentagemDias >= 80 && item.porcentagemDias < 90) {
 							temp = temp.replaceAll("_statusPorcentagemdias_", "bg-warning");
@@ -521,10 +587,12 @@
 						if (item.publicado === true) {
 							temp = temp.replaceAll("_publicado_", "checked");
 							temp = temp.replaceAll("_visivel_", "visible");  
+							temp = temp.replaceAll("_visivelstop_", "hidden");  
 							
 						} else {
 							temp = temp.replaceAll("_publicado_", "");
 							temp = temp.replaceAll("_visivel_", "hidden");
+							temp = temp.replaceAll("_visivelstop_", "visible");  
 						}
 						
 	        			$("#dadosEventosLinhas").append(temp);
@@ -672,6 +740,9 @@
        	        item ["dataInicio"] = $('#formCampanha').find('input[name="dataInicio"]').val();
        	        item ["dataFim"] = $('#formCampanha').find('input[name="dataFim"]').val();
        	        item ["imagemUrl"] = $('#formCampanha').find('input[name="imagemUrl"]').val();
+       	        item ["descricao"] = $('.descricao').val();
+       	        item ["layoutPainelVotacao"] = $('.layoutPainelVotacao').val();
+       	        
        	        var id = $('.codigoCampanha').html();
 
        	        var method = "POST";
@@ -729,9 +800,8 @@
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
 
-    
 
-        <%@include file="menu.jsp" %>
+  <%@include file="menu.jsp" %>
         
 
   </aside><!-- End Sidebar-->
@@ -755,7 +825,7 @@
          <div class="modal-dialog ">
            <div class="modal-content">
              <div class="modal-header">
-               <h5 class="modal-title">Votação</h5>
+               <h5 class="modal-title">Votacao</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
              </div>
              <div class="modal-body">
@@ -819,7 +889,7 @@
 					          <div class="card">
 					            <div class="card-body">
 					              <h5 class="card-title">Eventos</h5>
-					              <p>For custom Bootstrap form validation messages, youâll need to add the <code>novalidate</code> boolean attribute to your <code>&lt;form&gt;</code>. This disables the browser default feedback tooltips, but still provides access to the form validation APIs in JavaScript. </p>
+					              <p> </p>
 								
 <!-- 								<div id="popupCampanhaErro" class="modal fade " data-bs-backdrop="static" role="dialog"  -->
 <!-- 								style="text-align: center; z-index: 100; "> -->
@@ -864,14 +934,45 @@
 					                    Informe uma data valida.
 					                  </div>
 					                </div>
+					                
+					                
+<!-- 					                  <label for="validationCustom01" class="form-label">Imagem(URL) </label> -->
+					                  <div class="input-group col-md-4">
+										 <div class="form-floating mb-3">
+							                  <input type="text" placeholder="Leave a comment here" class="form-control"
+							                   id="validationCustom01" name="imagemUrl" value="" required>
+							                  <label for="floatingTextarea">Imagem (URL)</label>
+		  								</div>	
+		  								<div class="invalid-feedback">
+					                      Informe uma URL valida.
+					                    </div>				                  
+					                </div>
 					                <div class="col-12">
-					                  <label for="validationCustom01" class="form-label">Imagem(URL) </label>
+<!-- 					                  <label for="validationCustom01" class="form-label">Descricao</label> -->
 					                 <div class="input-group col-md-4">
-                      				  <span class="input-group-text ">@</span>
-					                  <input type="text" class="form-control" id="validationCustom01" name="imagemUrl" value="" required>
+					                  
+					                   <div class="form-floating mb-3">
+					                      <textarea class="form-control descricao" id="floatingTextarea" style="height: 100px;" required></textarea>
+					                      <label for="floatingTextarea">Descricao</label>
+					                    </div>
+					                  
 					                  <div class="valid-feedback">
 					                    Looks good!
 					                  </div>
+					                </div>
+					                </div>
+					                <div class="col-12">
+					                  <label for="validationCustom01" class="form-label">Layout Painel Votacao </label>
+					                 <div class="input-group col-md-4">
+                      				  <span class="input-group-text "></span>
+					                  <select class="form-select form-control layoutPainelVotacao" name="layoutPainelVotacao" aria-label="Default select example" id="validationCustom01" value="" required>
+					                      <option selected value="">-- selecione --</option>
+					                      <option value="padrao">Padrao</option>
+					                      <option value="carousel">Carousel</option>
+					                    </select>
+						                 <div class="invalid-feedback">
+						                    Informe uma data valida.
+						                  </div>
 					                </div>
 					                </div>
 					                
@@ -1064,7 +1165,8 @@
                     <th scope="col">#</th>
                     <th scope="col">Evento</th>
                     <th scope="col">Data</th>
-                    <th scope="col">Gestao</th>
+                    <th scope="col">Visao Geral</th>
+                    <th scope="col">Publicar</th>
                     <th scope="col">Pesquisas</th>
                     <th scope="col">Acoes</th>
                   </tr>
@@ -1081,91 +1183,12 @@
 
   </main><!-- End #main -->
 
+  <!-- ======= Modal ======= -->
+  <%@include file="modal.jsp" %>
+  <!-- ======= Modal ======= -->
+  
+  
   <!-- ======= Footer ======= -->
-  
-  <div id="popupCampanhaSucesso" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
-	  <div class="modal-dialog modal-dialog-centered" >
-	    <!-- Modal content-->
-	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
-	      <div class="modal-body">
-	      	  <div class="alert alert-success" role="alert">
-                <i class="bi bi-check-circle me-1"></i>
-                <span id="popupCampanhaMsgSucesso">Sucesso</span>
-              </div>
-	      </div>      
-	    </div>
-	  </div>
-	</div>
-	
-  <div id="popupCampanhaAlerta" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
-	  <div class="modal-dialog " >
-	    <!-- Modal content-->
-	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
-	      <div class="modal-body">
-	      	  <div class="alert alert-warning" role="alert">
-                <i class="bi bi-check-circle me-1"></i>
-                <span id="popupCampanhaMsgAlerta">Sucesso</span>
-              </div>
-	      </div>      
-	    </div>
-	  </div>
-	</div>
-	
-  <div id="popupCampanhaErro" class="modal modalBackground" data-bs-backdrop="static" role="dialog">
-	  <div class="modal-dialog" >
-	    <!-- Modal content-->
-	    <div class="modal-content" style="border-style: hidden; background-color: transparent;">
-	      <div class="modal-body">
-	      	  <div class="alert alert-danger" role="alert">
-                <i class="bi bi-check-circle me-1"></i>
-                <span id="popupCampanhaMsgErro">Erro</span>
-              </div>
-	      </div>      
-	    </div>
-	  </div>
-	</div>
-	
-	
-	<div class="modal fade " id="modalDialogo" tabindex="-1">
-     <div class="modal-dialog modal-dialog-centered">
-       <div class="modal-content">
-         <div class="modal-header">
-           <h5 class="modal-title modalDialogoTitulo"></h5>
-           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body modalDialogoPerguntaCabecalho">
-         </div>
-         <div class="modal-body modalDialogoPergunta">
-         </div>
-         <div class="modal-footer">
-           <button type="button" class="btn btn-primary executarSim">Sim</button>
-           <button type="button" class="btn btn-secondary executarNao" data-bs-dismiss="modal">Nao</button>
-         </div>
-       </div>
-     </div>
-   </div><!-- End Modal Dialog Scrollable-->
-   
-   
-   <div class="modal fade" id="modalInformacao" tabindex="-1">
-       <div class="modal-dialog modal-dialog-centered">
-         <div class="modal-content">
-           <div class="modal-header">
-             <h5 class="modalInformacaoTitulo"><strong>Informacao</strong></h5>
-             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-           </div>
-           <div class="modalInformacaoMensagem1">             
-           </div>
-           <br>
-           <div class="modalInformacaoMensagem2">             
-           </div>
-           <div class="modal-footer">
-             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-           </div>
-         </div>
-       </div>
-     </div>
-   
-  
   <%@include file="footer.jsp" %>
 
  <!-- ======= Footer ======= -->

@@ -24,7 +24,25 @@ public class UsuarioController {
 	@RequestMapping(value="/usuario", method = RequestMethod.GET)
 	public String showLoginPage(ModelMap model){
 		model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
+		model.addAttribute("nomeUsuario", "Fabio");
+		model.addAttribute("perfilUsuario", "Admin");
 		return "cadastrousuario";
+	}
+	
+	@RequestMapping(value="/profile", method = RequestMethod.GET)
+	public String showProfile(ModelMap model){
+		model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
+		model.addAttribute("nomeUsuario", "Fabio");
+		model.addAttribute("perfilUsuario", "Admin");
+		return "users-profile";
+	}
+	
+	@RequestMapping(value="/registrarusuario", method = RequestMethod.GET)
+	public String registrarUsuario(ModelMap model){
+		model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
+		model.addAttribute("nomeUsuario", "Fabio");
+		model.addAttribute("perfilUsuario", "Admin");
+		return "selfRegistrarUsuario";
 	}
 
 }

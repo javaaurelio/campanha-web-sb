@@ -41,6 +41,9 @@ public class LoginController {
 		model.put("name", username);
 		model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
 		
+		
+		
+		
 		return "dashboard";
 	}
 	

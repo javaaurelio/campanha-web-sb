@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.in28minutes.springboot.web.controller.infra.ParametrosUtil;
 import com.in28minutes.springboot.web.domain.configparam.ConfigParam;
 import com.in28minutes.springboot.web.domain.configparam.ConfigParamRepository;
 import com.in28minutes.springboot.web.domain.configparam.DadosCadastroConfigParam;
@@ -34,7 +35,7 @@ public class ConfigParamController {
 	public String cadastrar(@RequestBody @Valid DadosCadastroConfigParam param, ModelMap model) {
 		try {
 			configParamRepository.save(new ConfigParam(param));
-			
+			ParametrosUtil.reset();			
 			List<DadosCadastroConfigParam> lista = configParamRepository.findAll().stream()
 					.map(DadosCadastroConfigParam::new).toList();
 			ArrayList<String> listaParametro =  new ArrayList<String>();

@@ -44,5 +44,10 @@ public class ParametrosUtil {
 		}		 
 		return cache.get(param);
 	}
+	
+	public static void reset() {
+		
+		cache.clear();
+	}
 
 }

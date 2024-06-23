@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.in28minutes.springboot.web.controller.infra.ParametrosUtil;
@@ -25,14 +26,14 @@ public class PainelVotacaoController {
 	ConfigParamRepository configParamRepository;
 	
 	@RequestMapping(value="/painelvotacao", method = RequestMethod.GET)
-	public String campanha(ModelMap model){
+	public String campanha(ModelMap model, @RequestParam("l") String layout){
         model.addAttribute("data", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 		
         model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
+		model.addAttribute("layout", layout);
 		model.addAttribute("nomeUsuario", "Fabio");
 		model.addAttribute("perfilUsuario", "Admin");
-		
-		return "votacao";
+		return "layoutpainelvotacao-"+layout;
 	}
 	
 }
