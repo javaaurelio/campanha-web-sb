@@ -24,7 +24,6 @@
 	        imagesPreview(this, 'div.gallery');
 	    });
 	    
-	    
 		
 		
 	});
@@ -34,13 +33,13 @@
 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
   	<div class="gallery"></div>
      
-   <span class="d-none d-md-block dropdown-toggle ps-2">${nomeUsuario}</span>
+   <span class="d-none d-md-block dropdown-toggle ps-2 nomeUsuarioLogado"></span>
    </a><!-- End Profile Iamge Icon -->
 
    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
      <li class="dropdown-header">
-	   <h6>${nomeUsuario}</h6>
-       <span>${perfilUsuario}</span>
+	   <h6 class='nomeUsuarioLogado'></h6>
+       <span class='perfilUsuarioLogado'></span>
      </li>
      <li>
        <hr class="dropdown-divider">
@@ -67,7 +66,7 @@
      </li>
 
      <li>
-       <a class="dropdown-item d-flex align-items-center" href="sair">
+       <a class="dropdown-item d-flex align-items-center logoutDashboard">
          <i class="bi bi-box-arrow-right"></i>
          <span>Sair</span>
        </a>

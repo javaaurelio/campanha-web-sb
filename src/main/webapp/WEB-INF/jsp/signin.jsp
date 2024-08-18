@@ -2,56 +2,79 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Login - Dashboard</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <%@include file="import-head.jsp" %> 
 </head>
 
-<script type="text/javascript">
+<script>
 
-	sessionStorage.setItem('jwtLocal', "TESTE");
-    var jwtLocal  = "";
+$(document).ready(function(){
+	
+	 $(document).ajaxSend(function (event, jqxhr, settings) {
+		    settings.url = settings.url.replaceAll("#(host_api)", "${urlApi}")
+		    //jqxhr.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUFAtQ2FtcGFuaGEiLCJzdWIiOiJmYWJpbyIsImV4cCI6MTcxOTYwNjExNX0.hZOFlM6wy7gAGvAkP6nMx8NmDcKH65ajMnD3jhXJ-Q5V5BJnC8RfvSbVFmye_SBhjCN27K9W408PkQxVr0upww')
+	});
+
+    $("#formLogin" ).on("submit", function( event ) {
+    	
+    	if (!event.target.checkValidity()) {
+    		event.preventDefault();
+    	} else {
+   	        item = {}
+   	        item ["login"] = $('#formLogin').find('input[name="username"]').val();
+   	        item ["senha"] = $('#formLogin').find('input[name="password"]').val();
+   	        
+   	        var method = "POST";
+   	        var urlCustomizada = "#(host_api)/campanha/login";
+      	    event.preventDefault();
+
+      	    $.ajax({
+               type: method,
+               url: urlCustomizada,
+               contentType: "application/json; charset=utf-8",
+               data: JSON.stringify(item),
+               dataType: 'json' ,
+               success: function(data)
+               {
+            	  sessionStorage.setItem('jwtLocal', data.token	);
+                  window.location.href = "http://localhost:8080/dashboard";
+               },
+               
+               error: function(data)
+               {
+            	   
+            	   if  (data.statusText=='error' && data.status == 0) {
+            			Swal.fire({
+            	  		  title: "Falha na conexao.",
+            	  		  text: "",
+            	  		  icon: "error"
+            		  	});
+            		}
+            	   
+            	   Swal.fire({
+	    	    		  title: "Login ou senha invalidos",
+	    	    		  text: "",
+	    	    		  icon: "error"
+// 	    	    		  timer: 1500,
+// 	    				  timerProgressBar: true
+	    	    	});
+               }
+           });
+    	}
+    	
+    });
+    
+});   
+    
 
 </script>
 
-<body>
+<body >
 
   <main>
     <div class="container">
 
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-        <div class="container">
+        <div class="container" >
           <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
@@ -68,23 +91,23 @@
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Login</h5>
-                    <p class="text-center small">Informe username e senha</p>
+                    <p class="text-center small">Informe Login e Senha</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate method="post" action="/sigini">
+                  <form id="formLogin" class="row g-3 needs-validation" novalidate method="post" action="/sigini">
 
                     <div class="col-12">
                       <label for="yourUsername" class="form-label">login</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" value="teste@teste.com" required>
+                        <input type="text" name="username" class="form-control" id="yourUsername" value="fabio" required>
                         <div class="invalid-feedback">Entre com seu login.</div>
                       </div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" value="123456" required>
+                      <input type="password" name="password" class="form-control" id="yourPassword" value="aurelio" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
 
@@ -98,7 +121,7 @@
                       <button class="btn btn-primary w-100" type="submit">Login</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Don't have account? <a href="registrarusuario">Create an account</a></p>
+                      <p class="small mb-0">Voce ainda nao tem uma conta? <a href="registrarusuario">Criar uma conta</a></p>
                     </div>
                   </form>
 

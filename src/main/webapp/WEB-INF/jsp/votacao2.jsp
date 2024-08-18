@@ -163,7 +163,7 @@
 	    		
 				$.ajax({
 		            type: "GET",
-		            url: "http://localhost:8081/campanha/voto/painelvotacao/evento/"+idEventoParam,
+		            url: "#(host_api)/campanha/voto/painelvotacao/evento/"+idEventoParam,
 		            success: function(data)
 		            {
 		            	$(".linhaPesquisa").html('');
@@ -213,7 +213,7 @@
 			     
 		    	$.ajax({
 	                type: "POST",
-	                url: "http://localhost:8081/campanha/voto",
+	                url: "#(host_api)/campanha/voto",
 	                data: JSON.stringify(votos),
 	                contentType: "application/json; charset=utf-8",
 	                success: function(data)

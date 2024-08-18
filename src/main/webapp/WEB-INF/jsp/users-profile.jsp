@@ -8,40 +8,7 @@
 
 <script>
   
-	$(document).ready(function(){
-		
-		
-		carregarDadosPefil();
-		
-		function carregarDadosPefil() {
-			
-			 $.ajax({
-		            type: "GET",
-		            url: "http://localhost:8081/campanha/usuario/9",
-		            success: function(data)
-		            {
-		            	$('.nome').data('id', data.nome);
-		            	$('.nome').val(data.nome);
-		        		$('.detalheNome').html(data.nome);
-		        		$('.email').val(data.email);
-		        		$('.endereco').val(data.endereco);
-		        		$('.cidade').val(data.cidade);
-		        		$('.uf').val(data.uf);
-		        		$('.cep').val(data.cep);
-		        		$('.dataNascimento').val(data.dataNascimentoDDMMYYYY.split("/").reverse().join("-"));
-		        		
-		        		//$(   $.parseHTML('<img>') ).attr('id', "iconProfile").attr('class', "rounded-circle").attr('src', event.target.result).appendTo(placeToInsertImagePreview);
-		            },
-		            error: function(data)
-		            {
-		            	alert("Erro dados usuario")
-		            	
-		            	
-		            }
-		        });
-			
-			
-		}
+	$(document).ready(function() {
 		
 		var imagesPreview = function(input, placeToInsertImagePreview) {
 
@@ -55,11 +22,9 @@
 	                reader.onload = function(event) {
 	                    $(   $.parseHTML('<img>') ).attr('id', "iconProfile").attr('class', "rounded-circle").attr('src', event.target.result).appendTo(placeToInsertImagePreview);
 	                }
-
 	                reader.readAsDataURL(input.files[i]);
 	            }
 	        }
-
 	    };
 
 	    $('#gallery-photo-add').on('change', function() {
@@ -74,7 +39,7 @@
 	    	
     	  var base64Imagem = $('#iconProfile').attr('src');
     		 Swal.fire({
-	        	  title: "Tem certeza que deseja atualizar seu Profile ?",
+	        	  title: "Tem certeza que deseja atualizar seu perfil ?",
 	        	  showDenyButton: true,
 	        	  showCancelButton: false,
 	        	  confirmButtonText: "Sim",
@@ -84,7 +49,7 @@
 	        		  
 	        		  $.ajax({
 	      	            type: "PUT",
-	      	            url: "http://localhost:8081/campanha/usuario/imagem/perfil/9",
+	      	            url: "#(host_api)/campanha/usuario/logado/imagem/perfil",
 	      	            contentType: "application/json; charset=utf-8",
 	      	            data: base64Imagem,
 	      	            success: function(data)
@@ -107,6 +72,121 @@
 	        	  }
 	        	});
 	        
+	    });
+	    
+	    
+	    $('.novaSenhaRepetir').keyup(function () {
+
+	        if ($('.novaSenha').val() === $('.novaSenhaRepetir').val()) {
+	            $('.valido').show();
+	            $('.invalido').hide();
+	        } else {
+	        	$('.valido').hide();
+	            $('.invalido').show();
+	        }
+	    });
+	    
+	    $('.novaSenha').keyup(function () {
+
+	        if ($('.novaSenha').val() === $('.novaSenhaRepetir').val()) {
+	            $('.valido').show();
+	            $('.invalido').hide();
+	        } else {
+	        	$('.valido').hide();
+	            $('.invalido').show();
+	        }
+	    });
+	    
+	    $("#formAtualizarSenha" ).on("submit", function( event ) {
+	    	
+	    	if (!event.target.checkValidity()) {
+	    		  event.preventDefault()
+	              event.stopPropagation()
+	    	} else {
+	    		
+	   	        item = {}
+	   	        item ["senhaAtual"] = $('.senhaAtual').val();
+	   	        item ["novaSenha"] = $('.novaSenha').val();
+	   	        
+	   	        var method = "PUT";
+	   	        var urlCustomizada = "#(host_api)/campanha/usuario/logado/perfil/senha";
+		   	     event.preventDefault();
+	             event.stopPropagation();
+	   	        $.ajax({
+	               type: method,
+	               url: urlCustomizada,
+	               data: JSON.stringify(item),
+	               dataType: 'json' ,
+	               success: function(data)
+	               {
+	            	   Swal.fire({
+	      	 	    		  title: "Realizado",
+	      	 	    		  text: "Atualizado",
+	      	 	    		  icon: "success",
+	      	 	    		  timer: 1000,
+	      	 				  timerProgressBar: true,
+	      	 	    		});
+	               },
+	               error: function(data)
+	               {
+	            	   console.log(data.responseJSON)
+	            	   Swal.fire({
+		    	    		  title: data.responseJSON.message,
+		    	    		  text: data.message,
+		    	    		  icon: "error"
+		    	    	});
+	               }
+	           });
+	    	}
+	    	
+	    });
+	    
+	    $(".formularioUsuario" ).on("submit", function( event ) {
+	    	
+	    	if (!event.target.checkValidity()) {
+	    		  event.preventDefault()
+	              event.stopPropagation()
+	    	} else {
+	    		
+	   	        item = {}
+	   	        item ["nome"] = $('.nome').val();
+	   	        item ["email"] = $('.email').val();
+	   	        item ["dataNascimento"] = $('.dataNascimento').val();
+	   	        item ["cidade"] = $('.cidade').val();
+	   	        item ["endereco"] = $('.endereco').val();
+	   	        
+	   	        
+	   	        var method = "PUT";
+	   	        var urlCustomizada = "#(host_api)/campanha/usuario/logado/perfil";
+		   	     event.preventDefault();
+	             event.stopPropagation();
+	   	        $.ajax({
+	               type: method,
+	               url: urlCustomizada,
+	               data: JSON.stringify(item),
+	               dataType: 'json' ,
+	               success: function(data)
+	               {
+	            	   Swal.fire({
+	      	 	    		  title: "Realizado",
+	      	 	    		  text: "Atualizado",
+	      	 	    		  icon: "success",
+	      	 	    		  timer: 1000,
+	      	 				  timerProgressBar: true,
+	      	 	    		});
+	               },
+	               error: function(data)
+	               {
+	            	   console.log(data)
+	            	   Swal.fire({
+		    	    		  title: "ERRO",
+		    	    		  text: data.message,
+		    	    		  icon: "error"
+		    	    	});
+	               }
+	           });
+	    	}
+	    	
 	    });
 		
 		
@@ -152,7 +232,7 @@
                 <input type="file" id="gallery-photo-add" style="visibility: hidden;">
                 
               <h2 class="detalheNome"></h2>
-              <h3 class="detalhePerfil">Administrador</h3>
+              <h3 class="detalhePerfil"></h3>
               <div class="social-links mt-2">
                 <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
                 <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
@@ -203,17 +283,17 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Endereco</div>
-                    <div class="col-lg-9 col-md-8">Brasilia</div>
+                    <div class="col-lg-9 col-md-8 detalheEndereco"></div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Telefone</div>
-                    <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
+                    <div class="col-lg-9 col-md-8 detalheTelefone" ></div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
+                    <div class="col-lg-9 col-md-8 detalheEmail"></div>
                   </div>
 
                 </div>
@@ -266,7 +346,7 @@
                     <div class="row mb-3">
                       <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Telefone</label>
                       <div class="col-md-8 col-lg-9">
-                         <input type="text" class="form-control telefone" id="floatingCity" placeholder="Fone" required>
+                         <input type="text" class="form-control telefone" id="floatingCity" placeholder="Fone" >
                       </div>
                     </div>
 
@@ -356,31 +436,37 @@
 
                 <div class="tab-pane fade pt-3" id="profile-change-password">
                   <!-- Change Password Form -->
-                  <form>
+                  <form id="formAtualizarSenha" class="row g-3 needs-validation" method="post" action="/atulizar" novalidate>
 
-                    <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Senha atual</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword">
-                      </div>
-                    </div>
+                    <div class="col-md-3">
+	                  <label for="validationCustom01" class="form-label">Senha atual</label>
+	                 <div class="input-group col-md-4">
+                       <span class="input-group-text codigoCampanha"></span>
+	                   <input type="password" class="form-control senhaAtual" id="validationCustom01" name="senhaAtual" value="" required>
+	                </div>
+	                </div>
+	                
+                    <div class="col-md-4">
+	                  <label for="validationCustom01" class="form-label">Nova senha</label>
+	                  <div class="input-group col-md-4">
+                       <span class="input-group-text codigoCampanha"></span>
+	                   <input type="password" class="form-control novaSenha" id="validationCustom01" name="novaSenha" value="" required>
+	                 </div>
 
-                    <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Nova Senha</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="newpassword" type="password" class="form-control" id="newPassword">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Nova senha - verificacao</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="renewPassword">
-                      </div>
-                    </div>
+                    <label for="validationCustom01" class="form-label">Repetir nova senha</label>
+	                 <div class="input-group col-md-4">
+                       <span class="input-group-text codigoCampanha"></span>
+	                   <input type="password" class="form-control novaSenhaRepetir" id="validationCustom01" name="novaSenhaRepetir" value="" required>
+	                </div>
+	                 <div class="input-group col-md-4">
+                        <div class="valid-feedback valido">Confere</div>
+      					<div class="invalid-feedback invalido">Nao confere</div>
+	                </div>
+	                </div>
+	                
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Change Password</button>
+                      <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                   </form><!-- End Change Password Form -->
 

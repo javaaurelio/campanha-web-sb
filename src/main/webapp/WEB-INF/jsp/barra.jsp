@@ -7,20 +7,62 @@
 		       	$(".badgeQtdPreCadastro").html('');
 		        $.ajax({
 		            type: "GET",
-		            url: "http://localhost:8081/campanha/usuario/totalPreCadastroPendente",
+		            url: "#(host_api)/campanha/usuario/totalPreCadastroPendente",
 		            success: function(data)
 		            {
 		            	$(".badgeQtdPreCadastro").html(data);
 		            },
 		            
-		            error: function(data)
+		            error: function(data, as)
 		            {
 		            	$(".badgeQtdPreCadastro").html(data);            	
 		            }
 		        });
 			 };
-		carregarQtdPreCadastro();
+// 		carregarQtdPreCadastro();
 		window.setInterval('carregarQtdPreCadastro()', 10000); // 10 seconds
+		
+		
+		carregarDadosPefil();
+		function carregarDadosPefil() {
+			
+			 $.ajax({
+		            type: "GET",
+		            url: "#(host_api)/campanha/usuario/logado/perfil",
+		            success: function(data)
+		            {
+		            	console.log(data)
+		            	$('.nome').data('id', data.id);
+		            	$('.nome').val(data.nome);
+		            	
+		        		$('.nomeUsuarioLogado').html(data.nome);
+		        		$('.detalheNome').html(data.nome);
+		        		
+		        		$('.email').val(data.email);
+		        		$('.detalheEmail').html(data.email);
+		        		
+		        		$('.endereco').val(data.endereco);
+		        		$('.detalheEndereco').html(data.endereco);
+		        		
+		        		
+		        		$('.cidade').val(data.cidade);
+		        		$('.uf').val(data.uf);
+		        		$('.cep').val(data.cep);
+		        		$('.dataNascimento').val(data.dataNascimentoDDMMYYYY.split("/").reverse().join("-"));
+		        		
+		        		$('.gallery').html('<img id="iconProfile" class="rounded-circle" src="'+ data.perfilBase64Imagem +'">');
+		        		
+		            },
+		            error: function(data)
+		            {
+		            	Swal.fire({
+		            		  title: "Falha ao carregar dados do usuario.",
+		            		  text: "",
+		            		  icon: "error"
+		          	  	});
+		            }
+		        });
+		}
 		
 	});
 </script>
@@ -206,12 +248,13 @@
 
 <!--         </li>End Messages Nav -->
 
-        <li class="nav-item dropdown pe-3">
+         <li class="nav-item dropdown pe-3">
 
           	<%@include file="perfilwidget.jsp" %>  
           
           
         </li><!-- End Profile Nav -->
+        
 	
       </ul>
     </nav><!-- End Icons Navigation -->

@@ -2,12 +2,28 @@
 <html lang="en">
 
 <head>
-  <%@include file="head.jsp" %>  
+    <%@include file="import-head.jsp" %> 
 </head>
 
 
  <script>
      $(document).ready(function(){
+    	 
+    	 $(document).ajaxSend(function(event, jqxhr, settings) {
+    			settings.url = settings.url.replaceAll("#(host_api)", "${urlApi}")
+    			jqxhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+    			jqxhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
+
+   				sessionStorage.removeItem("jwtLocal");
+
+   		});
+    	 
+    	 $.ajaxSetup(
+    				{
+    					timeout: 60000,
+    					dataType: 'json'
+    				}
+    			);
     	 
     	 $(".formularioSelfCadastroUsuario" ).on("submit", function( event ) {
 	        	
@@ -17,23 +33,22 @@
 	        		dadosCadastroUsuario = {}
 	        		dadosCadastroUsuario ["nome"] = $('.nome').val();
 	        		dadosCadastroUsuario ["email"] = $('.email').val();
-	        		dadosCadastroUsuario ["usuario"] = $('.usuario').val();
+	        		dadosCadastroUsuario ["login"] = $('.usuario').val();
 	        		dadosCadastroUsuario ["senha"] = $('.senha').val();
 	       	        
 	       	        var method = "POST";
-	       	        var urlCustomizada = "http://localhost:8081/campanha/usuario/selfregistration";
+	       	        var urlCustomizada = "#(host_api)/campanha/usuario/selfregistration";
 	          	    event.preventDefault();
 	       	        
 	       	        $.ajax({
 	                   type: method,
 	                   url: urlCustomizada,
-	                   contentType: "application/json; charset=utf-8",
 	                   data: JSON.stringify(dadosCadastroUsuario),
 	                   success: function(data)
 	                   {
 	                      
 	                      Swal.fire({
-	                    	  title: "Pre-cadastro realizado com sucesso!",
+	                    	  title: "Pré-cadastro realizado com sucesso!",
 		    	    		  text: "Verifique sua caixa de email. Se nao for confirmado em 48h o pre-cadastro deve ser realizado novamente! ",
 		    	    		  icon: "success",
 							  confirmButtonText: "Entendi",
@@ -46,10 +61,12 @@
 	                   },	                   
 	                   error: function(data)
 	                   {
-	                   	//console.log(JSON.stringify(data))
-	                   	$("#popupCampanhaMsgErro").html(JSON.stringify(data));
-	                   	$("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
-	                   
+	                	   console.log(data)
+	                	   Swal.fire({
+	             	  		  title: "Falha na operacao.",
+	             	  		  text: "",
+	             	  		  icon: "error"
+	             		  	});
 	                   }
 	               });
 	       	        
@@ -104,7 +121,7 @@
                     </div>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">User name</label>
+                      <label for="yourUsername" class="form-label">Login</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
                         <input type="text" class="form-control usuario" placeholder="Seu User Name" required>
@@ -129,7 +146,7 @@
                       <button class="btn btn-primary w-100" type="submit">Criar conta</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Voce ja tem uma conta ? <a href="pages-login.html">Logar</a></p>
+                      <p class="small mb-0">Voce ja tem uma conta ? <a href="/">Logar</a></p>
                     </div>
                   </form>
 

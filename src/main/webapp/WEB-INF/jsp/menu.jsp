@@ -8,12 +8,12 @@
       </li><!-- End Dashboard Nav -->
       
       
-      <li class="nav-item">
-        <a class="nav-link " href="/campanha">
-          <i class="bi bi-grid"></i>
-          <span>Gestao Campanhas</span>
-        </a>
-      </li>
+<!--       <li class="nav-item"> -->
+<!--         <a class="nav-link " href="/campanha"> -->
+<!--           <i class="bi bi-grid"></i> -->
+<!--           <span>Gestao Campanhas</span> -->
+<!--         </a> -->
+<!--       </li> -->
       
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav-cadastro" data-bs-toggle="collapse" href="#">
@@ -25,6 +25,11 @@
 	              <i class="bi bi-circle"></i><span>Usuario</span>
 	            </a>
 	          </li>
+<!-- 	          <li> -->
+<!-- 	            <a href="/comunidade"> -->
+<!-- 	              <i class="bi bi-circle"></i><span>Comunidade</span> -->
+<!-- 	            </a> -->
+<!-- 	          </li> -->
 <!-- 	          <li> -->
 <!-- 	            <a href="components-accordion.html"> -->
 <!-- 	              <i class="bi bi-circle"></i><span>Accordion</span> -->

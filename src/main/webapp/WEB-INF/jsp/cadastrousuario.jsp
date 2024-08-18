@@ -40,9 +40,9 @@
     		    +'   </td>'
                '  </tr>';
                
-               var urlCustomizada = "http://localhost:8081/campanha/usuario";
+               var urlCustomizada = "#(host_api)/campanha/usuario";
                if (paginaAtual != null && paginaDestino != null) {
-            	   urlCustomizada = "http://localhost:8081/campanha/usuario?page="+ paginaDestino; 
+            	   urlCustomizada = "#(host_api)/campanha/usuario?page="+ paginaDestino; 
                }                
             
             $("#listaUsuarios").html('');
@@ -102,7 +102,7 @@
 	         
 	   	     $.ajax({
 	            type: "GET",
-	            url: "http://localhost:8081/campanha/usuario/"+id,
+	            url: "#(host_api)/campanha/usuario/"+id,
 	            success: function(data)
 	            {
 	            	$('.nome').data('id', data.id);
@@ -153,7 +153,7 @@
 	        		  $.ajax({
 	      	            type: "Delete",
 //	       	            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam,
-	      	            url: "http://localhost:8081/campanha/usuario/"+id,
+	      	            url: "#(host_api)/campanha/usuario/"+id,
 	      	            success: function(data)
 	      	            {
 	      	            	      	            	
@@ -212,11 +212,11 @@
 	       	        
 	       	        var method = "POST";
 	       	        //var urlCustomizada = "https://64acce2b9edb4181202fd445.mockapi.io/usuario/campanha";
-	       	        var urlCustomizada = "http://localhost:8081/campanha/usuario";
+	       	        var urlCustomizada = "#(host_api)/campanha/usuario";
 	       	        
 	       	        if (id > 0) {
 	       	        	method = "PUT";
-	       	        	urlCustomizada="http://localhost:8081/campanha/usuario/"+id;
+	       	        	urlCustomizada="#(host_api)/campanha/usuario/"+id;
 // 	       	        	urlCustomizada="${urlApi}/campanha/evento/"+id;
 	       	        }
 	          	     event.preventDefault();

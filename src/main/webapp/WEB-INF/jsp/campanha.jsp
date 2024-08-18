@@ -133,7 +133,7 @@
 	    ' </tr> ';
 	    
 	    
-	    $(document).on("click", ".bi-copy", function() {
+	    $(document).on("click", ".bi-copy_", function() {
 	    	mostrarToastSucesso("Copiado !");
 	    	var urlPublicacao = $(this).data("urlpublicacao");
 	    	navigator.clipboard.writeText(urlPublicacao);
@@ -457,7 +457,7 @@
 	    
 	    function publicarCampanha(idEvento, statusAtual, statusDesejado) {
 	    	
-	    	//mostrarCarregando("Publicando", "Aguarde...", 20000);
+	    	mostrarCarregando("Publicando", "Aguarde...", 20000);
 	    	
 	    	$.ajax({
 	            type: "PUT",
@@ -619,7 +619,7 @@
      	// ######################################################
      	// ######################################################
      	
-        $(".salvarPesquisa").click(function(){
+        $(".salvarPesquisa_").click(function(){
         	
     		//var index = $(".linhaPesquisa").find('tr').index();
     		//var index = $(".linhaPesquisa tbody tr:last-child").index();
@@ -730,7 +730,7 @@
             
         });
         
-        $("#formCampanha" ).on("submit", function( event ) {
+        $("_#formCampanha" ).on("submit", function( event ) {
         	
         	if (!event.target.checkValidity()) {
         		event.preventDefault();
@@ -746,7 +746,6 @@
        	        var id = $('.codigoCampanha').html();
 
        	        var method = "POST";
-       	        //var urlCustomizada = "https://64acce2b9edb4181202fd445.mockapi.io/usuario/campanha";
        	        var urlCustomizada = "${urlApi}/campanha/evento";
        	        
        	        if (id > 0) {

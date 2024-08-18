@@ -125,16 +125,20 @@
 	    		
 				$.ajax({
 		            type: "GET",
-		            url: "#(host_api)/campanha/voto/painelvotacao/evento/"+hashParam,
-		            contentType: "application/json; charset=utf-8",
-	                dataType: 'json',
-// 		            headers: {
-// 		                "ngrok-skip-browser-warning":"69420"
-// 		            }      ,
+		            url: "${urlApi}/campanha/voto/painelvotacao/evento/"+hashParam,
+		            headers: {
+		                "ngrok-skip-browser-warning":"69420",
+		                "Aurelio":"Teste"
+		            },
 		            success: function(data)
 		            {
 		            	$(".linhaPesquisa").html('');
+		    			//alert(JSON.stringify(data))
+		    			
 		            	$.each(data, function(i, item) {
+		            		
+		            		
+		            		
 		            		
 				    			$('.imagemUrl').attr('src', item.evento.imagemUrl);
 				    			$(".tituloPainelVotacao").text(item.evento.nome);
@@ -224,14 +228,26 @@
 		    		event.preventDefault();
 			    	$.ajax({
 		                type: "POST",
-		                url: "#(host_api)/campanha/voto",
+		                url: "${urlApi}/campanha/voto",
 		                data: JSON.stringify(dadosVotoParam),
 		                contentType: "application/json; charset=utf-8",
-		                dataType: 'json' ,
+		                headers: {
+			                "ngrok-skip-browser-warning":"69420",
+			                "Aurelio":"Teste"
+			            },
+		                statusCode: {
+		                    404: function() {
+		                      alert( "page not found" );
+		                    }
+		                  },
+		                beforeSend: function( xhr ) {
+		                	$("#popupCarregando").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
+		                },
 		                success: function(data)
 		                {
 		                	//alert("OK "+JSON.stringify(data));
 		                	$("#qtdPesquisa").html($(".linhaPesquisa tr").length);		
+		                	$("#popupCampanhaSucesso").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
 		                	$('#smallModalVotacao').modal('hide');
 		                	
 		                	
@@ -245,7 +261,7 @@
 		                	    Swal.showLoading();
 		                	    const timer = Swal.getPopup().querySelector("b");
 		                	    timerInterval = setInterval(() => {
-		                	      timer.textContent = '0';
+		                	      timer.textContent = `${Swal.getTimerLeft()}`;
 		                	    }, 100);
 		                	  },
 		                	  willClose: () => {
@@ -265,22 +281,18 @@
 		                error: function(jqXHR, exception)
 		                {
 		                	
-		                	Swal.fire({
-			            		  title:data.responseJSON.message,
-			            		  text: "Falha na operacao",
-			            		  icon: "error"
-			            	});
-		                	
-		                	//alert("Erro1"+JSON.stringify(exception))
-		                	//alert("Erro2"+JSON.stringify(jqXHR))
+		                	alert("Erro1"+JSON.stringify(exception))
+		                	alert("Erro2"+JSON.stringify(jqXHR))
+		                	$("#popupCampanhaMsgErro").html("Erro ao registrar voto! " + JSON.stringify(jqXHR));
+		                    $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
 		                }
 		            });
 		    	}
 	    		 
 				 }
 				 catch(err) {
-				  // alert("ErroTry:"+JSON.stringify(err));
-				   //alert("ErroTry-MSG:"+err.message);
+				   alert("ErroTry:"+JSON.stringify(err));
+				   alert("ErroTry-MSG:"+err.message);
 				 }
 	    		 
 	    		 
@@ -297,7 +309,7 @@
          <div class="modal-dialog ">
            <div class="modal-content">
              <div class="modal-header">
-               <h5 class="modal-title">Votacao - #<i class="idMetadadosVoto"></i> </h5>
+               <h5 class="modal-title">Votacao - <i class="bi bi-grid idMetadadosVoto"></i> </h5>
              </div>
              <div class="modal-body">
                

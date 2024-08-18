@@ -35,11 +35,165 @@
   height: 100vh;
   overflow: hidden;
 }
+
+
 </style>
+
+<style>
+#chartdiv {
+  width: 100%;
+  height: 600px
+}
+</style>
+
+
+
+
+<link href="jquery.orgchart.css" rel="stylesheet">
+
+
+
+
+<!-- Resources -->
+<script src="./local/map/index.js"></script>
+<script src="./local/map/map.js"></script>
+<script src="./local/map/worldLow.js"></script>
+<script src="./local/map/Animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am5.ready(function() {
+
+var data = [
+	{
+	    id: "BR",
+	    name: "Brasil",
+	    value: 100
+	},
+	  
+	{
+	    id: "CL",
+	    name: "Chile",
+	    value: 100
+	},
+	{
+	    id: "AR",
+	    name: "Argentina",
+	    value: 100
+	}
+];
+
+var root = am5.Root.new("chartdiv");
+root.setThemes([am5themes_Animated.new(root)]);
+
+var chart = root.container.children.push(am5map.MapChart.new(root, {}));
+
+var polygonSeries = chart.series.push(
+  am5map.MapPolygonSeries.new(root, {
+    geoJSON: am5geodata_worldLow,
+    exclude: ["AQ"]
+  })
+);
+
+var bubbleSeries = chart.series.push(
+  am5map.MapPointSeries.new(root, {
+    valueField: "value",
+    calculateAggregates: true,
+    polygonIdField: "id"
+  })
+);
+
+var circleTemplate = am5.Template.new({});
+
+bubbleSeries.bullets.push(function(root, series, dataItem) {
+  var container = am5.Container.new(root, {});
+  
+  var circle = container.children.push(
+    am5.Circle.new(root, {
+      radius: 20,
+      fillOpacity: 0.7,
+      fill: am5.color(0x00ff99),
+      cursorOverStyle: "pointer",
+      tooltipText: '{name}: [bold]{value}[/]',
+      panX: "rotateX",
+      wheelY: "none"
+    }, circleTemplate)
+  );
+
+  var countryLabel = container.children.push(
+    am5.Label.new(root, {
+      text: "{name}",
+      paddingLeft: 5,
+      populateText: true,
+      fontWeight: "bold",
+      fontSize: 13,
+      centerY: am5.p50
+    })
+  );
+
+  circle.on("radius", function(radius) {
+    countryLabel.set("x", radius);
+  })
+
+  return am5.Bullet.new(root, {
+    sprite: container,
+    dynamic: true
+  });
+});
+
+bubbleSeries.bullets.push(function(root, series, dataItem) {
+  return am5.Bullet.new(root, {
+    sprite: am5.Label.new(root, {
+      text: "{value.formatNumber('#.')}",
+      fill: am5.color(0xffffff),
+      populateText: true,
+      centerX: am5.p50,
+      centerY: am5.p50,
+      textAlign: "center"
+    }),
+    dynamic: true
+  });
+});
+
+
+
+// minValue and maxValue must be set for the animations to work
+bubbleSeries.set("heatRules", [
+  {
+    target: circleTemplate,
+    dataField: "value",
+    min: 10,
+    max: 50,
+    minValue: 0,
+    maxValue: 100,
+    key: "radius"
+  }
+]);
+
+
+bubbleSeries.data.setAll(data);
+
+updateData();
+
+function updateData() {
+  for (var i = 0; i < bubbleSeries.dataItems.length; i++) {
+    bubbleSeries.data.setIndex(i, { value: Math.round(Math.random() * 100), id: data[i].id, name: data[i].name })
+  }
+}
+
+
+}); // end am5.ready()
+</script>
+
 
 <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script>
 	$(document).ready(function(){
+		
+		
+		$( ".am5-layer-30" ).remove();
+		
+		
 
 // 		##########################################
 // 		############Carregamento Principal #######
@@ -393,7 +547,10 @@
    		  	if (dataSelecionada) {
    		  	     dataSelecionadaUrl = "/" + dataSelecionada;
    		  	}
-   		  
+
+   		  	// http://localhost:8081/campanha/dashboardevento/33/grafico/barra/hora24/2024-07-16
+
+
              var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
  		      $.ajax({
  		            type: "GET",
@@ -415,8 +572,8 @@
  	        			          data: seriesData
  	        			        }],
  	        			          chart: {
- 	        			          height: 350,
- 	        			          type: 'bar'
+ 	        			              height: 350,
+ 	        			              type: 'bar'
  	        			        },
  	        			        plotOptions: {
  	        			          bar: {
@@ -441,6 +598,9 @@
  	        			        xaxis: {
  	        			          categories: categoriesData,
  	        			          position: 'top',
+ 	        			          labels: {
+ 	        			            format: 'dd-MM-yyyy'
+ 	        			          },
  	        			          axisBorder: {
  	        			            show: false
  	        			          },
@@ -474,7 +634,8 @@
  	        			            show: true,
  	        			            formatter: function (val) {
  	        			              return val + "";
- 	        			            }
+ 	        			            },
+  	        			            format: 'dd-MM-yyyy'
  	        			          }
  	        			        
  	        			        },
@@ -606,7 +767,8 @@
 	<main id="main" class="main">
 		<div class="pagetitle">
 			<h1 class='tituloDashboard'>
-				Dashboard <label class='nomeEvento'></label>
+				Dashboard <label class='nomeEvento_'></label>
+				
 			</h1>
 			<br>
 			<nav>
@@ -728,41 +890,188 @@
 							
 							<div class="card">
 					            <div class="card-body">
-					              <h5 class="card-title">Visao especial</h5>
+					              <h5 class="card-title"></h5>
 					
 					              <!-- Default Tabs -->
 					              <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
 					                <li class="nav-item flex-fill" role="presentation">
-					                  <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home" aria-selected="true">Velocidade Votos</button>
+					                  <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" 
+					                  data-bs-target="#home-justified" type="button" role="tab" 
+					                  aria-controls="home" aria-selected="true">Por Perguntas</button>
 					                </li>
 					                <li class="nav-item flex-fill" role="presentation">
-					                  <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile" aria-selected="false">Mapa Mental</button>
+					                  <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" 
+					                  data-bs-target="#profile-justified" type="button" role="tab" 
+					                  aria-controls="profile" aria-selected="false">Regiao</button>
 					                </li>
 					                <li class="nav-item flex-fill" role="presentation">
-					                  <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-justified" type="button" role="tab" aria-controls="contact" aria-selected="false">Outros</button>
+					                  <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" 
+					                  data-bs-target="#contact-justified" type="button" role="tab" 
+					                  aria-controls="contact" aria-selected="false">Brasil</button>
 					                </li>
 					              </ul>
+					              
 					              <div class="tab-content pt-2" id="myTabjustifiedContent">
 					                <div class="tab-pane fade show active" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
 					                  
-					                  <div class="card">
+											<div id="reportsChart"></div>
 
-											<div class="card-body">
-												<h5 class="card-title">Velocidade dos votos</h5>
-												<div id="chart-container"></div>
-											</div>
-											
-											
-										</div>
-					                  
-					                  
-					                  
-					                </div>
+											<script>
+                  
+									                  var categoriesItem = [];
+									        		  var seriesItem = [];
+									        			
+									                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+										  		      $.ajax({
+										  		            type: "GET",
+										  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico",
+										  		            success: function(data)
+										  		            {
+										  		       			$(".nomeEvento").html(data.nomeEvento );
+										  	        			$(".qtdVotosEvento").html( data.quantidadeVotos );
+										  	        			
+										  	        			categoriesItem = [];
+										  	        			seriesItem = [];
+										  	        			$.each(data.dataVoto, function(i, item) {	
+										  	        				categoriesItem.push(item);
+										  	        			});
+										  	        			
+										  	        			$.each(data.dadosDashboardEventoGraficoVotoPorDatas, function(i, item) {	
+										  	        				
+										  	        				
+										  	        				var itemQualificador = {};
+										  	        				itemQualificador.name = item.qualificador;
+										  	        				itemQualificador.data = [];
+																	
+										  	        				$.each(item.listaVotos, function(i, item) {	
+										  	        					itemQualificador.data.push(item.quantidadeVotos);
+										  	        				});
+										  	        				seriesItem.push(itemQualificador);
+										  	        			});
+										  	        			
+										  	        			console.log(JSON.stringify(categoriesItem));
+										  	        			console.log(JSON.stringify(seriesItem));
+										  	        			
+										  	        		  $('#reportsChart').html('');
+										  	        			
+										  	        			var options = {
+										  	                        series: seriesItem,
+										  	                        chart: {
+										  	                          height: 350,
+										  	                          type: 'area',
+										  	                          toolbar: {
+										  	                            show: true
+										  	                          },
+										  	                        },
+										  	                        markers: {
+										  	                          size: 5
+										  	                        },
+										  	                        colors: ['#444444', '#a90606', '#f1c232', '#4154f1', '#00b662'],
+										  	                        fill: {
+										  	                          type: "gradient",
+										  	                          gradient: {
+										  	                            shadeIntensity: 2,
+										  	                            opacityFrom: 0.3,
+										  	                            opacityTo: 0.4,
+										  	                            stops: [0, 90, 1000]
+										  	                          }
+										  	                        },
+										  	                        dataLabels: {
+										  	                          enabled: false
+										  	                        },
+										  	                        stroke: {
+										  	                          curve: 'smooth',
+										  	                          width: 2
+										  	                        },
+										  	                        xaxis: {
+										  	                          type: 'date',
+										  	                          categories: categoriesItem
+										  	                        },
+										  	                        tooltip: {
+										  	                          x: {
+										  	                            format: 'yy-MM-dd'
+										  	                          },
+										  	                        }
+										  	                      }
+										  	        			 
+										  	        			 
+										  	        			 
+										  	        			
+										  	        			var reportsChart =  new ApexCharts(document.querySelector("#reportsChart"), options );
+										  	        			reportsChart.render();
+										  	        			
+										  	        			
+										  		            },
+										  		            
+										  		            error: function(data)
+										  		            {
+										  		            	console.log(JSON.stringify(data))
+										  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+										  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+										  		            
+										  		            }
+										  		        });
+									                  
+					                    
+					                  </script>
+
+
+								</div>
 					                <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
-					                  Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium distinctio omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio similique. Voluptate nihil recusandae mollitia dolores. Ut laboriosam voluptatum dicta.
+																	                 
+												<div id="chartdiv"></div>
 					                </div>
+					                
+					                
 					                <div class="tab-pane fade" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab">
-					                  Saepe animi et soluta ad odit soluta sunt. Nihil quos omnis animi debitis cumque. Accusantium quibusdam perspiciatis qui qui omnis magnam. Officiis accusamus impedit molestias nostrum veniam. Qui amet ipsum iure. Dignissimos fuga tempore dolor.
+					                 
+									<div id="pieChart"></div>
+
+									<script>
+		              	              
+						              var labelPieChart = [];
+					        		  var seriesItemPieChart = [];
+					        			
+					                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+						  		      $.ajax({
+						  		            type: "GET",
+						  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico/pie",
+						  		            success: function(data)
+						  		            {
+						  		            	
+				// 		  		            	console.log(JSON.stringify(data));
+						  	        			$.each(data, function(i, item) {	
+						  	        				labelPieChart.push(item.estado);
+						  	        				seriesItemPieChart.push(parseInt(item.soma));
+						  	        			});
+						  		            },
+						  		            error: function(data)
+						  		            {
+						  		            	console.log(JSON.stringify(data))
+						  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+						  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+						  		            
+						  		            }
+						  		        });
+					                  
+						              
+						              
+						                document.addEventListener("DOMContentLoaded", () => {
+						                  new ApexCharts(document.querySelector("#pieChart"), {
+						                    series: seriesItemPieChart,
+						                    chart: {
+						                      height: 300,
+						                      type: 'pie',
+						                      toolbar: {
+						                        show: true
+						                      },
+						                    },
+						                    labels: labelPieChart
+						                  }).render();
+						                });
+						              </script>
+					                  
+					                  
 					                </div>
 					              </div><!-- End Default Tabs -->
 					
@@ -786,172 +1095,10 @@
 <!-- 									</ul> -->
 <!-- 								</div> -->
 
-								<div class="card-body">
-									<h5 class="card-title">
-										Visao Votos<span> / </span>
-									</h5>
 
-									<!-- Line Chart -->
-									<div id="reportsChart"></div>
 
-									<script>
-                  
-				                  var categoriesItem = [];
-				        		  var seriesItem = [];
-				        			
-				                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
-					  		      $.ajax({
-					  		            type: "GET",
-					  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico",
-					  		            success: function(data)
-					  		            {
-					  		       			$(".nomeEvento").html(data.nomeEvento );
-					  	        			$(".qtdVotosEvento").html( data.quantidadeVotos );
-					  	        			
-					  	        			categoriesItem = [];
-					  	        			seriesItem = [];
-					  	        			$.each(data.dataVoto, function(i, item) {	
-					  	        				categoriesItem.push(item);
-					  	        			});
-					  	        			
-					  	        			$.each(data.dadosDashboardEventoGraficoVotoPorDatas, function(i, item) {	
-					  	        				
-					  	        				
-					  	        				var itemQualificador = {};
-					  	        				itemQualificador.name = item.qualificador;
-					  	        				itemQualificador.data = [];
-												
-					  	        				$.each(item.listaVotos, function(i, item) {	
-					  	        					itemQualificador.data.push(item.quantidadeVotos);
-					  	        				});
-					  	        				seriesItem.push(itemQualificador);
-					  	        			});
-					  	        			
-					  	        			console.log(JSON.stringify(categoriesItem));
-					  	        			console.log(JSON.stringify(seriesItem));
-					  	        			
-					  	        		  $('#reportsChart').html('');
-					  	        			
-					  	        			var options = {
-					  	                        series: seriesItem,
-					  	                        chart: {
-					  	                          height: 350,
-					  	                          type: 'area',
-					  	                          toolbar: {
-					  	                            show: true
-					  	                          },
-					  	                        },
-					  	                        markers: {
-					  	                          size: 5
-					  	                        },
-					  	                        colors: ['#444444', '#a90606', '#f1c232', '#4154f1', '#00b662'],
-					  	                        fill: {
-					  	                          type: "gradient",
-					  	                          gradient: {
-					  	                            shadeIntensity: 2,
-					  	                            opacityFrom: 0.3,
-					  	                            opacityTo: 0.4,
-					  	                            stops: [0, 90, 1000]
-					  	                          }
-					  	                        },
-					  	                        dataLabels: {
-					  	                          enabled: false
-					  	                        },
-					  	                        stroke: {
-					  	                          curve: 'smooth',
-					  	                          width: 2
-					  	                        },
-					  	                        xaxis: {
-					  	                          type: 'date',
-					  	                          categories: categoriesItem
-					  	                        },
-					  	                        tooltip: {
-					  	                          x: {
-					  	                            format: 'yy-MM-dd'
-					  	                          },
-					  	                        }
-					  	                      }
-					  	        			 
-					  	        			 
-					  	        			 
-					  	        			
-					  	        			var reportsChart =  new ApexCharts(document.querySelector("#reportsChart"), options );
-					  	        			reportsChart.render();
-					  	        			
-					  	        			
-					  		            },
-					  		            
-					  		            error: function(data)
-					  		            {
-					  		            	console.log(JSON.stringify(data))
-					  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-					  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-					  		            
-					  		            }
-					  		        });
-				                  
-                    
-                  </script>
-									<!-- End Line Chart -->
 
-								</div>
 
-							</div>
-
-							<div class="card">
-								<div class="card-body">
-									<h5 class="card-title">Grafico por Estado</h5>
-
-									<!-- Pie Chart -->
-									<div id="pieChart"></div>
-
-									<script>
-		              
-		              	              
-		              var labelPieChart = [];
-	        		  var seriesItemPieChart = [];
-	        			
-	                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
-		  		      $.ajax({
-		  		            type: "GET",
-		  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico/pie",
-		  		            success: function(data)
-		  		            {
-		  		            	
-// 		  		            	console.log(JSON.stringify(data));
-		  	        			$.each(data, function(i, item) {	
-		  	        				labelPieChart.push(item.estado);
-		  	        				seriesItemPieChart.push(parseInt(item.soma));
-		  	        			});
-		  		            },
-		  		            error: function(data)
-		  		            {
-		  		            	console.log(JSON.stringify(data))
-		  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-		  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-		  		            
-		  		            }
-		  		        });
-	                  
-		              
-		              
-		                document.addEventListener("DOMContentLoaded", () => {
-		                  new ApexCharts(document.querySelector("#pieChart"), {
-		                    series: seriesItemPieChart,
-		                    chart: {
-		                      height: 300,
-		                      type: 'pie',
-		                      toolbar: {
-		                        show: true
-		                      },
-		                    },
-		                    labels: labelPieChart
-		                  }).render();
-		                });
-		              </script>
-									<!-- End Pie Chart -->
-
-								</div>
 							</div>
 
 						</div>
@@ -996,6 +1143,17 @@
 						</div>
 					</div>
 					<!-- End Recent Activity -->
+					
+					<!-- Recent Activity -->
+<!-- 					<div class="card"> -->
+
+<!-- 						<div class="card-body"> -->
+
+<!-- 							<div id="chart-container"></div> -->
+
+<!-- 						</div> -->
+<!-- 					</div> -->
+					<!-- End Recent Activity -->
 
 					<div class="card">
 						<div class="card-body">
@@ -1006,81 +1164,81 @@
 
 							<script>
 	              
-	              var categoriesItemRadar = [];
-        		  var seriesItemRadar = [];
-        			
-                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
-	  		      $.ajax({
-	  		            type: "GET",
-	  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico/radar",
-	  		            success: function(data)
-	  		            {
-	  		            	categoriesItemRadar = [];
-	  		            	seriesItemRadar = [];
-	  	        			
-	  	        			var seriesItemDataRadar = {};
-	  	        			seriesItemDataRadar.name = 'Total Votos';
-	  	        			seriesItemDataRadar.data = [];
-	  	        			
-	  	        			
-	  	        			$.each(data, function(i, item) {	
-	  	        				seriesItemDataRadar.data.push(item.soma);
-	  	        				categoriesItemRadar.push(item.pesquisa);
-	  	        			});
-	  	        			
-	  	        			seriesItemRadar.push(seriesItemDataRadar);
-	  	        			
-// 	  	        			console.log(JSON.stringify(categoriesItem));
-// 	  	        			console.log(JSON.stringify(seriesItem));
-	  	        			
-	  		            },
-	  		            
-	  		            error: function(data)
-	  		            {
-	  		            	console.log(JSON.stringify(data))
-	  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-	  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-	  		            
-	  		            }
-	  		        });
-	  		      
-	  		      
-	  		    	document.addEventListener("DOMContentLoaded", () => {
-	                  new ApexCharts(document.querySelector("#radarChart"), {
-	                	  
-	                	  stroke: {
-	                		    show: true,
-	                		    width: 2,
-	                		    colors: [],
-	                		    dashArray: 0
-	                		  },
-	                	series: seriesItemRadar,	                      
-	                    chart: {
-	                      height: 350,
-	                      type: 'radar'
-	                    },
-	                    xaxis: {
-	                      categories: categoriesItemRadar,
-	                      labels: {
-	                    	  show: true,
-	                    	  style: {
-	                    	    colors: ["#a8a8a8"],
-	                    	    fontSize: "11px",
-	                    	    fontFamily: 'Arial'
-	                    	  }
-	                    	}
-	                    },
-	                    dataLabels: {
-	                    	  enabled: true,
-	                    	  background: {
-	                    	    enabled: true,
-	                    	    borderRadius:2,
-	                    	  }
-	                    	}
-	                  }).render();
-	                });
-	                
-	              </script>
+				              var categoriesItemRadar = [];
+			        		  var seriesItemRadar = [];
+			        			
+			                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+				  		      $.ajax({
+				  		            type: "GET",
+				  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico/radar",
+				  		            success: function(data)
+				  		            {
+				  		            	categoriesItemRadar = [];
+				  		            	seriesItemRadar = [];
+				  	        			
+				  	        			var seriesItemDataRadar = {};
+				  	        			seriesItemDataRadar.name = 'Total Votos';
+				  	        			seriesItemDataRadar.data = [];
+				  	        			
+				  	        			
+				  	        			$.each(data, function(i, item) {	
+				  	        				seriesItemDataRadar.data.push(item.soma);
+				  	        				categoriesItemRadar.push(item.pesquisa);
+				  	        			});
+				  	        			
+				  	        			seriesItemRadar.push(seriesItemDataRadar);
+				  	        			
+			// 	  	        			console.log(JSON.stringify(categoriesItem));
+			// 	  	        			console.log(JSON.stringify(seriesItem));
+				  	        			
+				  		            },
+				  		            
+				  		            error: function(data)
+				  		            {
+				  		            	console.log(JSON.stringify(data))
+				  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+				  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+				  		            
+				  		            }
+				  		        });
+				  		      
+				  		      
+				  		    	document.addEventListener("DOMContentLoaded", () => {
+				                  new ApexCharts(document.querySelector("#radarChart"), {
+				                	  
+				                	  stroke: {
+				                		    show: true,
+				                		    width: 2,
+				                		    colors: [],
+				                		    dashArray: 0
+				                		  },
+				                	series: seriesItemRadar,	                      
+				                    chart: {
+				                      height: 350,
+				                      type: 'radar'
+				                    },
+				                    xaxis: {
+				                      categories: categoriesItemRadar,
+				                      labels: {
+				                    	  show: true,
+				                    	  style: {
+				                    	    colors: ["#a8a8a8"],
+				                    	    fontSize: "11px",
+				                    	    fontFamily: 'Arial'
+				                    	  }
+				                    	}
+				                    },
+				                    dataLabels: {
+				                    	  enabled: true,
+				                    	  background: {
+				                    	    enabled: true,
+				                    	    borderRadius:2,
+				                    	  }
+				                    	}
+				                  }).render();
+				                });
+				                
+				              </script>
 							<!-- End Radar Chart -->
 
 						</div>
