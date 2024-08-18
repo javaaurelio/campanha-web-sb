@@ -11,5 +11,4 @@ public class FrontEnd_WEB_EventoDashboardApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FrontEnd_WEB_EventoDashboardApplication.class, args);
 	}
-	
 }
