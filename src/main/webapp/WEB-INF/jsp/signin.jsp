@@ -39,7 +39,7 @@ $(document).ready(function(){
                   window.location.href = "http://localhost:8080/dashboard";
                },
                
-               error: function(data)
+               error: function(data, as)
                {
             	   
             	   if  (data.statusText=='error' && data.status == 0) {
@@ -51,7 +51,7 @@ $(document).ready(function(){
             		}
             	   
             	   Swal.fire({
-	    	    		  title: "Login ou senha invalidos",
+	    	    		  title: "Login ou senha invalidos ",
 	    	    		  text: "",
 	    	    		  icon: "error"
 // 	    	    		  timer: 1500,
@@ -79,7 +79,7 @@ $(document).ready(function(){
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
-                <a href="index.html" class="logo d-flex align-items-center w-auto">
+                <a href="dashboard" class="logo d-flex align-items-center w-auto">
                   <img src="assets/img/logo.png" alt="">
                   <span class="d-none d-lg-block">Dashboard</span>
                 </a>

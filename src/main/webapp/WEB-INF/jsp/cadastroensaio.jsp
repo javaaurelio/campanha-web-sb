@@ -15,40 +15,30 @@
 // 		##########################################
 		 carregarDadosUsuario(null, null);
 		 function carregarDadosUsuario(paginaAtual, paginaDestino) {
-			//alert(sessionStorage.getItem('jwtLocal'));
-			var configuracoes =
-				'<td>'
-			  	+ 'Primeiro acesso: _primeiroAcesso_<br>'
-			  	+ 'Ultimo acesso: _ultimoAcesso_<br>'
-			  	+ '<div class="form-check form-switch">'
-// 				    +'<span> Ativo:</span><input class="form-check-input publicar" type="checkbox" id="flexSwitchCheckChecked__id_" _ativo_ >'
-			    +'</div><br>'
-			  	+ '</td>' 	;
 			var linhaTabela = 
 	       		'<tr> '
                 +' <td>_id_</td>'
-                +' <td>_nome_</td>'
-                +' <td>_email_</td>'
-                +' <td>_cidade_</td>'
-                +' <td>_dataNascimento_</td>'           
-                + configuracoes          
+                +' <td>_ensaio_</td>'
+                +' <td>_cor_</td>'
                 +'  <td class="text-center" style="width: 10%">'
-    		    +'		  <i class="bi bi-pencil editarUsuario" data-id="_id_"></i>'
+    		    +'		  <i class="bi bi-pencil editarEnsaio" data-id="_id_"></i>'
     		    +'        <span>   </span>'					
     		    +'        <span>   </span>'					
-    		    +'        <i class="bi bi-trash deletarUsuario" data-id="_id_"></i>	'					
+    		    +'        <i class="bi bi-trash deletarEnsaio" data-id="_id_"></i>	'					
     		    +'   </td>'
                '  </tr>';
                
-               var urlCustomizada = "#(host_api)/campanha/usuario";
+               var urlCustomizada = "#(host_api)/campanha/ensaio";
                if (paginaAtual != null && paginaDestino != null) {
-            	   urlCustomizada = "#(host_api)/campanha/usuario?page="+ paginaDestino; 
+            	   urlCustomizada = "#(host_api)/campanha/ensaio?page="+ paginaDestino; 
                }                
             
-            $("#listaUsuarios").html('');
+            $("#listaEnsaio").html('');
+            $('.ensaio').val("");
+            $('.ensaio').data('id', "");
+            $('.cor').val("");
 	        $.ajax({
 	            type: "GET",
-// 	            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam,
 	            url: urlCustomizada,
 	            success: function(data)
 	            {
@@ -75,19 +65,10 @@
 	            	
 	            	$.each(data.content, function(i, item) {
 	            		var temp = linhaTabela;
-	            		temp = temp.replaceAll("_nome_", item.nome);
-	            		temp = temp.replaceAll("_email_", item.email);
-	            		temp = temp.replaceAll("_cidade_", item.cidade);
-	            		temp = temp.replaceAll("_estado_", item.estado);
-	            		temp = temp.replaceAll("_dataNascimento_", item.dataNascimentoFormatado);
+	            		temp = temp.replaceAll("_ensaio_", item.nome);
+	            		temp = temp.replaceAll("_cor_", item.cor);
 	            		temp = temp.replaceAll("_id_", item.id);
-	            		temp = temp.replaceAll("_primeiroAcesso_", item.dataHoraPrimeiroAcesso);
-	            		temp = temp.replaceAll("_ultimoAcesso_", item.dataHoraUltimoAcesso);
-	            		if (item.ativo) {
-		            		temp = temp.replaceAll("_ativo_", "checked");
-	            		}
-	            		
-		    			$("#listaUsuarios").append(temp);
+		    			$("#listaEnsaio").append(temp);
             		});
 	            },
 	            error: function(data)
@@ -100,46 +81,41 @@
 	        });
 		 }
 		 
-		 $(document).on("click", ".editarUsuario", function(){
+		 $(document).on("click", ".editarEnsaio", function(){
 	         var id = $(this).data('id');
 	         
 	   	     $.ajax({
 	            type: "GET",
-	            url: "#(host_api)/campanha/usuario/"+id,
+	            url: "#(host_api)/campanha/ensaio/"+id,
 	            success: function(data)
 	            {
-	            	$('.nome').data('id', data.id);
-	        		$('.nome').val(data.nome);
-	        		$('.email').val(data.email);
-	        		$('.endereco').val(data.endereco);
-	        		$('.cidade').val(data.cidade);
-	        		$('.uf').val(data.uf);
-	        		$('.cep').val(data.cep);
-	        		$('.dataNascimento').val(data.dataNascimentoDDMMYYYY.split("/").reverse().join("-"));
+	            	$('.cor').val(data.cor);
+	            	$('.ensaio').val(data.nome);
+	            	$('.ensaio').data('id', data.id);
 	            },
 	            error: function(data)
 	            {
-	            	
-	            	
 	            	
 	            }
 	        });
 			 
 		 });
 		 
-// 		 $(document).on("click", ".filtroName", function(event) {
+		 $(document).on("click", ".filtroName", function(event) {
 			 
-// 			 if($('.filtroNameText').children().length>0){
-// 				 $('.filtroNameText').html('');
-// 			 } else {
-// 				 if ( $('.filtroNameText')) {
-// 			         $('.filtroNameText').html('<input type="text" class="filtroNameTextFiltro"/>');
-// 				 }	 
-// 			 } 
-// 		 });
+			 if($(this).children().length>0){
+				 $(this).html('');
+			 } else {
+				 if ( $(this)) {
+			         $(this).html('<input type="text">');
+				 }	 
+			 }
+			 
+			 
+			 
+		 });
 		 
-		 
-		 $(document).on("click", ".deletarUsuario", function(){
+		 $(document).on("click", ".deletarEnsaio", function(){
 			
 	         var id = $(this).data('id');
 	         Swal.fire({
@@ -147,17 +123,15 @@
 	        	  showDenyButton: true,
 	        	  showCancelButton: false,
 	        	  confirmButtonText: "Sim",
-	        	  denyButtonText: "Não"
+	        	  denyButtonText: "Nao"
 	        	}).then((result) => {
 	        	  if (result.isConfirmed) {
 
 	        		  $.ajax({
 	      	            type: "Delete",
-//	       	            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam,
-	      	            url: "#(host_api)/campanha/usuario/"+id,
+	      	            url: "#(host_api)/campanha/ensaio/"+id,
 	      	            success: function(data)
 	      	            {
-	      	            	      	            	
 		                      Swal.fire({
 			    	    		  title: "Excluir",
 			    	    		  text: "Excluido com sucesso!",
@@ -195,38 +169,28 @@
         });
 		 
 		 
-		 $(".formularioUsuario" ).on("submit", function( event ) {
+		 $(".formularioEnsaio" ).on("submit", function( event ) {
 	        	
 	        	if (!event.target.checkValidity()) {
 	        		event.preventDefault();
 	        	} else {
-	        		dadosCadastroUsuario = {}
-	        		dadosCadastroUsuario ["nome"] = $('.nome').val();
-	        		dadosCadastroUsuario ["email"] = $('.email').val();
-	        		dadosCadastroUsuario ["dataNascimento"] = $('.dataNascimento').val();
-	        		dadosCadastroUsuario ["endereco"] = $('.endereco').val();
-	        		dadosCadastroUsuario ["cidade"] = $('.cidade').val();
-	        		dadosCadastroUsuario ["uf"] = $('.uf').val();
-	        		dadosCadastroUsuario ["cep"] = $('.cep').val();
-// 	        		dadosCadastroUsuario ["senha"] = $('.senha').val();
-	       	        var id = $('.nome').data('id');
-	       	        
+	        		dadosCadastroEnsaio = {}
+	        		dadosCadastroEnsaio["nome"] = $('.ensaio').val();
+	        		dadosCadastroEnsaio["cor"] = $('.cor').val();
+	       	        var id = $('.ensaio').data('id');
 	       	        var method = "POST";
-	       	        //var urlCustomizada = "https://64acce2b9edb4181202fd445.mockapi.io/usuario/campanha";
-	       	        var urlCustomizada = "#(host_api)/campanha/usuario";
-	       	        
+	       	        var urlCustomizada = "#(host_api)/campanha/ensaio";
 	       	        if (id > 0) {
 	       	        	method = "PUT";
-	       	        	urlCustomizada="#(host_api)/campanha/usuario/"+id;
-// 	       	        	urlCustomizada="${urlApi}/campanha/evento/"+id;
+	       	        	urlCustomizada="#(host_api)/campanha/ensaio/"+id;
 	       	        }
-	          	     event.preventDefault();
-	       	        //alert (method +  JSON.stringify(item) + urlCustomizada);
+	       	        
+	          	    event.preventDefault();
 	       	        $.ajax({
 	                   type: method,
 	                   url: urlCustomizada,
 	                   contentType: "application/json; charset=utf-8",
-	                   data: JSON.stringify(dadosCadastroUsuario),
+	                   data: JSON.stringify(dadosCadastroEnsaio),
 	                   success: function(data)
 	                   {
 	                      // $("#popupCampanhaMsgSucesso").html("Sucesso");
@@ -251,7 +215,6 @@
 	                   
 	                   }
 	               });
-	       	        
 	       	     
 	        	}
 	        	
@@ -279,64 +242,27 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
           <li class="breadcrumb-item">Cadastro</li>
-          <li class="breadcrumb-item active">Usuario</li>
+          <li class="breadcrumb-item active">Ensaio</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 		  
 	  <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Cadastro de Usuarios</h5>
+              <h5 class="card-title">Cadastro de Ensaio</h5>
 
               <!-- Floating Labels Form -->
-              <form class="row g-3 needs-validation formularioUsuario" novalidate>
+              <form class="row g-3 needs-validation formularioEnsaio" novalidate>
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="text" class="form-control nome" id="floatingName" placeholder="Seu Nome" required>
-                    <label for="floatingName">Nome</label>
+                    <input type="text" class="form-control ensaio" id="floatingName" placeholder="Nome do Ensaio" required>
+                    <label for="floatingName">Ensaio</label>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="email" class="form-control email" id="floatingEmail" placeholder="Seu Email" required>
-                    <label for="floatingEmail">Email</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input type="date" class="form-control dataNascimento" id="floatingDataNascimento" required name="dataInicio">
-                    <label for="floatingDataNascimento">Data Nascimento</label>
-                  </div>
-                </div>
-                
-                <div class="col-12">
-                  <div class="form-floating">
-                    <textarea class="form-control endereco" placeholder="Address" id="floatingTextarea" style="height: 100px;" required></textarea>
-                    <label for="floatingTextarea">Endereco</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="col-md-12">
-                    <div class="form-floating">
-                      <input type="text" class="form-control cidade" id="floatingCity" placeholder="Cidade" required>
-                      <label for="floatingCity">Cidade</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3">
-                    <select class="form-select uf" id="floatingSelect" aria-label="Estado" required>
-                      <option selected>New York</option>
-                      <option value="1">Oregon</option>
-                      <option value="2">DC</option>
-                    </select>
-                    <label for="floatingSelect">State</label>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <div class="form-floating">
-                    <input type="text" class="form-control cep" id="floatingZip" placeholder="Cep" required>
-                    <label for="floatingZip">Cep</label>
+                    <input type="text" class="form-control cor" id="floatingName" placeholder="Cor" required>
+                    <label for="floatingName">Cor</label>
                   </div>
                 </div>
                 <div class="text-center">
@@ -356,20 +282,16 @@
               <table class="table table-bordered border-primary">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col" >Nome</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Cidade</th>
-                    <th scope="col">Data nascimeno</th>
-                    <th scope="col">Configuracoes</th>
+                    <th scope="col" width="10">#</th>
+                    <th scope="col" >Ensaio <i class="bi bi-funnel filtroName"></i></th>
+                    <th scope="col">Cor</th>
                     <th scope="col">Acoes</th>
                   </tr>
                 </thead>
-                <tbody id="listaUsuarios">
+                <tbody id="listaEnsaio">
                                    
                 </tbody>
               </table>
-              
                <nav aria-label="Page navigation example">
 				  <ul class="pagination  justify-content-center">
 				    <li class="page-item primeiro" data-destino="primeiro"><a class="page-link primeiro" href="#" >Primeiro</a></li>

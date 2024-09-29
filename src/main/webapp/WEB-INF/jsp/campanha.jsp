@@ -98,7 +98,7 @@
 		    
 		    +'  <td class="text-center" style="width: 10%">                    	  '
 		    +'		  <i class="bi bi-pencil editarItemCampanha"></i>'
-		    +'        <i class="bi bi-trash deleteItemCampanha"></i>	'					
+		    +'        <i class="bi bi-trash deleteItemCampanha"></i>	'
 		    +'        <br>	'					
 		    +'        <i class="bi bi-tv mostrarPainelVotacao" title="Visualizar painel de votacao"></i>'
 		    +'        <i class="bi bi-speedometer mostrarDashboard"></i>'
@@ -401,23 +401,6 @@
 	    $(document).on("publicarCampanhaSim", function(event, idObject, elementoAlterado){
 	    	$('#modalDialogo').modal('hide');
 	    	var status = $(".publicar").is(":checked");
-	    	
-// 	    	Swal.fire({
-// 		        title: 'Do you want to get data from Github?',
-// 		        text: "Voce quer publicar ?",
-// 		        type: 'warning',
-// 		        showCancelButton: true,
-// 		        allowOutsideClick: false,
-// 		        confirmButtonColor: '#3085d6',
-// 		        cancelButtonColor: '#d33',
-// 		        confirmButtonText: 'Sim',
-// 		        showLoaderOnConfirm: true,
-// 		        allowOutsideClick: () => !Swal.isLoading(),
-// 		        preConfirm: function(){
-// 		            return publicarCampanha(idObject, status, true); //Your ajax function here
-// 		        }
-// 		    });
-
 	    	publicarCampanha(idObject, status, true);
 	    });
 	    
@@ -811,7 +794,7 @@
       <h1>Campanha</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
           <li class="breadcrumb-item">Forms</li>
           <li class="breadcrumb-item active">Validation</li>
         </ol>
@@ -878,7 +861,7 @@
                 <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title">Cadastro de Evento</h5>
+                      <h5 class="modal-title">AAAACadastro de Apresentacao</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -887,35 +870,51 @@
                       
 					          <div class="card">
 					            <div class="card-body">
-					              <h5 class="card-title">Eventos</h5>
+					              <h5 class="card-title">Apresentacao</h5>
 					              <p> </p>
 								
-<!-- 								<div id="popupCampanhaErro" class="modal fade " data-bs-backdrop="static" role="dialog"  -->
-<!-- 								style="text-align: center; z-index: 100; "> -->
-<!-- 								  <div class="modal-dialog" > -->
-<!-- 								    Modal content -->
-<!-- 								    <div class="modal-content" style="border-style: hidden; background-color: transparent;"> -->
-<!-- 								      <div class="modal-body"> -->
-<!-- 								      	  <div class="alert alert-danger alert-dismissible fade show" role="alert"> -->
-<!-- 							                <i class="bi bi-exclamation-octagon me-1"></i> -->
-<!-- 							                <span id="popupCampanhaMsgErro">Erro</span> -->
-<!-- 							              </div> -->
-<!-- 								      </div>       -->
-<!-- 								    </div> -->
-<!-- 								  </div> -->
-<!-- 								</div> -->
-					              
 					              <!-- Custom Styled Validation -->
 					              <form id="formCampanha" class="row g-3 needs-validation" novalidate>
 					              
-					                <div class="col-md-4">
-					                  <label for="validationCustom01" class="form-label">Campanha </label>
+					                <div class="col-12">
+					                  <label for="validationCustom01" class="form-label">Layout Painel Votacao </label>
 					                 <div class="input-group col-md-4">
-                      				  <span class="input-group-text codigoCampanha"></span>
-					                  <input type="text" class="form-control" id="validationCustom01" name="campanha" value="" required>
-					                  <div class="valid-feedback">
-					                    Looks good!
-					                  </div>
+                      				  <span class="input-group-text "></span>
+					                  <select class="form-select form-control estado" name="estado" aria-label="Default select example" id="validationCustom01" value="" required>
+					                      <option selected value="">-- selecione --</option>
+												<option value="" selected></option>
+												<option value="AC">Acre</option>
+												<option value="AL">Alagoas</option>
+												<option value="AP">Amapá</option>
+												<option value="AM">Amazonas</option>
+												<option value="BA">Bahia</option>
+												<option value="CE">Ceará</option>
+												<option value="DF">Distrito Federal</option>
+												<option value="ES">Espírito Santo</option>
+												<option value="GO">Goiás</option>
+												<option value="MA">Maranhão</option>
+												<option value="MT">Mato Grosso</option>
+												<option value="MS">Mato Grosso do Sul</option>
+												<option value="MG">Minas Gerais</option>
+												<option value="PA">Pará</option>
+												<option value="PB">Paraíba</option>
+												<option value="PR">Paraná</option>
+												<option value="PE">Pernambuco</option>
+												<option value="PI">Piauí</option>
+												<option value="RJ">Rio de Janeiro</option>
+												<option value="RN">Rio Grande do Norte</option>
+												<option value="RS">Rio Grande do Sul</option>
+												<option value="RO">Rondônia</option>
+												<option value="RR">Roraima</option>
+												<option value="SC">Santa Catarina</option>
+												<option value="SP">São Paulo</option>
+												<option value="SE">Sergipe</option>
+												<option value="TO">Tocantins</option>
+												<option value="EX">Estrangeiro</option>
+					                    </select>
+						                 <div class="invalid-feedback">
+						                    Informe uma data valida.
+						                  </div>
 					                </div>
 					                </div>
 					               					                

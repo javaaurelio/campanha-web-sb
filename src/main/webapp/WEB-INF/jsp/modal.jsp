@@ -1,40 +1,6 @@
 
  <script>
    
-   $(document).on("click", ".mostrarModalGraficoPreCadastro", function(){
-		
-// 	       var options = {
-// 				exportEnabled: true,
-// 				animationEnabled: false,
-// 				title:{
-// 					text: "Pre Cadastro"
-// 				},
-// 				legend:{
-// 					horizontalAlign: "right",
-// 					verticalAlign: "center"
-// 				},
-// 				data: [{
-// 					type: "pie",
-// 					showInLegend: true,
-// 					toolTipContent: "<b>{name}</b>: ${y} (#percent%)",
-// 					indexLabel: "{name}",
-// 					legendText: "{name} (#percent%)",
-// 					indexLabelPlacement: "inside",
-// 					dataPoints: [
-// 						{ y: 6566.4, name: "Housing" },
-// 						{ y: 684, name: "Others"},
-// 						{ y: 1231.2, name: "Utilities" }
-// 					]
-// 				}]
-// 			};
-			//$("#chartContainer").CanvasJSChart(options);
-	   
-
-		 $('#painelPreCadastroPendente').modal('show');
-	});
-	
-   
-   
    function mostrarToastSucesso(textoParam) {
 	   const Toast = Swal.mixin({
 			  toast: true,
@@ -93,8 +59,7 @@
 	       console.log("I was closed by the timer");
 	     }
 	   });
-	   
-	   
+	   	   
    }
    
    </script>
@@ -171,9 +136,6 @@
 	  </div>
 	</div>
 	
-	
-	
-	
 	<div class="modal fade " id="modalDialogo" tabindex="-1">
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content">
@@ -213,7 +175,6 @@
        </div>
      </div>
    
-   
    <!-- ======= Lista de PreCadastro  ======= -->   
    <div class="modal fade" id="painelPreCadastroPendente" tabindex="-1" data-bs-backdrop="static">
 	  <div class="modal-dialog  modal-lg">
@@ -235,110 +196,370 @@
 	</div>
 	
 	
-	<div class="modal fade" id="modalCadastrarEvento" tabindex="-1" >
+<!--        <div class="modal fade" id="modalCadastrarEvento" tabindex="-1" > -->
+<!--             <div class="modal-dialog modal-xl"> -->
+<!--               <div class="modal-content"> -->
+<!--                 <div class="modal-header"> -->
+<!--                   <h5 class="modal-title">Cadastro de Apresentação_</h5> -->
+<!--                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+<!--                 </div> -->
+<!--                 <div class="modal-body"> -->
+                  
+<!--               <div class="col-lg-13"> -->
+                  
+<!-- 	          <div class="card"> -->
+<!-- 	            <div class="card-body"> -->
+<!-- 	              <h5 class="card-title">Apresentacao</h5> -->
+<!-- 	              <p> </p> -->
+	              
+<!-- 	              Custom Styled Validation -->
+<!-- 	              <form id="formCampanha" class="row g-3 needs-validation" novalidate> -->
+	              
+<!--                    <div class="col-md-3"> -->
+<!-- 	                 <label for="validationCustom01" class="form-label">Estado</label> -->
+<!-- 	                 <div class="input-group col-md-4"> -->
+<!--                   	  <span class="input-group-text "></span> -->
+<!-- 	                  <select class="form-select form-control estado" name="estado" aria-label="Default select example" id="validationCustom01" value="" required> -->
+<!-- 	                      <option selected value="">-- selecione --</option> -->
+<!-- 							<option value="AC">Acre</option> -->
+<!-- 							<option value="AL">Alagoas</option> -->
+<!-- 							<option value="AP">Amapá</option> -->
+<!-- 							<option value="AM">Amazonas</option> -->
+<!-- 							<option value="BA">Bahia</option> -->
+<!-- 							<option value="CE">Ceará</option> -->
+<!-- 							<option value="DF">Distrito Federal</option> -->
+<!-- 							<option value="ES">Espírito Santo</option> -->
+<!-- 							<option value="GO">Goiás</option> -->
+<!-- 							<option value="MA">Maranhão</option> -->
+<!-- 							<option value="MT">Mato Grosso</option> -->
+<!-- 							<option value="MS">Mato Grosso do Sul</option> -->
+<!-- 							<option value="MG">Minas Gerais</option> -->
+<!-- 							<option value="PA">Pará</option> -->
+<!-- 							<option value="PB">Paraíba</option> -->
+<!-- 							<option value="PR">Paraná</option> -->
+<!-- 							<option value="PE">Pernambuco</option> -->
+<!-- 							<option value="PI">Piauí</option> -->
+<!-- 							<option value="RJ">Rio de Janeiro</option> -->
+<!-- 							<option value="RN">Rio Grande do Norte</option> -->
+<!-- 							<option value="RS">Rio Grande do Sul</option> -->
+<!-- 							<option value="RO">Rondônia</option> -->
+<!-- 							<option value="RR">Roraima</option> -->
+<!-- 							<option value="SC">Santa Catarina</option> -->
+<!-- 							<option value="SP">São Paulo</option> -->
+<!-- 							<option value="SE">Sergipe</option> -->
+<!-- 							<option value="TO">Tocantins</option> -->
+<!-- 							<option value="EX">Estrangeiro</option> -->
+<!-- 	                    </select> -->
+<!-- 		                 <div class="invalid-feedback"> -->
+<!-- 		                    Informe uma data valida. -->
+<!-- 		                  </div> -->
+<!-- 	                </div> -->
+<!-- 	                </div> -->
+	               					                
+<!-- 	                <div class="col-md-2"> -->
+<!-- 	                  <label for="validationCustom02" class="form-label">Data Apresentacao</label> -->
+<!-- 	                  <input type="date" class="form-control" id="validationCustom03" required name="dataApresentacao"> -->
+<!-- 	                  <div class="invalid-feedback"> -->
+<!-- 	                    Informe uma data valida para apresentacao -->
+<!-- 	                  </div> -->
+<!-- 	                </div> -->
+	                
+<!-- 					<div class="col-md-3"> -->
+<!-- 	                 <label for="validationCustom01" class="form-label">Ensaio</label> -->
+<!-- 	                 <div class="input-group col-md-4"> -->
+<!--                   	  <span class="input-group-text "></span> -->
+<!-- 	                  <select class="form-select form-control ensaio" name="ensaio" aria-label="Default select example" id="validationCustom01" value="" required> -->
+<!-- 	                      <option selected value="">-- selecione --</option> -->
+<!-- 							<option value="AC">Acre</option> -->
+<!-- 							<option value="AL">Alagoas</option> -->
+<!-- 							<option value="AP">Amapá</option> -->
+<!-- 							<option value="EX">Estrangeiro</option> -->
+<!-- 	                    </select> -->
+<!-- 		                 <div class="invalid-feedback"> -->
+<!-- 		                    Informe uma data valida. -->
+<!-- 		                  </div> -->
+<!-- 	                </div> -->
+<!-- 	                </div> -->
+	                
+	                
+<!-- 	                <div class="col-md-8"> -->
+<!-- 	                 <label for="validationCustom01" class="form-label">Agremiacao</label> -->
+<!-- 	                 <div class="input-group col-md-4"> -->
+<!--                   	  <span class="input-group-text "></span> -->
+<!-- 	                  <select class="form-select form-control agremiacao" name="agremiacao" aria-label="Default select example" id="validationCustom01" value="" required> -->
+<!-- 	                      <option selected value="">-- selecione --</option> -->
+							
+<!-- 							<option value="EX">Estrangeiro</option> -->
+<!-- 	                    </select> -->
+<!-- 		                 <div class="invalid-feedback"> -->
+<!-- 		                    Informe uma data valida. -->
+<!-- 		                  </div> -->
+<!-- 	                </div> -->
+<!-- 	                </div> -->
+	                
+<!-- 	                <div class="modal-footer"> -->
+<!--                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button> -->
+<!--                       <button class="btn btn-primary" type="submit">Salvar</button> -->
+<!--                     </div> -->
+
+<!-- 	              </form> -->
+	
+<!-- 	            </div> -->
+<!-- 	          </div> -->
+<!-- 	        </div> -->
+                
+                
+<!--                 </div> -->
+                
+<!--               </div> -->
+<!--             </div> -->
+<!-- </div> -->
+
+      <div class="modal fade" id="modalCadastrarApresentacao" tabindex="-1" >
             <div class="modal-dialog modal-xl">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Cadastro de Evento</h5>
+                  <h5 class="modal-title">Cadastro de Apresentação</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                   
                   <div class="col-lg-13">
+               
+               <div id="carouselControleApresentacao" class="carousel slide" data-ride="carousel" data-interval="false" >
+               
+               			<div class="carousel-inner">
+											
+						     <div class="carousel-item active slideApresentacao">            
                   
-	          <div class="card">
-	            <div class="card-body">
-	              <h5 class="card-title">Eventos</h5>
-	              <p> </p>
-	              
-	              <!-- Custom Styled Validation -->
-	              <form id="formCampanha" class="row g-3 needs-validation" novalidate>
-	              
-	                <div class="col-md-4">
-	                  <label for="validationCustom01" class="form-label">Campanha </label>
-	                 <div class="input-group col-md-4">
-                  				  <span class="input-group-text codigoCampanha"></span>
-	                  <input type="text" class="form-control" id="validationCustom01" name="campanha" value="" required>
-	                  <div class="valid-feedback">
-	                    Looks good!
-	                  </div>
-	                </div>
-	                </div>
-	               					                
-	                <div class="col-md-2">
-	                  <label for="validationCustom02" class="form-label">Data Evento</label>
-	                  <input type="date" class="form-control" id="validationCustom03" required name="dataInicio">
-	                  <div class="invalid-feedback">
-	                    Informe uma data valida.
-	                  </div>
-	                </div>
-	                <div class="col-md-2">
-	                  <label for="validationCustom03" class="form-label">Data Fim Evento</label>
-	                  <input type="date" class="form-control" id="validationCustom03" required name="dataFim">
-	                  <div class="invalid-feedback">
-	                    Informe uma data valida.
-	                  </div>
-	                </div>
-	                
-	                
-<!-- 					                  <label for="validationCustom01" class="form-label">Imagem(URL) </label> -->
-	                  <div class="input-group col-md-4">
-						 <div class="form-floating mb-3">
-			                  <input type="text" placeholder="Leave a comment here" class="form-control"
-			                   id="validationCustom01" name="imagemUrl" value="" required>
-			                  <label for="floatingTextarea">Imagem (URL)</label>
-								</div>	
-								<div class="invalid-feedback">
-	                      Informe uma URL valida.
-	                    </div>				                  
-	                </div>
-	                <div class="col-12">
-<!-- 					                  <label for="validationCustom01" class="form-label">Descricao</label> -->
-	                 <div class="input-group col-md-4">
-	                  
-	                   <div class="form-floating mb-3">
-	                      <textarea class="form-control descricao" id="floatingTextarea" style="height: 100px;" required></textarea>
-	                      <label for="floatingTextarea">Descricao</label>
-	                    </div>
-	                  
-	                  <div class="valid-feedback">
-	                    Looks good!
-	                  </div>
-	                </div>
-	                </div>
-	                <div class="col-12">
-	                  <label for="validationCustom01" class="form-label">Layout Painel Votacao </label>
-	                 <div class="input-group col-md-4">
-                  				  <span class="input-group-text "></span>
-	                  <select class="form-select form-control layoutPainelVotacao" name="layoutPainelVotacao" aria-label="Default select example" id="validationCustom01" value="" required>
-	                      <option selected value="">-- selecione --</option>
-	                      <option value="padrao">Padrao</option>
-	                      <option value="carousel">Carousel</option>
-	                    </select>
-		                 <div class="invalid-feedback">
-		                    Informe uma data valida.
-		                  </div>
-	                </div>
-	                </div>
-	                
-	                
-	                <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                      <button class="btn btn-primary" type="submit">Salvar</button>
-                    </div>
+					          <div class="card dadosApresentacao" data-codagremiacao="" data-codapresentacao="">
+					            <div class="card-body">
+					              <h5 class="card-title nomeAgremiacao"></h5>
+					              <p> </p>
+					              
+					              <!-- Custom Styled Validation -->
+					              <form id="formApresentacao" class="row g-3 needs-validation" novalidate>
+					              
+				                   <div class="col-md-3">
+					                 <label for="validationCustom01" class="form-label">Estado</label>
+					                 <div class="input-group col-md-4">
+				                  	  <span class="input-group-text "></span>
+					                  <select class="form-select form-control estadoFormApresentacao" name="estado" aria-label="Default select example" id="validationCustom01" value="" required>
+					                      <option selected value="">-- selecione --</option>
+											<option value="AC">Acre</option>
+											<option value="AL">Alagoas</option>
+											<option value="AP">Amapá</option>
+											<option value="AM">Amazonas</option>
+											<option value="BA">Bahia</option>
+											<option value="CE">Ceará</option>
+											<option value="DF">Distrito Federal</option>
+											<option value="ES">Espírito Santo</option>
+											<option value="GO">Goiás</option>
+											<option value="MA">Maranhão</option>
+											<option value="MT">Mato Grosso</option>
+											<option value="MS">Mato Grosso do Sul</option>
+											<option value="MG">Minas Gerais</option>
+											<option value="PA">Pará</option>
+											<option value="PB">Paraíba</option>
+											<option value="PR">Paraná</option>
+											<option value="PE">Pernambuco</option>
+											<option value="PI">Piauí</option>
+											<option value="RJ">Rio de Janeiro</option>
+											<option value="RN">Rio Grande do Norte</option>
+											<option value="RS">Rio Grande do Sul</option>
+											<option value="RO">Rondônia</option>
+											<option value="RR">Roraima</option>
+											<option value="SC">Santa Catarina</option>
+											<option value="SP">São Paulo</option>
+											<option value="SE">Sergipe</option>
+											<option value="TO">Tocantins</option>
+											<option value="EX">Estrangeiro</option>
+					                    </select>
+						                 <div class="invalid-feedback">
+						                    Informe uma data valida.
+						                  </div>
+					                </div>
+					                </div>
+					               					                
+					                <div class="col-md-2">
+					                  <label for="validationCustom02" class="form-label">Data apresentação</label>
+					                  <input type="date" class="form-control dataApresentacaoFormApresentacao" id="validationCustom03" required name="dataApresentacao">
+					                  <div class="invalid-feedback">
+					                    Informe uma data valida para apresentação
+					                  </div>
+					                </div>
+					                
+									<div class="col-md-3">
+					                 <label for="validationCustom01" class="form-label">Ensaio</label>
+					                 <div class="input-group col-md-4">
+				                  	  <span class="input-group-text "></span>
+					                  <select class="form-select form-control ensaioFormApresentacao" name="ensaio" aria-label="Default select example" id="validationCustom01" value="" required>
+					                      <option selected value="">-- selecione --</option>
+											<option value="AC">Acre</option>
+											<option value="AL">Alagoas</option>
+											<option value="AP">Amapá</option>
+											<option value="EX">Estrangeiro</option>
+					                    </select>
+						                 <div class="invalid-feedback">
+						                    Informe uma data valida.
+						                  </div>
+					                </div>
+					                </div>
+					                
+					                
+				              	    <!-- Bordered Table -->
+									<table
+										class="table hoverable tabelaApresentacao">
+										<thead>
+											<tr>
+												<th scope="col" class="text-center" style="width: 1%">#</th>
+												<th scope="col">Estado</th>
+												<th scope="col">Ensaio</th>
+												<th scope="col">Data</th>
+												<th scope="col" class="text-center" style="width: 7%">Ações</th>
+											</tr>
+										</thead>
+										<tbody class="linhaApresentacao">
+										</tbody>
+									</table>
+									<!-- End Bordered Table -->
+									
+							   <nav aria-label="Page navigation example">
+								  <ul class="pagination  justify-content-center">
+								    <li class="page-item primeiro" data-destino="primeiro"><a class="page-link primeiro" href="#" >Primeiro</a></li>
+								    <li class="page-item anterior" data-paginadestino="anterior"><a class="page-link anterior" href="#">Anterior</a></li>
+								    <li class="page-item"><a class="page-link" href="#"><span class="paginaAtual"></span> / <span class="paginasTotal"></span> </a></li>
+								    <li class="page-item proximo" data-paginadestino="proximo"><a class="page-link" href="#" >Proximo</a></li>
+								    <li class="page-item ultimo" data-paginadestino="ultima"><a class="page-link" href="#">Ultimo</a></li>
+								  </ul>
+								</nav>
+				
+									<div class="col-12">
+										<span>Qtd:</span><span class="qtdLinhaApresentacao">0</span>
+									</div>
+					                
+					                <div class="modal-footer">
+				                      <button type="reset" class="btn btn-secondary rounded-pill btCancelarApresentacao" >Fechar</button>
+				                      <button class="btn btn-success rounded-pill btSalvarApresentacao" type="submit">Salvar</button>
+				                      <button class="btn btn-primary rounded-pill btPesquisarApresentacao" type="button">Pesquisar</button>
+				                    </div>
+				
+					              </form>
+					
+					            </div>
+					          </div>
+					          
+					          
+					          
+						        </div>
+						        
+									<div class="carousel-item slidePerguntas"> 
+								
+																<div class="card dadosApresentacao" data-codagremiacao="" data-codapresentacao="">
+																            <div class="card-body">
+																              <h5 class="card-title nomeAgremiacaoComApresentacao"></h5>
+																              <p> </p>
+																              
+																            <form class="row g-3 needs-validation" novalidate>
+																            
+																	             <div class="col-md-8">
+																                  <label for="validationCustom02" class="form-label">Pergunta</label>
+																                  
+																                  <div class="input-group">
+																						<input type="text" class="form-control" id="textoPesquisa"
+																							value="" required> <span class="input-group-text"
+																							id="addonTextoPesquisa">?</span>
+																						<button type="button" style="left: 15px;" class="w-25 btn btn-secondary rounded-pill salvarPesquisa" >Salvar</button>
+																					</div>
+																                  
+																                  <div class="invalid-feedback">
+																                    Informe uma data valida para apresentacao
+																                  </div>
+																                </div>
+																            
+																            
 
-	              </form>
-	
-	            </div>
-	          </div>
-	        </div>
+																				   <div class="col-md-12">
+																						<!-- End Custom Styled Validation -->
+														
+																						<!-- Bordered Table -->
+																						<table
+																							class="table table-bordered border-primary tabelaPerguntas">
+																							<thead>
+																								<tr>
+																									<th scope="col" class="text-center" style="width: 1%">#</th>
+																									<th scope="col">Pergunta</th>
+																									<th scope="col" class="text-center" style="width: 7%">Acoes</th>
+																								</tr>
+																							</thead>
+																							<tbody class="linhaPergunta">
+																							</tbody>
+																						</table>
+																						<!-- End Bordered Table -->
+														
+																						<div class="col-12">
+																							<span>Qtd:</span><span id="qtdPesquisa">0</span>
+																						</div>
+																						
+																						 <div class="modal-footer justify-content-center">
+																						 <div class="row">
+																						  <div class="col-3"></div>
+																						  <div class="col-6">
+																						  	<button type="button" class="btn btn-secondary rounded-pill" data-bs-target="#carouselControleApresentacao" data-bs-slide="prev"><i class="bi bi-arrow-left"></i> Voltar</button>
+																						  </div>
+																						  <div class="col-3"></div>
+																						    
+																						  </div>
+																						 
+																					     </div>
+																	                      
+																	                    </div>
+												
+																			</form>
+																
+																            </div>
+																          </div>
+
+									
+									</div>
+								</div>
+							
+									</div>
+								</div>
+								           						        
+						        
+						        </div>
+						        
+				        </div>
                 
-                
+                			        </div>
+                			        
+                		</div>
+                		
+                		
+              <div class="modal fade" id="modalResumoApresentacao" tabindex="-1" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Resumo Apresentação</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                      <div class="list-group list-group-resumoApresentacao">
+		              </div>
+																						
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                  </div>
                 </div>
-                
               </div>
-            </div>
-</div>
+                		
+                		
+<!--             </div> -->
+<!-- </div> -->
 
 
 <div class="modal fade" id="PesquisaModal" tabindex="-1">
@@ -365,6 +586,7 @@
 		                <div class="card-body">
 		                  <h4 class="card-title nomeEvento"></h4>
 		                  <p class="card-text descricaoEvento"></p>
+		                  <p class="card-text dataapresentacao"></p>
 		                </div>
 		              </div>
 		            </div>
@@ -377,36 +599,21 @@
 
 								<div class="col-md-12">
 								<br>
-									<label for="validationCustom01" class="form-label">Pergunta</label>
-									<div class="row">
-										<div class="col-md-8"
-											style="padding-left: 5px; padding-right: 5px;">
-											<div class="input-group">
-												<input type="text" class="form-control" id="textoPesquisa"
-													value="" required> <span class="input-group-text"
-													id="addonTextoPesquisa">?</span>
-												<button type="button" class="btn btn-info salvarPesquisa"
-													style="">Salvar</button>
-											</div>
-
-
-										</div>
-									</div>
-
+									<label for="validationCustom01" class="form-label"></label>
 <!-- 									<div class="row"> -->
-<!-- 										<div class="col-md-7"> -->
-<!-- 											<br> -->
-<!-- 											<div id="center" class="rating"> -->
-<!-- 												<span class="fa fa-star" id="star5"></span> <span -->
-<!-- 													class="fa fa-star" id="star4"></span> <span -->
-<!-- 													class="fa fa-star" id="star3"></span> <span -->
-<!-- 													class="fa fa-star" id="star2"></span> <span -->
-<!-- 													class="fa fa-star" id="star1"></span> -->
+<!-- 										<div class="col-md-8" -->
+<!-- 											style="padding-left: 5px; padding-right: 5px;"> -->
+<!-- 											<div class="input-group"> -->
+<!-- 												<input type="text" class="form-control" id="textoPesquisa" -->
+<!-- 													value="" required> <span class="input-group-text" -->
+<!-- 													id="addonTextoPesquisa">?</span> -->
+<!-- 												<button type="button" class="btn btn-info salvarPesquisa" -->
+<!-- 													style="">Salvar</button> -->
 <!-- 											</div> -->
-<!-- 										</div> -->
 
+
+<!-- 										</div> -->
 <!-- 									</div> -->
-								</div>
 
 								<!-- End Custom Styled Validation -->
 
@@ -417,17 +624,12 @@
 										<tr>
 											<th scope="col" class="text-center" style="width: 1%">#</th>
 											<th scope="col">Pergunta</th>
-											<th scope="col" class="text-center" style="width: 7%">Acoes</th>
 										</tr>
 									</thead>
 									<tbody class="linhaPesquisa">
 									</tbody>
 								</table>
 								<!-- End Bordered Table -->
-
-								<div class="col-12">
-									<span>Qtd:</span><span id="qtdPesquisa">0</span>
-								</div>
 
 							</form>
 

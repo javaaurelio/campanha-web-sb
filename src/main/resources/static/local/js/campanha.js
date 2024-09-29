@@ -102,7 +102,7 @@ $(document).ready(function(){
     	   '<tr data-codevento="_idEvento_" data-codpesquisa="_idPesquisa_" data-ordem="_ordem_" > ' +
 	           '<td> _ordem_ </td>' +
 	           '<td> _pesquisa_ </td>' +
-			   '<td>' + actions + '</td>' +
+//			   '<td>' + actions + '</td>' +
           '</tr>';
           
           
@@ -139,6 +139,81 @@ $(document).ready(function(){
 // 		##########################################
 		 carregarDadosDashboardEvento();
 		 
+		 
+		 carregarComboAgremiacao();
+		 function carregarComboAgremiacao() {
+			 
+			 $('.agremiacao').empty();
+    	     $('.agremiacao').append($('<option>', { 
+					        value: '',
+					        text : '--selecione--'
+					    }));
+	         $.ajax({
+	            type: "GET",
+	            url: "#(host_api)/campanha/agremiacao/lista",
+	            dataType: 'json' ,
+	            success: function(data)
+	            {
+					$.each(data, function(i, item) {	            		
+		       			$('.agremiacao').append($('<option>', { 
+					        value: item.id,
+					        text : item.agremiacao
+					    }));
+	            	});	            	
+	            },
+	            
+	            error: function(jqXHR, textStatus, errorThrown)
+	            {
+	            	 Swal.fire({
+	    	    		  title: "Falha ao recuperar dados agremiacao",
+	    	    		  text: "",
+	    	    		  icon: "error",
+	    	    		  timer: 1000,
+	    				  timerProgressBar: true
+	    	    	});
+	            
+	            }
+	        });
+		}
+		 
+		 
+		 carregarComboEnsaio();
+		 function carregarComboEnsaio() {
+	     
+    	     $('.ensaio').empty();
+    	     $('.ensaio').append($('<option>', { 
+					        value: '',
+					        text : '--Selecione--'
+					    }));
+	         $.ajax({
+	            type: "GET",
+	            url: "#(host_api)/campanha/ensaio/lista",
+	            dataType: 'json' ,
+	            success: function(data)
+	            {
+					$.each(data, function(i, item) {	            		
+		       			$('.ensaio').append($('<option>', { 
+					        value: item.id,
+					        text : item.nome
+					    }));
+	            	});	            	
+	            },
+	            
+	            error: function(jqXHR, textStatus, errorThrown)
+	            {
+	            	 Swal.fire({
+	    	    		  title: "Falha ao recuperar dados ensaio",
+	    	    		  text: "",
+	    	    		  icon: "error",
+	    	    		  timer: 1000,
+	    				  timerProgressBar: true
+	    	    	});
+	            
+	            }
+	        });
+	     
+	     }
+		 
 		 function carregarDadosDashboardEvento() {
 			$(".filtroPainelTotal").text('Total Geral');
 	       	$(".aumentoVotosEvento").html('');
@@ -171,15 +246,15 @@ $(document).ready(function(){
 			
 				'<hr class="dropdown-divider">'+
 			
-			'				<li><a class="dropdown-item bi bi-pencil editarItemCampanha" '+
-			'					href="#"> Alterar</a> </li>'+
-			'				<li><a class="dropdown-item bi bi-trash deleteItemCampanha"               '+
-			'					href="#"> Deletar</a></li>                                      '+
-			'				<li><a class="dropdown-item bi bi-tv href="#"> Preview</a></li> '+
+//			'				<li><a class="dropdown-item bi bi-pencil editarItemCampanha" '+
+//			'					href="#" data-id="_idEvento_"> Alterar</a> </li>'+
+//			'				<li><a class="dropdown-item bi bi-trash deleteItemCampanha"               '+
+//			'					href="#" data-id="_idEvento_"> Deletar</a></li>                                      '+
+//			'				<li><a class="dropdown-item bi bi-tv href="#"> Preview</a></li> '+
 			
 			
-			'   <hr class="dropdown-divider">'+
-			'				<li><a class="dropdown-item bi-play-fill mostrarModalPublicar" href="#"> Publicar</a></li>'+
+//			'   <hr class="dropdown-divider">'+
+//			'				<li><a class="dropdown-item bi-play-fill mostrarModalPublicar" href="#"> Publicar</a></li>'+
 			'   <hr class="dropdown-divider">'+
 			'				<li><a class="dropdown-item bi bi-speedometer mostrarEstatisticas" href="#"> Estatisticas de Votos</a></li>'+
 			'			</ul>                                                               '+
@@ -192,20 +267,22 @@ $(document).ready(function(){
 					' data-imagemurl="_imagemUrl_" '+
 					' data-publicado="_publicado_" '+
 					' data-descricao="_descricaoEvento_" '+
+					' data-dataapresentacao="_dataApresentacao_" '+
+					' data-ensaio="_ensaio_" '+
 					'   >'+
 					'<div class="card info-card naopublicado-card revenue-card" style="_estiloStatus_" > '+
 					eventoDivAcoes +
 					'	          <div class="card-body" title="_eventoNome_tt">'+
-					'               <h5 class="card-title">_eventoNome_<span> |  <span class="text-black-50" style="font-size: 10px;"></span></h5>'+
+					'               <h5 class="card-title">_eventoNome_<span> |  <span class="text-black-50" style="font-size: 12px;">_ensaio_</span></h5>'+
 					'	                <div class="d-flex align-items-center">'+
 					'                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">'+
 					'                  <i class="bi bi-people"></i> '+
-					'               </div>'+
+					'                 </div>'+
 					'              <div class="ps-3">'+
 					'               <h6 class="qtdVotosEvento">   _mediaVotacao_ / 5  </h6> ' +
-					'              <span class="text-success small fw-bold">_qtdVotosEvento_  </span> <span class="text-muted small">votos</span>'+
-					'             <br> <span class="text-success small fw-bold qtdPerguntas__idEvento_">_qtdPerguntas_  </span> <span class="text-muted small">Perguntas</span>    '+
-					'             <div class="progress" style="height: 12px;"><div class="progress-bar _statusPorcentagemdias_" role="progressbar" style="width: _vidaUtil_%" aria-valuenow="_vidaUtil_" aria-valuemin="0" aria-valuemax="100">_vidaUtil_%</div>   </div>'+
+					'              <span class="text-success small fw-bold">_qtdVotosEvento_  </span> <span class="text-muted small"></span>'+
+					'             <br> <span class="text-success small fw-bold qtdPerguntas__idEvento_">_qtdPerguntas_  </span> <span class="text-muted small">_dataApresentacao_</span>    '+
+//					'             <div class="progress" style="height: 12px;"><div class="progress-bar _statusPorcentagemdias_" role="progressbar" style="width: _vidaUtil_%" aria-valuenow="_vidaUtil_" aria-valuemin="0" aria-valuemax="100">_vidaUtil_%</div>   </div>'+
 					'           </div>'+
 					'        </div>'+
 					'     </div>'+
@@ -214,40 +291,42 @@ $(document).ready(function(){
 					
 			$.ajax({
 	            type: "GET",
-	            url: "#(host_api)/campanha/dashboardevento/geral",
+	            url: "#(host_api)/campanha/dashboardapresentacao/geral",
 	            dataType: 'json' ,
 	            success: function(data)
 	            {
 					$(".eventos").html( "" );
-					$(".eventos").append( novoEventoDiv );
+//					$(".eventos").append( novoEventoDiv );
 
-					$.each(data.listaDadosEvento, function(i, item) {	            		
+					$.each(data.listaApresentacao, function(i, item) {	            		
 
 	            		var temp = eventoDiv;
-	            		temp = temp.replaceAll("_idEvento_", item.idEvento);
-	            		temp = temp.replaceAll("_eventoNome_tt", item.nomeEvento);
-	            		temp = temp.replaceAll("_eventoNome_", item.nomeEvento.substring(0, 20));
+	            		temp = temp.replaceAll("_idEvento_", item.idApresentacao);
+	            		temp = temp.replaceAll("_eventoNome_tt", item.agremiacao);
+	            		temp = temp.replaceAll("_eventoNome_", item.agremiacao.substring(0, 20));
 	            		temp = temp.replaceAll("_descricaoEvento_", item.descricao);
-	            		temp = temp.replaceAll("_dataInicio_", item.dataInicio);
-	            		temp = temp.replaceAll("_dataFim_", item.dataFim);
-	            		temp = temp.replaceAll("_vidaUtil_", item.vidaUtil);
-	            		temp = temp.replaceAll("_publicado_", item.publicado);
-	            		temp = temp.replaceAll("_urlPublicacao_", item.urlPublicacao);
-	            		temp = temp.replaceAll("_imagemUrl_", item.urlImagem);
+//	            		temp = temp.replaceAll("_dataInicio_", item.dataApresentacao);
+//	            		temp = temp.replaceAll("_dataFim_", '');
+//	            		temp = temp.replaceAll("_vidaUtil_", '');
+//	            		temp = temp.replaceAll("_publicado_", '');
+//	            		temp = temp.replaceAll("_urlPublicacao_", '');
+	            		temp = temp.replaceAll("_imagemUrl_", item.bandeiraBase64Imagem); 
 	            		temp = temp.replaceAll("_mediaVotacao_", item.mediaVotos);
-	            		temp = temp.replaceAll("_qtdPerguntas_", item.qtdPerguntas);
-	            		temp = temp.replaceAll("_qtdVotosEvento_", item.qtdVotos);
+	            		temp = temp.replaceAll("_ensaio_", item.ensaio);
+	            		temp = temp.replaceAll("_dataApresentacao_", item.dataApresentacao);
+	            		temp = temp.replaceAll("_qtdPerguntas_", '');
+	            		temp = temp.replaceAll("_qtdVotosEvento_", '');
 	            		//temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(#d2ffdf, #e8fff1)");
 	            		//temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(#ffffff, #fdfdfd, #ebffe1)");
 
-	            		if  (item.publicado) {
-							
-		            		temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(#ffffff, #b8d8d8)");
-							
-						} else {
-							
-		            		temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(#ffffff, #d8bfb8)");
-							
+	            		if  (item.mediaVotos > 4) {
+		            		temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(#ffffff, #b8d8d8)"); //linear-gradient(109.6deg, rgb(170, 255, 169) 11.2%, rgb(17, 255, 189) 91.1%)
+						} else if (item.mediaVotos > 2 && item.mediaVotos < 4) {
+		            		temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(#ffffff, #b8d8c1)");
+						} else if (item.mediaVotos > 1 && item.mediaVotos <= 2) {
+		            		temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(#ffffff, #c6d8b8)");
+						} else if (item.mediaVotos >= 0 && item.mediaVotos <= 1) {
+		            		temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(359.3deg, rgb(196, 214, 252) 1%, rgba(187, 187, 187, 0) 70.9%)");
 						}
 	            		
 	            		// temp = temp.replaceAll("_estiloStatus_", "background: linear-gradient(#ffffff, #eeeeee, #e8e8e8)"); nao publicado
@@ -283,7 +362,7 @@ $(document).ready(function(){
             var id = $(this).parents("tr").data("codpesquisa");
                         
             var method = "PUT";
-   	        var	urlCustomizada="#(host_api)/campanha/pesquisa/ordem/"+id+"/up";
+   	        var	urlCustomizada="#(host_api)/campanha/pergunta/ordem/"+id+"/up";
 
    	        $.ajax({
                type: method,
@@ -313,7 +392,7 @@ $(document).ready(function(){
             var id = $(this).parents("tr").data("codpesquisa");
                         
             var method = "PUT";
-   	        var	urlCustomizada="#(host_api)/campanha/pesquisa/ordem/"+id+"/down";
+   	        var	urlCustomizada="#(host_api)/campanha/pergunta/ordem/"+id+"/down";
 
    	        $.ajax({
                type: method,
@@ -342,8 +421,7 @@ $(document).ready(function(){
 	    
 	    $(document).on("click", ".deleteItemCampanha", function() {
 			var cd = $(this).parents('.dadosEvento');
-				    	
-	    	var idEvento = cd.data("id");
+	    	var idEvento = $(this).data("id");
 	    	var nomeEvento = cd.data("nomeevento");
 	    	
 	    	Swal.fire({
@@ -356,7 +434,7 @@ $(document).ready(function(){
 	        	  if (result.isConfirmed) {
 					  						
 			   	        var method = "DELETE";
-			   	        var	urlCustomizada="#(host_api)/campanha/evento/"+idEvento;
+			   	        var	urlCustomizada="#(host_api)/campanha/apresentacao/"+idEvento;
 			   	        $.ajax({
 			               type: method,
 			               url: urlCustomizada,
@@ -395,7 +473,7 @@ $(document).ready(function(){
 			var qtdPesquisas = 0;
 			$.ajax({
 	            type: "GET",
-	            url: "#(host_api)/campanha/pesquisa/"+idEvento,
+	            url: "#(host_api)/campanha/pergunta/"+idEvento,
 	            success: function(data)
 	            {
 	            	$(".linhaPesquisa").html('');
@@ -445,7 +523,7 @@ $(document).ready(function(){
 	    	$(".linhaPesquisaPainelVisualizacao").html('');
 			$.ajax({
 	            type: "GET",
-	            url: "#(host_api)/campanha/pesquisa/"+idEvento,
+	            url: "#(host_api)/campanha/pergunta/"+idEvento,
 	            success: function(data)
 	            {
 	            	$(".linhaPesquisa").html('');
@@ -463,8 +541,8 @@ $(document).ready(function(){
 	            },
 	            error: function(data)
 	            {
-	            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-	            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+//	            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+//	            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
 	            
 	            }
 	        });
@@ -572,18 +650,18 @@ $(document).ready(function(){
 			
 			$.ajax({
 		            type: "GET",
-		            url: "#(host_api)/campanha/evento/"+cd.data("id"),
+		            url: "#(host_api)/campanha/apresentacao/"+cd.data("id"),
 		            success: function(data)
 		            {
 		            	$(".codigoCampanha").html( data.id );
            	
 			           	$("#formCampanha :input[name='campanha']").val( data.campanha );
 			           	           	
-			           	var datainicio = data.dataInicio;
-			           	$("#formCampanha :input[name='dataInicio']").val( datainicio.split("/").reverse().join("-") );
-			           	
-			           	var datafim = data.dataFim;
-			           	$("#formCampanha :input[name='dataFim']").val( datafim.split("/").reverse().join("-") );
+//			           	var datainicio = data.dataInicio;
+//			           	$("#formCampanha :input[name='dataInicio']").val( datainicio.split("/").reverse().join("-") );
+//			           	
+//			           	var datafim = data.dataFim;
+//			           	$("#formCampanha :input[name='dataFim']").val( datafim.split("/").reverse().join("-") );
 			           	
 			           	$("#formCampanha :input[name='imagemUrl']").val( data.imagemUrl );
 			           	
@@ -629,13 +707,13 @@ $(document).ready(function(){
             	$("#addonTextoPesquisa").removeClass("is-invalid");
                 
                 var dadosPesquisa = {};
-   	    		dadosPesquisa.idEvento = $('#nomeCampanhaPergunta').data('codevento');
+   	    		dadosPesquisa.idApresentacao = $('#nomeCampanhaPergunta').data('codevento');
    	    		dadosPesquisa.ordem = index+1;
-   	    		dadosPesquisa.pesquisa = $("#textoPesquisa").val();
+   	    		dadosPesquisa.pergunta = $("#textoPesquisa").val();
     	    	
                 $.ajax({
                     type: "POST",
-                    url: "#(host_api)/campanha/pesquisa",
+                    url: "#(host_api)/campanha/pergunta",
                     data: JSON.stringify(dadosPesquisa),
                     contentType: "application/json; charset=utf-8",
                     success: function(data)
@@ -675,7 +753,7 @@ $(document).ready(function(){
 					    $("#qtdPesquisa").html($(".linhaPesquisa tr").length);
 			            
 			            var method = "DELETE";
-			   	        var	urlCustomizada="#(host_api)/campanha/pesquisa/"+idPesquisa;
+			   	        var	urlCustomizada="#(host_api)/campanha/pergunta/"+idPesquisa;
 
 			   	        $.ajax({
 			               type: method,
@@ -756,20 +834,19 @@ $(document).ready(function(){
         		event.preventDefault();
         	} else {
        	        item = {}
-       	        item ["campanha"] = $('#formCampanha').find('input[name="campanha"]').val();
-       	        item ["dataInicio"] = $('#formCampanha').find('input[name="dataInicio"]').val();
-       	        item ["dataFim"] = $('#formCampanha').find('input[name="dataFim"]').val();
-       	        item ["imagemUrl"] = $('#formCampanha').find('input[name="imagemUrl"]').val();
-       	        item ["descricao"] = $('.descricao').val();
-       	        item ["layoutPainelVotacao"] = $('.layoutPainelVotacao').val();
+       	        item ["estado"] = $('.estado').val();
+       	        item ["dataApresentacao"] = $('.dataApresentacao').val();
+       	        item ["codEnsaio"] = $('.ensaio').val();
+       	        item ["codAgremiacao"] = $('.agremiacao').val();
+       	        
        	        
        	        var id = $('.codigoCampanha').html();
        	        var method = "POST";
-       	        var urlCustomizada = "#(host_api)/campanha/evento";
+       	        var urlCustomizada = "#(host_api)/campanha/apresentacao";
        	        
        	        if (id > 0) {
        	        	method = "PUT";
-       	        	urlCustomizada="#(host_api)/campanha/evento/"+id;
+       	        	urlCustomizada="#(host_api)/campanha/apresentacao/"+id;
        	        }
           	     event.preventDefault();
        	        //alert (method +  JSON.stringify(item) + urlCustomizada);
@@ -818,12 +895,14 @@ $(document).ready(function(){
 			var idEvento = cd.data("id");
 			var imagemurl = cd.data("imagemurl");
 			var descricao = cd.data("descricao");
+			var dataapresentacao = cd.data("dataapresentacao");
 			
 			$('#nomeCampanhaPergunta').attr("data-codevento", idEvento);
 			$('#nomeCampanhaPergunta').data("codevento", idEvento);
 			
 			$(".nomeEvento").html(idEvento + " | "+nomeEvento);
-			$(".descricaoEvento").html(descricao.substring(0, 200));
+			$(".descricaoEvento").html(descricao.substring(0, 250));
+			$(".dataapresentacao").html(dataapresentacao);
 			$('.imagemUrl').attr("src", imagemurl);
 			
 			
@@ -838,7 +917,7 @@ $(document).ready(function(){
 	    	var dadosEvento = $(this).parents('.dadosEvento');
 	    	
 	    	var idEvento = dadosEvento.data('id');
-		  	$(location).attr('href','dashboardevento?idEvento=' + idEvento);
+		  	$(location).attr('href','dashboardevento?idApresentacao=' + idEvento);
 		  
 	    });
 	    

@@ -7,41 +7,41 @@
   
   <script>
 	$(document).ready(function() {
-	    $("#smallModalVotacao").modal({
-	        show: false,
-	        backdrop: 'static'
-	    });
+// 	    $("#smallModalVotacao").modal({
+// 	        show: false,
+// 	        backdrop: 'static'
+// 	    });
 		
 		var coordenadas = {};
 		var localizacaoApi = {};
 		
-		try {
-			navigator.geolocation.getCurrentPosition(
-					function(data){
-						    coordenadas.timestamp=data.timestamp;
-						    coordenadas.latitude=data.coords.latitude;
-						    coordenadas.longitude=data.coords.longitude;
+// 		try {
+// 			navigator.geolocation.getCurrentPosition(
+// 					function(data){
+// 						    coordenadas.timestamp=data.timestamp;
+// 						    coordenadas.latitude=data.coords.latitude;
+// 						    coordenadas.longitude=data.coords.longitude;
 						    
-						}, function error(err) {
-							  alert("Erro Geo:" + err.code + " - "+ err.message);
-						}
-				)	
+// 						}, function error(err) {
+// 							  alert("Erro Geo:" + err.code + " - "+ err.message);
+// 						}
+// 				)	
 			
-		} catch(err) {
-		   alert("Erro geolocation:"+JSON.stringify(err));
-		   alert("Erro geolocation-MSG:"+err.message);
-		 }		
+// 		} catch(err) {
+// 		   alert("Erro geolocation:"+JSON.stringify(err));
+// 		   alert("Erro geolocation-MSG:"+err.message);
+// 		 }		
 				
-		try {
-		$.get("https://ipinfo.io", function(response) {
-			localizacaoApi.cidade = response.city;
-			localizacaoApi.pais = response.country;
-		}, "");
+// 		try {
+// 		$.get("https://ipinfo.io", function(response) {
+// 			localizacaoApi.cidade = response.city;
+// 			localizacaoApi.pais = response.country;
+// 		}, "");
 		
-		} catch(err) {
-			   alert("Erro geolocation:"+JSON.stringify(err));
-			   alert("Erro geolocation-MSG:"+err.message);
-		}
+// 		} catch(err) {
+// 			   alert("Erro geolocation:"+JSON.stringify(err));
+// 			   alert("Erro geolocation-MSG:"+err.message);
+// 		}
 		
 		function reloaddd() {
 		     $(".star1").click(function(){
@@ -115,7 +115,8 @@
        var rowTemplateEnsaio =           
     	'   <li class="list-group-item"> ' +
 	    '   <a class="" href="#carouselExampleControls" data-slide="next"> ' +
-	    '     <button style= "background-color: #d9fcf2" type="button" class="list-group-item list-group-item-action rounded-pill" data-codensaio="_codEnsaio_" data-evento="_nomeEnsaio_"> _nomeEnsaio_ <i class="bi bi-arrow-right-circle"></i></button>' +
+// 	    '     <button style= "background-color: #d9fcf2" type="button" class="list-group-item list-group-item-action rounded-pill" data-codensaio="_codEnsaio_" data-evento="_nomeEnsaio_"> _nomeEnsaio_ <i class="bi bi-arrow-right-circle"></i></button>' +
+	    '     <button style= "background-color: _cor_" type="button" class="list-group-item list-group-item-action rounded-pill" data-codensaio="_codEnsaio_" data-evento="_nomeEnsaio_"> _nomeEnsaio_ <i class="bi bi-arrow-right-circle"></i></button>' +
 	    '   </a>' +
 	    ' </li> ';
 		
@@ -126,17 +127,6 @@
 		 function carregarDadosVotacao() {
 	        
 	    	$(".linhaPesquisaPainelVisualizacao").html('');
-	    	if (JSON.stringify(hashParam)=="null") {
-	    		
-	    		Swal.fire({
-	    			  icon: "error",
-	    			  title: "Oops...",
-	    			  text: "Parametro invalido"	    			  
-	    			});
-	    		
-	    		
-	    	} else {
-	    		
 				$.ajax({
 		            type: "GET",
 		            url: "#(host_api)/campanha/voto/painelvotacao/tela/1",
@@ -159,6 +149,7 @@
 		            	$.each(data.listaCadastroEnsaios, function(i, item) {	            		
 		            		rowTemplateEnsaioTemp = rowTemplateEnsaio.replaceAll('_nomeEnsaio_', item.nome );
 		            		rowTemplateEnsaioTemp = rowTemplateEnsaioTemp.replaceAll('_codEnsaio_', item.id );
+		            		rowTemplateEnsaioTemp = rowTemplateEnsaioTemp.replaceAll('_cor_', item.cor );
 			            	$(".listaEnsaios").append(rowTemplateEnsaioTemp);
 		            	});
 		            	
@@ -187,10 +178,10 @@
 		            	});
 		            	
 		    			if (data.estados.length>0) {
-			            	$('#smallModalVotacao').modal('show');
+			            	//$('#smallModalVotacao').modal('show');
 		    			} else {
-		    				$("#popupCampanhaMsgErro").html("Evento nao encontrado! ");
-		    				$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+// 		    				$("#popupCampanhaMsgErro").html("Evento nao encontrado! ");
+// 		    				$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
 		    			}
 		    			
 		    			reloaddd();
@@ -216,7 +207,6 @@
 			           	}		            	
 			           }
 			        });
-			 }
 		 }
 		 
 		 
@@ -330,12 +320,13 @@
 			var texto = $(this).data('evento');
 			$(".ensaioEvento").html(texto);
 			
+			
 			var estado = $('.estadosComEvento').find(":selected").text();
 			$('.estadosComEvento').hide();
 			$(".estadoEvento").html(estado);
 			
 			var codensaio = $(this).data('codensaio');
-			
+			$(".ensaioEvento").data('codensaio', codensaio);
 			
 			$.ajax({
 	            type: "GET",
@@ -361,6 +352,7 @@
 // 		            	$(".listaEnsaios").append(rowTemplateEnsaioTemp);
 	            		
 // 	            	});
+
 	            	$('.agremiacaoOpcoes').empty();
 	            	$('.listaDataApresentacao').empty();
 	            	
@@ -445,14 +437,14 @@
 				
 				$.ajax({
 	                type: "GET",
-	                url: "#(host_api)/campanha/agremiacao/"+id,
+	                url: "#(host_api)/campanha/voto/painelvotacao/agremiacao/"+id,
 	                contentType: "application/json; charset=utf-8",
 	                dataType: 'json' ,
 	                success: function(data)
 	                {
 	                	$('.nomeAgremiacao').html(data.agremiacao);
-	                	$('.descricaoAgremiacao').html('Descricao');
-	                	$('.bandeiraAgremiacao').attr("src",data.bandeiraBase64Imagem);
+	                	$('.descricaoAgremiacao').html(data.agremiacaoDescricao);
+	                	$('.bandeiraAgremiacao').attr("src", data.bandeiraBase64Imagem);
 
 	                	$('#carouselExampleControls').carousel('next');
 	                },
@@ -486,25 +478,26 @@
 		 function carregarPerguntasVotacao() {
 			 
 			 $(".linhaPesquisaPainelVisualizacao").html('');
-		    	if (JSON.stringify(hashParam)=="null") {
-		    		$("#popupCampanhaMsgErro").html("Parametro invalido !");
-	            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 3000).effect("scale", { times: 1 }, 900).fadeOut('slow');
-		    		
-		    	} else {
-		    		
-		    		
 // 		    		/campanha/voto/painelvotacao/tela/3/AL/2/5/2024-09-10
 		    		
+		    		
+// 		    		var estado = "AL";
+// 		    		var tipoEnsaio = "2";
+// 		    		var idAgremiacao = "5";
+// 		    		var dataApresentacao = "2024-09-10";
+
+					var estado = $('.estadosComEvento').find(":selected").text();
+					var tipoEnsaio = $('.ensaioEvento').data('codensaio');
+					var idAgremiacao = $('.agremiacaoOpcoes').find(":selected").val(); 
+					var dataApresentacao = $('.listaDataApresentacao').find(":selected").val(); 
+
 					$.ajax({
 			            type: "GET",
-// 			            url: "${urlApi}/campanha/voto/painelvotacao/perguntas/"+5,
-			            url: "#(host_api)/campanha/voto/painelvotacao/tela/3/AL/2/5/2024-09-10",
+			            url: "#(host_api)/campanha/voto/painelvotacao/tela/3/"+ estado +"/" + tipoEnsaio+"/"+ idAgremiacao + "/" + dataApresentacao,
 			            success: function(data)
 			            {
 			            	$(".linhaPesquisa").html('');
-			    			
 			            	$.each(data.listaPerguntas, function(i, item) {
-					    			
 			            			var temp = rowPesquisaPainelVotacao;
 									temp = temp.replaceAll("_codpesquisa_", item.id);	
 									temp = temp.replaceAll("_pesquisa_", item.pergunta);
@@ -516,16 +509,7 @@
 			            	$('.bandeiraAgremiacao').attr('src', data.bandeiraBase64Imagem);
 			    			$(".tituloPainelVotacao").text(data.agremiacao);
 		        			$(".descricaoPainelVotacao").text(data.agremiacaoDescricao);
-			    			
-// 			    			if (data.length>0) {
-// 				            	$('#smallModalVotacao').modal('show');
-// 			    			} else {
-// 			    				$("#popupCampanhaMsgErro").html("Evento nao encontrado! ");
-// 			    				$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-// 			    			}
-			    			
 			    			reloaddd();
-			    			
 			            },
 			            error: function(data)
 			          	  {
@@ -552,8 +536,6 @@
 // 				           	}		            	
 				           }
 				        });
-				 }
-			 
 		 }
 		 
 		 
@@ -587,16 +569,152 @@
 			 
 		 });
 		 
+		 
+		 $("#formVotoCarnaval" ).on("submit", function( event ) {
+			 try {
+			    
+			 	var itemSemVoto = false;
+		    	votos = [];
+		    	pessoa = {};
+		    	dadosVotoParam = {};
+		    	
+		    	 $(".linhaPesquisaPainelVisualizacao").find('tr').each(function( index, element ) {
+		   		     voto = {}
+		    		 voto.codpesquisa = $(this).data('codpesquisa');
+		    		 voto.voto = 0;
+		    		 voto.voto = $(this).data('voto');
+		    		 
+		    		 if (voto.voto == undefined) {
+		    			 itemSemVoto = true;
+		    			 $(this).css("border-color", "red");
+		    		 } else {
+		    			 $(this).css("border-color", "");
+		    		 }
+		    		 
+// 		    		 pessoa.nomePessoa = $(".nomePessoa").val();
+// 		    		 pessoa.cidade = $(".cidade").val();
+// 		    		 pessoa.idade = $(".idade").val();
+// 		    		 pessoa.uf = $(".uf").val();
+// 		    		 pessoa.sexo = $(".sexo:checked").val();
+		    		 votos.push(voto);
+		    	});
+		    	 
+		    	 dadosVotoParam.listaVoto = votos;
+// 		    	 dadosVotoParam.pessoa = pessoa;
+	    		 dadosVotoParam.coordenadas = coordenadas;
+	    		 dadosVotoParam.idMetadadoVoto = $(".idMetadadosVoto").html();
+	    		 dadosVotoParam.dataTela = moment().format();
+	    		 
+	    		 if (itemSemVoto) {
+		    		event.preventDefault();
+		    	} else {
+		    		event.preventDefault();
+			    	$.ajax({
+		                type: "POST",
+		                url: "#(host_api)/campanha/voto/painelvotacao/carnaval",
+		                data: JSON.stringify(dadosVotoParam),
+		                contentType: "application/json; charset=utf-8",
+		                dataType: 'json' ,
+		                success: function(data)
+		                {
+		                	$('#carouselExampleControls').carousel('next');
+		                	
+		                	$(".btVoltarCarousel").hide();
+		                	
+		        			$(".ensaioEvento").html("");
+		        			$(".estadoEvento").html("");
+		                	
+		                	
+// 		                	let timerInterval;
+// 		                	Swal.fire({
+// 		                	  title: "Obrigado pelo seu voto!",
+// 		                	  html: "Ate a proxima votacao...",
+// 		                	  timer: 3000,
+// 		                	  timerProgressBar: true,
+// 		                	  didOpen: () => {
+// 		                	    Swal.showLoading();
+// 		                	    const timer = Swal.getPopup().querySelector("b");
+// 		                	    timerInterval = setInterval(() => {
+// 		                	      timer.textContent = '0';
+// 		                	    }, 100);
+// 		                	  },
+// 		                	  willClose: () => {
+// 		                	    clearInterval(timerInterval);
+// 		                	  }
+// 		                	}).then((result) => {
+// 		                	  /* Read more about handling dismissals below */
+//  		                	    if (result.dismiss === Swal.DismissReason.timer) {
+// 		                	      console.log("I was closed by the timer");
+// 	                	    	  $('#carouselExampleControls').carousel('next');		                	    	
+// 		                	    }
+// 		                	});
+		                },
+		                
+		                error: function(jqXHR, exception)
+		                {
+		                	Swal.fire({
+			            		  title:data.responseJSON.message,
+			            		  text: "Falha na operacao",
+			            		  icon: "error"
+			            	});
+		                	
+		                	//alert("Erro1"+JSON.stringify(exception))
+		                	//alert("Erro2"+JSON.stringify(jqXHR))
+		                }
+		            });
+		    	}
+	    		 
+				 }
+				 catch(err) {
+				  // alert("ErroTry:"+JSON.stringify(err));
+				   //alert("ErroTry-MSG:"+err.message);
+				 }
+	    	});
+		 
+		 
+// 		 $(document).on("click", "#salvarVotarCarnaval", function(){
+// 			 alert("OK")
+// 		    	votos = []
+// 		    	 $(".linhaPesquisaPainelVisualizacao").find('tr').each(function( index, element ) {
+// 		   		     voto = {}
+// 		    		 voto.codpesquisa = $(this).data('codpesquisa');
+// 		    		 voto.voto = $(this).data('voto');
+// 		    		 votos.push(voto);
+// 		    	});
+// 			     //alert(JSON.stringify(votos));
+			     
+// 		    	$.ajax({
+// 	                type: "POST",
+// 	                url: "#(host_api)/campanha/voto/carnaval",
+// 	                data: JSON.stringify(votos),
+// 	                contentType: "application/json; charset=utf-8",
+// 	                success: function(data)
+// 	                {
+// // 	                	atualizarTabelasPesquisa();
+// alert("OK")
+// 	                	$("#qtdPesquisa").html($(".linhaPesquisa tr").length);		
+// 	                	$("#popupCampanhaSucesso").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
+// 	                },
+	                
+// 	                error: function(data)
+// 	                {
+// 	                	$("#popupCampanhaMsgErro").html(JSON.stringify(data));
+// 	                    $("#popupCampanhaErro").fadeIn('fade').animate({opacity: 2.0}, 1500).effect("fade", { times: 1}, 10).fadeOut('fade');
+// 	                }
+// 	            });
+// 	    	});
+		 
     });
 </script>
 
 <body>
 
-      <div class="modal fade" id="smallModalVotacao" tabindex="-1">
+      <div class="_modal _fade" id="smallModalVotacao" tabindex="-1">
          <div class="modal-dialog ">
            <div class="modal-content">
              <div class="modal-header">
-               <h5 class="modal-title">Votacao - # AQ<i class="idMetadadosVoto"></i> </h5>
+               <h5 class="modal-title"><i class="idMetadadosVoto"></i> </h5>
+<!--                <h5 class="modal-title">Painel Votacao<i class="idMetadadosVoto"></i> </h5> -->
              </div>
              <div class="modal-body">
                
@@ -672,6 +790,11 @@
 								<!-- 		    Voto -->
 												<div class="carousel-item">
 												  <%@include file="layoutpainelvotacao-item-carousel-voto.jsp" %>
+								           		</div>
+								           		
+								<!-- 		    Fechar  -->
+												<div class="carousel-item">
+												  <%@include file="layoutpainelvotacao-item-carousel-obrigado.jsp" %>
 								           		</div>
 						         </div>
        </div>

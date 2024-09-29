@@ -52,8 +52,6 @@
 <link href="jquery.orgchart.css" rel="stylesheet">
 
 
-
-
 <!-- Resources -->
 <script src="./local/map/index.js"></script>
 <script src="./local/map/map.js"></script>
@@ -189,12 +187,39 @@ function updateData() {
 <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script>
 	$(document).ready(function(){
-		
-		
 		$( ".am5-layer-30" ).remove();
 		
-		
+// 		##########################################
+// 		############Carregamento Principal #######
+// 		##########################################
+// 		 carregarDadosFiltros();
+		 function carregarDadosFiltros() {
 
+			 
+			var idEventoParam = (new URL(location.href)).searchParams.get('idApresentacao');
+			
+	        $.ajax({
+	            type: "GET",
+	            url: "#(host_api)/campanha/dashboardapresentacao/"+idEventoParam,
+	            success: function(data)
+	            {
+	       			$(".nomeEvento").html(data.nomeEvento );
+        			$(".qtdVotosEvento").html( data.quantidadeVotos );
+	            },
+	            
+	            error: function(data)
+	            {
+	            	console.log(JSON.stringify(data))
+// 	            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+// 	            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+	            
+	            }
+	        });
+		 }
+		
+		
+		
+		
 // 		##########################################
 // 		############Carregamento Principal #######
 // 		##########################################
@@ -202,12 +227,11 @@ function updateData() {
 		 function carregarDadosDashboard() {
 			$(".filtroPainelTotal").text('Total Geral');
 	       	$(".aumentoVotosEvento").html('');
-			var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+			var idEventoParam = (new URL(location.href)).searchParams.get('idApresentacao');
 			
 	        $.ajax({
 	            type: "GET",
-	            //url: "https://64acce2b9edb4181202fd445.mockapi.io/usuario/campanha",
-	            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam,
+	            url: "#(host_api)/campanha/dashboardapresentacao/"+idEventoParam,
 	            success: function(data)
 	            {
 	       			$(".nomeEvento").html(data.nomeEvento );
@@ -243,7 +267,7 @@ function updateData() {
  	    	$('.modalInformacaoMensagem2').html(map);
 	     });
 		 
-		 carregarDadosDashboardAtividades();
+// 		 carregarDadosDashboardAtividades();
 		 function carregarDadosDashboardAtividades() {
 	       	$(".listaAtividades").html('');
 	       	$(".labelAtividadeOnline").html('Item Pesquisa | Online');
@@ -264,12 +288,10 @@ function updateData() {
 			var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
 	           $.ajax({
 	            type: "GET",
-	            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/atividades/online",
+	            url: "#(host_api)/campanha/dashboardevento/"+idEventoParam+"/atividades/online",
 	            success: function(data)
 	            {
 	            	$(".listaAtividades").html('');
-	            	
-	    			//alert(JSON.stringify(data))
 	            	$.each(data, function(i, item) {	            		
 	            			
 	            		var temp = html;
@@ -304,7 +326,6 @@ function updateData() {
 							 break;
 						}
 						
-						
 	        			$(".listaAtividades").append(temp);
 		        		
 	            	});
@@ -313,8 +334,8 @@ function updateData() {
 	            error: function(data)
 	            {
 	            	console.log(JSON.stringify(data))
-	            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-	            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+// 	            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+// 	            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
 	            
 	            }
 	        });
@@ -336,7 +357,7 @@ function updateData() {
 			var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
 	           $.ajax({
 	            type: "GET",
-	            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/atividades/online/media",
+	            url: "#(host_api)/campanha/dashboardevento/"+idEventoParam+"/atividades/online/media",
 	            success: function(data)
 	            {
 	            	$(".listaAtividades").html('');
@@ -393,10 +414,10 @@ function updateData() {
 		 $(document).on("click", ".filtroPainelTotalVoto", function(){
 			 
 			 $(".filtroPainelTotal").html('Total Geral');
-			 var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+			 var idEventoParam = (new URL(location.href)).searchParams.get('idApresentacao');
 		        $.ajax({
 		            type: "GET",
-		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam,
+		            url: "#(host_api)/campanha/dashboardapresentacao/"+idEventoParam,
 		            success: function(data)
 		            {
 		       			$(".nomeEvento").html(data.nomeEvento );
@@ -417,10 +438,10 @@ function updateData() {
 		 $(document).on("click", ".filtroPainelHojeVoto", function(){
 	            
 			 $(".filtroPainelTotal").html('Hoje');
-			 var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+			 var idEventoParam = (new URL(location.href)).searchParams.get('idApresentacao');
 		        $.ajax({
 		            type: "GET",
-		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/hoje",
+		            url: "#(host_api)/campanha/dashboardapresentacao/"+idEventoParam+"/hoje",
 		            success: function(data)
 		            {
 		       			$(".nomeEvento").html(data.nomeEvento );
@@ -440,10 +461,10 @@ function updateData() {
 		 $(document).on("click", ".filtroPainelOntemVoto", function(){
 	            
 			 $(".filtroPainelTotal").html('Ontem');
-			 var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+			 var idEventoParam = (new URL(location.href)).searchParams.get('idApresentacao');
 		        $.ajax({
 		            type: "GET",
-		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/ontem",
+		            url: "#(host_api)/campanha/dashboardapresentacao/"+idEventoParam+"/ontem",
 		            success: function(data)
 		            {
 		       			$(".nomeEvento").html(data.nomeEvento );
@@ -463,10 +484,10 @@ function updateData() {
 		 $(document).on("click", ".filtroPainelUltimo7DiasVoto", function(){
 	            
 			 $(".filtroPainelTotal").html('Ultimos 7 dias');
-			 var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+			 var idEventoParam = (new URL(location.href)).searchParams.get('idApresentacao');
 		        $.ajax({
 		            type: "GET",
-		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/ultimo7dias",
+		            url: "#(host_api)/campanha/dashboardapresentacao/"+idEventoParam+"/ultimo7dias",
 		            success: function(data)
 		            {
 		       			$(".nomeEvento").html(data.nomeEvento );
@@ -492,8 +513,6 @@ function updateData() {
 			 carregarDadosDashboardAtividadesMediaVoto();
          });
 		 
-		 
-		 
 		 $(document).on("click", ".filtroGraficoBarraDia", function(){
 			 carregarGraficoBarra("dia");
          });
@@ -507,6 +526,7 @@ function updateData() {
 		 $(document).on("click", ".filtroGraficoBarraHora24", function(){
 			 carregarGraficoBarra("hora24");
          });
+		 
 		 $(document).on("click", ".filtroGraficoBarraHoraDia", function() {
 			 
 			 Swal.fire({
@@ -532,12 +552,336 @@ function updateData() {
 				  allowOutsideClick: () => !Swal.isLoading()
 				}).then((result) => {
 				  if (result.isConfirmed) {	
+					  alert(result.value)
 					  carregarGraficoBarra("hora24", result.value);					  
 				  }
 				});
          });
 		 
-		 carregarGraficoBarra("dia");
+		 carregarGraficoPizza();	 
+         function carregarGraficoPizza() {
+        	 
+             var idApresentacaoParam = (new URL(location.href)).searchParams.get('idApresentacao');
+             
+ 		      $.ajax({
+ 		            type: "GET",
+ 		           url: "#(host_api)/campanha/dashboardapresentacao/" +idApresentacaoParam+"/grafico/radar",
+ 		            success: function(data)
+ 		            {
+		              var labelPieChart = [];
+	        		  var seriesItemPieChart = [];
+	        		  
+  	        			$.each(data, function(i, item) {	
+  	        				labelPieChart.push(item.pesquisa);
+  	        				seriesItemPieChart.push(parseInt(item.soma));
+  	        			});
+                  
+  	        			var options = {
+			                    series: seriesItemPieChart,
+			                    chart: {
+			                      height: 300,
+			                      type: 'pie',
+			                      toolbar: {
+			                        show: true
+			                      },
+			                    },
+			                    labels: labelPieChart
+			                  };
+	  	        			
+  	        			var pieChart = new ApexCharts(document.querySelector("#pieChart"), options);
+  	        			pieChart.render();
+ 		            },
+ 		            
+ 		            error: function(data)
+ 		            {
+ 		            	console.log(JSON.stringify(data))
+ 		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+ 		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+ 		            
+ 		            }
+ 		        });
+        	 
+        	 
+         }
+         
+		 carregarGraficoRadar();		 
+		 
+         function carregarGraficoRadar() {
+        	 
+        	 
+        	 var categoriesItemRadar = [];
+   		  	var seriesItemRadar = [];
+   			
+             var idEventoParam = (new URL(location.href)).searchParams.get('idApresentacao');
+ 		      $.ajax({
+ 		            type: "GET",
+ 		            url: "#(host_api)/campanha/dashboardapresentacao/" +idEventoParam+"/grafico/radar",
+ 		            success: function(data)
+ 		            {
+ 		            	categoriesItemRadar = [];
+ 		            	seriesItemRadar = [];
+ 	        			
+ 	        			var seriesItemDataRadar = {};
+ 	        			seriesItemDataRadar.name = 'Total Votos';
+ 	        			seriesItemDataRadar.data = [];
+ 	        			
+ 	        			
+ 	        			$.each(data, function(i, item) {	
+ 	        				seriesItemDataRadar.data.push(item.soma);
+ 	        				categoriesItemRadar.push(item.pesquisa);
+ 	        			});
+ 	        			
+ 	        			seriesItemRadar.push(seriesItemDataRadar);
+ 	        			
+ 	        			var options = {
+
+ 	        					stroke: {
+ 	     	               		    show: true,
+ 	     	               		    width: 2,
+ 	     	               		    colors: [],
+ 	     	               		    dashArray: 0
+ 	     	               		  },
+ 	     	               	series: seriesItemRadar,	                      
+ 	     	                   chart: {
+ 	     	                     height: 350,
+ 	     	                     type: 'radar'
+ 	     	                   },
+ 	     	                   xaxis: {
+ 	     	                     categories: categoriesItemRadar,
+ 	     	                     labels: {
+ 	     	                   	  show: true,
+ 	     	                   	  style: {
+ 	     	                   	    colors: ["#a8a8a8"],
+ 	     	                   	    fontSize: "11px",
+ 	     	                   	    fontFamily: 'Arial'
+ 	     	                   	  }
+ 	     	                   	}
+ 	     	                   },
+ 	     	                   dataLabels: {
+ 	     	                   	  enabled: true,
+ 	     	                   	  background: {
+ 	     	                   	    enabled: true,
+ 	     	                   	    borderRadius:2,
+ 	     	                   	  }
+ 	     	                   	}
+ 	     	                 };
+ 	      		        
+ 	     		        var radar = new ApexCharts(document.querySelector("#radarChart"), options);
+ 	     		        radar.render();
+ 	        			
+ 		            },
+ 		            
+ 		            error: function(data)
+ 		            {
+ 		            	console.log(JSON.stringify(data))
+ 		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+ 		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+ 		            
+ 		            }
+ 		        });
+         }
+		 
+         recuperarAgremiacao();
+         function recuperarAgremiacao() {
+
+        	 var idApresentacaoParam = (new URL(location.href)).searchParams.get('idApresentacao');
+
+        	 $.ajax({
+	                type: "GET",
+	                url: "#(host_api)/campanha/dashboardapresentacao/agremiacao/"+idApresentacaoParam,
+	                contentType: "application/json; charset=utf-8",
+	                dataType: 'json' ,
+	                success: function(data)
+	                {
+	                	$('.nomeAgremiacaoDashboard').html(data.agremiacao);
+	                	$('.descricaoAgremiacaoDashboard').html(data.agremiacaoDescricao);
+	                	$('.dataApresentacao').html(data.dataHorasApresentacao);
+	                	$('.ensaioNome').html(data.ensaio + " - " + data.estado);
+	                	$('.bandeiraAgremiacaoDashboard').attr("src", data.bandeiraBase64Imagem);
+	                },
+	                error: function(jqXHR, exception)
+	                {
+	                	Swal.fire({
+		            		  title:data.responseJSON.message,
+		            		  text: "Falha na operacao",
+		            		  icon: "error"
+		            	});
+	                }
+	            });
+		}
+         
+         recuperarRatingCard();
+         function recuperarRatingCard() {
+        	 
+        	 var idApresentacaoParam = (new URL(location.href)).searchParams.get('idApresentacao');
+
+        	 $.ajax({
+	                type: "GET",
+	                url: "#(host_api)/campanha/dashboardapresentacao/rating/media/"+idApresentacaoParam,
+	                contentType: "application/json; charset=utf-8",
+	                dataType: 'json' ,
+	                success: function(data)
+	                {
+	                	if (data == "") {
+	                		data = "0";
+	                	}
+	               		$('.ratingVotos').html(data + " / 5.0");
+
+	                },
+	                error: function(jqXHR, exception)
+	                {
+	                	Swal.fire({
+		            		  title:data.responseJSON.message,
+		            		  text: "Falha na operacao",
+		            		  icon: "error"
+		            	});
+	                }
+	            });
+         }
+         
+         
+         recuperarGraficoRating();
+         function recuperarGraficoRating() {
+
+        	 var idApresentacaoParam = (new URL(location.href)).searchParams.get('idApresentacao');
+
+        	 $.ajax({
+	                type: "GET",
+	                url: "#(host_api)/campanha/dashboardapresentacao/rating/"+idApresentacaoParam,
+	                contentType: "application/json; charset=utf-8",
+	                dataType: 'json' ,
+	                success: function(data)
+	                {
+	                	categoriesData = [];
+ 	        			seriesData = [];
+ 	        			
+ 	        			$.each(data, function(i, item) {	
+        					categoriesData.push(item.rating);
+ 	        				seriesData.push(item.qtdVotos);
+ 	        			});
+ 	        			
+ 	        			$('#ratingBarChart').html(''); 	        			
+ 	        			
+ 	        			var options = {
+	        			          series: [{
+	        			          name: 'Ratings',
+	        			          data: seriesData
+	        			        }],
+	        			          chart: {
+	        			              height: 350,
+	        			              type: 'bar'
+	        			        },
+	        			        plotOptions: {
+	        			          bar: {
+	        			            borderRadius: 2,
+	        			            dataLabels: {
+	        			              position: 'top', // top, center, bottom
+	        			            },
+	        			          }
+	        			        },
+	        			        dataLabels: {
+	        			          enabled: true,
+	        			          offsetY: -20,
+	        			          style: {
+	        			            fontSize: '12px'
+	        			              
+	        			          }
+	        			        },
+	        			        
+	        			        xaxis: {
+	        			          categories: categoriesData,
+	        			          position: 'top',
+	        			          axisBorder: {
+	        			            show: true
+	        			          },
+	        			          axisTicks: {
+	        			            show: true
+	        			          },
+	        			          crosshairs: {
+	        			            fill: {
+	        			              type: 'gradient',
+	        			              gradient: {
+	        			                colorFrom: '#D8E3F0',
+	        			                colorTo: '#BED1E6',
+	        			                stops: [0, 1000],
+	        			                opacityFrom: 0.4,
+	        			                opacityTo: 0.2,
+	        			              }
+	        			            }
+	        			          },
+	        			          tooltip: {
+	        			            enabled: true,
+	        			          }
+	        			        },
+	        			        yaxis: {
+	        			          axisBorder: {
+	        			            show: false
+	        			          },
+	        			          axisTicks: {
+	        			            show: false,
+	        			          },
+	        			          labels: {
+	        			            show: true,
+	        			            formatter: function (val) {
+	        			              return val + " total";
+	        			            }
+	        			          }
+	        			        
+	        			        },
+	        			        labels: {
+	        			            style: {
+	        			              fontSize: '12px'
+	        			            }
+	        			        },
+	        			        title: {
+	        			          text: 'Rating',
+	        			          floating: true,
+	        			          offsetY: 330,
+	        			          align: 'center',
+	        			          style: {
+	        			            color: '#444'
+	        			          }
+	        			        },
+	        			        colors: [
+	        			            function ({ value, seriesIndex, dataPointIndex, w }) {
+	        			            	
+	        			            	
+	        			            	
+	        			                if (dataPointIndex == 0) {
+	        			                  return "#da3d05";
+	        			                } else if (dataPointIndex == 1)  {
+	        			                  return "#f99510";
+	        			                } else if (dataPointIndex == 2)  {
+	        			                  return "#f9d310";
+	        			                } else if (dataPointIndex == 3)  {
+	        			                  return "#bcf910";
+	        			                } else if (dataPointIndex == 4)  {
+	        			                  return "#18dd6d";
+	        			                }
+	        			              }
+	        			          ]
+	        			        };
+	                	
+	                	
+	                	
+	                	var chart = new ApexCharts(document.querySelector("#ratingBarChart"), options);
+	                    chart.render();
+
+	                },
+	                error: function(jqXHR, exception)
+	                {
+	                	Swal.fire({
+		            		  title:data.responseJSON.message,
+		            		  text: "Falha na operacao",
+		            		  icon: "error"
+		            	});
+	                }
+	            });
+		}
+		 
+		 
+		 
+		 carregarGraficoBarra("dia");		 
 		 
          function carregarGraficoBarra(agrupamento, dataSelecionada) {
         
@@ -548,14 +892,13 @@ function updateData() {
    		  	     dataSelecionadaUrl = "/" + dataSelecionada;
    		  	}
 
-   		  	// http://localhost:8081/campanha/dashboardevento/33/grafico/barra/hora24/2024-07-16
-
-
-             var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+             var idEventoParam = (new URL(location.href)).searchParams.get('idApresentacao');
  		      $.ajax({
  		            type: "GET",
- 		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico/barra/"+agrupamento+""+dataSelecionadaUrl,
- 		            success: function(data)
+ 		            url: "#(host_api)/campanha/dashboardapresentacao/"+idEventoParam+"/grafico/barra/"+agrupamento+""+dataSelecionadaUrl,
+ 		           contentType: "application/json; charset=utf-8",
+ 		          dataType: 'json' ,
+  		            success: function(data)
  		            {
  	        			categoriesData = [];
  	        			seriesData = [];
@@ -660,97 +1003,15 @@ function updateData() {
  		            error: function(data)
  		            {
  		            	console.log(JSON.stringify(data))
- 		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
- 		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+//  		            	alert('Erro')
+//  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+//  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
  		            
  		            }
  		        });
  		      
          }	
          
-         
-         
-         var dom = document.getElementById('chart-container');
-         var myChart = echarts.init(dom, null, {
-           renderer: 'canvas',
-           useDirtyRect: false
-         });
-         var app = {};
-
-         var option;
-
-         option = {
-        		  series: [
-        		    {
-        		      type: 'gauge',
-        		      progress: {
-        		        show: true,
-        		        width: 18
-        		      },
-        		      axisLine: {
-        		        lineStyle: {
-        		          width: 18
-        		        }
-        		      },
-        		      axisTick: {
-        		        show: false
-        		      },
-        		      splitLine: {
-        		        length: 15,
-        		        lineStyle: {
-        		          width: 2,
-        		          color: '#999'
-        		        }
-        		      },
-        		      axisLabel: {
-        		        distance: 25,
-        		        color: '#999',
-        		        fontSize: 20
-        		      },
-        		      anchor: {
-        		        show: true,
-        		        showAbove: true,
-        		        size: 25,
-        		        itemStyle: {
-        		          borderWidth: 10
-        		        }
-        		      },
-        		      title: {
-        		        show: false
-        		      },
-        		      detail: {
-        		        valueAnimation: true,
-        		        fontSize: 80,
-        		        offsetCenter: [0, '70%']
-        		      },
-        		      data: [
-        		        {
-        		          value: 70
-        		        }
-        		      ]
-        		    }
-        		  ]
-        		};
-         
-         setInterval(function () {
-           myChart.setOption({
-             series: [
-               {
-                 data: [
-                   {
-                     value: +(Math.random() * 100).toFixed(2)
-                   }
-                 ]
-               }
-             ]
-           });
-         }, 2000);
-
-         if (option && typeof option === 'object') {
-           myChart.setOption(option);
-         }
-
-         window.addEventListener('resize', myChart.resize);
 		 
 	});
 </script>
@@ -773,7 +1034,7 @@ function updateData() {
 			<br>
 			<nav>
 				<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+					<li class="breadcrumb-item"><a href="dashboard">Home</a></li>
 					<li class="breadcrumb-item active">Dashboard</li>
 				</ol>
 			</nav>
@@ -786,9 +1047,74 @@ function updateData() {
 				<!-- Left side columns -->
 				<div class="col-lg-8">
 					<div class="row">
+					
+					   <div class="card">
+			            <div class="card-body">
+<!-- 			              <h5 class="card-title">Agremiacao</h5> -->
+			              	
+			              	<div class="row">
+							
+				              	<div class="btn-group col" >
+								  	<div class="row g-0">
+									  <div class="col-md-4">
+									    <img style="width:200px;height:200px;" src=""
+									     class="img-fluid rounded-start bandeiraAgremiacaoDashboard" alt="...">
+									       </div>
+									       <div class="col-md-8">
+									         <div class="card-body">
+									           <h5 class="card-title nomeAgremiacaoDashboard"></h5>
+									           <p class="card-text descricaoAgremiacaoDashboard"></p>
+									           <p class="card-text dataApresentacao"></p>
+									           <p class="card-text ensaioNome"></p>
+									         </div>
+									       </div>
+									     </div>
+								</div>
+			              	
+							</div>
+			              	
+			            </div>
+			          </div>
+			          
+<!-- 					   <div class="card"> -->
+<!-- 			            <div class="card-body"> -->
+<!-- 			              <h5 class="card-title">Filtro</h5> -->
+			              	
+<!-- 			              	<div class="row"> -->
 
+							
+<!-- 			              	<div class="btn-group col" > -->
+<!-- 							  <button class="btn btn-secondary dropdown-toggle"  -->
+<!-- 							          type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"> -->
+<!-- 							    Apresentacao -->
+<!-- 							  </button> -->
+<!-- 							  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"> -->
+<!-- 							    <li><a class="dropdown-item" href="#">Escola A</a></li> -->
+<!-- 							    <li><a class="dropdown-item" href="#">Escola B</a></li> -->
+<!-- 							    <li><a class="dropdown-item" href="#">Escola C</a></li> -->
+<!-- 							  </ul> -->
+<!-- 							</div> -->
+							
+<!-- 			              	<div class="btn-group col"> -->
+<!-- 							  <button class="btn btn-secondary dropdown-toggle"  -->
+<!-- 							          type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"> -->
+<!-- 							    Data -->
+<!-- 							  </button> -->
+<!-- 							  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"> -->
+<!-- 							    <li><a class="dropdown-item" href="#">Escola A</a></li> -->
+<!-- 							    <li><a class="dropdown-item" href="#">Escola B</a></li> -->
+<!-- 							    <li><a class="dropdown-item" href="#">Escola C</a></li> -->
+<!-- 							  </ul> -->
+<!-- 							</div> -->
+			              	
+<!-- 							</div> -->
+			              	
+<!-- 			            </div> -->
+<!-- 			          </div> -->
+
+					<div class="row">
 						<!-- Sales Card -->
-						<div class="col-xxl-4 col-md-6">
+						    <div class="col-xxl-4 col-md-4">
 
 							<!--             <div class="container-fluid"> -->
 							<!-- 			   	 <div class="map-responsive"> -->
@@ -799,8 +1125,7 @@ function updateData() {
 							<div class="card info-card sales-card">
 
 								<div class="filter">
-									<a class="icon" href="#" data-bs-toggle="dropdown"><i
-										class="bi bi-three-dots"></i></a>
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
 									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 										<li class="dropdown-header text-start">
 											<h6>Filter</h6>
@@ -825,18 +1150,70 @@ function updateData() {
 									<div class="d-flex align-items-center">
 										<div
 											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-											<i class="bi bi-megaphone-fill"></i>
+											<i class="bi bi-check2-all"></i>
 										</div>
 										<div class="ps-3">
 											<h6 class="qtdVotosEvento"></h6>
 											<span
 												class="text-success small pt-1 fw-bold aumentoVotosEvento">0%</span>
-											<span class="text-muted small pt-2 ps-1">aumento</span>
+											    <span class="text-muted small pt-2 ps-1">votos</span>
 										</div>
 									</div>
 								</div>
-
 							</div>
+						</div>
+						
+						<div class="col-xxl-4 col-md-4">
+
+							<div class="card info-card revenue-card">
+								<div class="card-body">
+									<h5 class="card-title">
+										Media de votos <span> </span>
+									</h5>
+
+									<div class="d-flex align-items-center">
+										<div
+											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-star-fill" style="color: #FFEB00"></i>
+										</div>
+										<div class="ps-3">
+											<h6 class="ratingVotos"></h6>
+											<span
+												class="text-success small pt-1 fw-bold aumentoVotosEventoA"></span>
+											    <span class="text-muted small pt-2 ps-1">rating</span>
+											    
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-xxl-4 col-md-4">
+
+							<div class="card info-card revenue-card">
+								<div class="card-body">
+									<h5 class="card-title">
+										Media de votos <span>| </span>
+									</h5>
+
+									<div class="d-flex align-items-center">
+										<div
+											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-star-fill" style="color: #FFEB00"></i>
+										</div>
+										<div class="ps-3">
+											<h6 class="ratingVotos"></h6>
+											<span
+												class="text-success small pt-1 fw-bold aumentoVotosEventoA"></span>
+											    <span class="text-muted small pt-2 ps-1">rating</span>
+											    
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						
 						</div>
 						<!-- End Sales Card -->
 
@@ -878,209 +1255,108 @@ function updateData() {
 									<h5 class="card-title">Votos por Periodo</h5>
 
 									<!-- Bar Chart -->
-<!-- 									<div id="_barChart" style="min-height: 400px;" class="echart_"></div> -->
 									<div id="barChart"></div>
 
 									<!-- End Bar Chart -->
 
 								</div>
+								
 							</div>
 							
 							
 							
-							<div class="card">
-					            <div class="card-body">
-					              <h5 class="card-title"></h5>
+<!-- 						<div class="card"> -->
+<!-- 					            <div class="card-body"> -->
+<!-- 					              <h5 class="card-title"></h5> -->
 					
-					              <!-- Default Tabs -->
-					              <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
-					                <li class="nav-item flex-fill" role="presentation">
-					                  <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" 
-					                  data-bs-target="#home-justified" type="button" role="tab" 
-					                  aria-controls="home" aria-selected="true">Por Perguntas</button>
-					                </li>
-					                <li class="nav-item flex-fill" role="presentation">
-					                  <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" 
-					                  data-bs-target="#profile-justified" type="button" role="tab" 
-					                  aria-controls="profile" aria-selected="false">Regiao</button>
-					                </li>
-					                <li class="nav-item flex-fill" role="presentation">
-					                  <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" 
-					                  data-bs-target="#contact-justified" type="button" role="tab" 
-					                  aria-controls="contact" aria-selected="false">Brasil</button>
-					                </li>
-					              </ul>
+<!-- 					              Default Tabs -->
+<!-- 					              <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist"> -->
+<!-- 					                <li class="nav-item flex-fill" role="presentation"> -->
+<!-- 					                  <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab"  -->
+<!-- 					                  data-bs-target="#home-justified" type="button" role="tab"  -->
+<!-- 					                  aria-controls="home" aria-selected="true">Por Perguntas</button> -->
+<!-- 					                </li> -->
+<!-- 					                <li class="nav-item flex-fill" role="presentation"> -->
+<!-- 					                  <button class="nav-link w-100 active" id="profile-tab" data-bs-toggle="tab"  -->
+<!-- 					                  data-bs-target="#profile-justified" type="button" role="tab"  -->
+<!-- 					                  aria-controls="profile" aria-selected="false">Regiao</button> -->
+<!-- 					                </li> -->
+<!-- 					                <li class="nav-item flex-fill" role="presentation"> -->
+<!-- 					                  <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab"  -->
+<!-- 					                  data-bs-target="#contact-justified" type="button" role="tab"  -->
+<!-- 					                  aria-controls="contact" aria-selected="false">Brasil</button> -->
+<!-- 					                </li> -->
+<!-- 					              </ul> -->
 					              
-					              <div class="tab-content pt-2" id="myTabjustifiedContent">
-					                <div class="tab-pane fade show active" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
+<!-- 					              <div class="tab-content pt-2" id="myTabjustifiedContent"> -->
+<!-- 					                <div class="tab-pane fade show active" id="home-justified" role="tabpanel" aria-labelledby="home-tab"> -->
 					                  
-											<div id="reportsChart"></div>
+<!-- 											<div id="reportsChart"></div> -->
 
-											<script>
-                  
-									                  var categoriesItem = [];
-									        		  var seriesItem = [];
-									        			
-									                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
-										  		      $.ajax({
-										  		            type: "GET",
-										  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico",
-										  		            success: function(data)
-										  		            {
-										  		       			$(".nomeEvento").html(data.nomeEvento );
-										  	        			$(".qtdVotosEvento").html( data.quantidadeVotos );
-										  	        			
-										  	        			categoriesItem = [];
-										  	        			seriesItem = [];
-										  	        			$.each(data.dataVoto, function(i, item) {	
-										  	        				categoriesItem.push(item);
-										  	        			});
-										  	        			
-										  	        			$.each(data.dadosDashboardEventoGraficoVotoPorDatas, function(i, item) {	
-										  	        				
-										  	        				
-										  	        				var itemQualificador = {};
-										  	        				itemQualificador.name = item.qualificador;
-										  	        				itemQualificador.data = [];
-																	
-										  	        				$.each(item.listaVotos, function(i, item) {	
-										  	        					itemQualificador.data.push(item.quantidadeVotos);
-										  	        				});
-										  	        				seriesItem.push(itemQualificador);
-										  	        			});
-										  	        			
-										  	        			console.log(JSON.stringify(categoriesItem));
-										  	        			console.log(JSON.stringify(seriesItem));
-										  	        			
-										  	        		  $('#reportsChart').html('');
-										  	        			
-										  	        			var options = {
-										  	                        series: seriesItem,
-										  	                        chart: {
-										  	                          height: 350,
-										  	                          type: 'area',
-										  	                          toolbar: {
-										  	                            show: true
-										  	                          },
-										  	                        },
-										  	                        markers: {
-										  	                          size: 5
-										  	                        },
-										  	                        colors: ['#444444', '#a90606', '#f1c232', '#4154f1', '#00b662'],
-										  	                        fill: {
-										  	                          type: "gradient",
-										  	                          gradient: {
-										  	                            shadeIntensity: 2,
-										  	                            opacityFrom: 0.3,
-										  	                            opacityTo: 0.4,
-										  	                            stops: [0, 90, 1000]
-										  	                          }
-										  	                        },
-										  	                        dataLabels: {
-										  	                          enabled: false
-										  	                        },
-										  	                        stroke: {
-										  	                          curve: 'smooth',
-										  	                          width: 2
-										  	                        },
-										  	                        xaxis: {
-										  	                          type: 'date',
-										  	                          categories: categoriesItem
-										  	                        },
-										  	                        tooltip: {
-										  	                          x: {
-										  	                            format: 'yy-MM-dd'
-										  	                          },
-										  	                        }
-										  	                      }
-										  	        			 
-										  	        			 
-										  	        			 
-										  	        			
-										  	        			var reportsChart =  new ApexCharts(document.querySelector("#reportsChart"), options );
-										  	        			reportsChart.render();
-										  	        			
-										  	        			
-										  		            },
-										  		            
-										  		            error: function(data)
-										  		            {
-										  		            	console.log(JSON.stringify(data))
-										  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-										  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-										  		            
-										  		            }
-										  		        });
-									                  
-					                    
-					                  </script>
-
-
-								</div>
-					                <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
-																	                 
-												<div id="chartdiv"></div>
-					                </div>
+<!-- 								    </div> -->
+<!-- 					                <div class="tab-pane fade show active" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab"> -->
+<!-- 											<div id="chartdiv"></div> -->
+<!-- 					                </div> -->
 					                
 					                
-					                <div class="tab-pane fade" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab">
+<!-- 					                <div class="tab-pane fade" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab"> -->
 					                 
-									<div id="pieChart"></div>
+<!-- 									<div id="pieChart"></div> -->
 
 									<script>
 		              	              
-						              var labelPieChart = [];
-					        		  var seriesItemPieChart = [];
+// 						              var labelPieChart = [];
+// 					        		  var seriesItemPieChart = [];
 					        			
-					                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
-						  		      $.ajax({
-						  		            type: "GET",
-						  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico/pie",
-						  		            success: function(data)
-						  		            {
+// 					                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
+// 						  		      $.ajax({
+// 						  		            type: "GET",
+// 						  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico/pie",
+// 						  		            success: function(data)
+// 						  		            {
 						  		            	
-				// 		  		            	console.log(JSON.stringify(data));
-						  	        			$.each(data, function(i, item) {	
-						  	        				labelPieChart.push(item.estado);
-						  	        				seriesItemPieChart.push(parseInt(item.soma));
-						  	        			});
-						  		            },
-						  		            error: function(data)
-						  		            {
-						  		            	console.log(JSON.stringify(data))
-						  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-						  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
+// 				// 		  		            	console.log(JSON.stringify(data));
+// 						  	        			$.each(data, function(i, item) {	
+// 						  	        				labelPieChart.push(item.estado);
+// 						  	        				seriesItemPieChart.push(parseInt(item.soma));
+// 						  	        			});
+// 						  		            },
+// 						  		            error: function(data)
+// 						  		            {
+// 						  		            	console.log(JSON.stringify(data))
+// 						  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
+// 						  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
 						  		            
-						  		            }
-						  		        });
+// 						  		            }
+// 						  		        });
 					                  
 						              
 						              
-						                document.addEventListener("DOMContentLoaded", () => {
-						                  new ApexCharts(document.querySelector("#pieChart"), {
-						                    series: seriesItemPieChart,
-						                    chart: {
-						                      height: 300,
-						                      type: 'pie',
-						                      toolbar: {
-						                        show: true
-						                      },
-						                    },
-						                    labels: labelPieChart
-						                  }).render();
-						                });
-						              </script>
+// 						                document.addEventListener("DOMContentLoaded", () => {
+// 						                  new ApexCharts(document.querySelector("#pieChart"), {
+// 						                    series: seriesItemPieChart,
+// 						                    chart: {
+// 						                      height: 300,
+// 						                      type: 'pie',
+// 						                      toolbar: {
+// 						                        show: true
+// 						                      },
+// 						                    },
+// 						                    labels: labelPieChart
+// 						                  }).render();
+// 						                });
+ 						              </script>
 					                  
 					                  
-					                </div>
-					              </div><!-- End Default Tabs -->
+<!-- 					                </div> -->
+<!-- 					              </div> -->
 					
-					            </div>
-					          </div>
+<!-- 					            </div> -->
+<!-- 					          </div> -->
 							
 
 
-							<div class="card">
+<!-- 							<div class="card"> -->
 
 <!-- 								<div class="filter"> -->
 <!-- 									<a class="icon" href="#" data-bs-toggle="dropdown"><i -->
@@ -1095,13 +1371,26 @@ function updateData() {
 <!-- 									</ul> -->
 <!-- 								</div> -->
 
-
-
-
-
-							</div>
+<!-- 							</div> -->
 
 						</div>
+						
+					<div class="col-12">
+
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">Rating</h5>
+
+									<!-- Bar Chart -->
+									<div id="ratingBarChart"></div>
+
+									<!-- End Bar Chart -->
+
+								</div>
+   							</div>
+							
+					</div>
+							
 						<!-- End Reports -->
 
 						<!-- Top Selling -->
@@ -1114,34 +1403,34 @@ function updateData() {
 				<div class="col-lg-4">
 
 					<!-- Recent Activity -->
-					<div class="card">
+<!-- 					<div class="card"> -->
 
-						<div class="filter">
-							<a class="icon" href="#" data-bs-toggle="dropdown"><i
-								class="bi bi-three-dots"></i></a>
-							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-								<li class="dropdown-header text-start">
-									<h6>Visualizacao</h6>
-								</li>
+<!-- 						<div class="filter"> -->
+<!-- 							<a class="icon" href="#" data-bs-toggle="dropdown"><i -->
+<!-- 								class="bi bi-three-dots"></i></a> -->
+<!-- 							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"> -->
+<!-- 								<li class="dropdown-header text-start"> -->
+<!-- 									<h6>Visualizacao</h6> -->
+<!-- 								</li> -->
 
-								<li><a
-									class="dropdown-item filtroPainelUltimaAtividadeItemVoto"
-									href="#">Item voto</a></li>
-								<li><a
-									class="dropdown-item filtroPainelUltimaAtividadeMediaVoto"
-									href="#">Voto media pessoa </a></li>
-							</ul>
-						</div>
+<!-- 								<li><a -->
+<!-- 									class="dropdown-item filtroPainelUltimaAtividadeItemVoto" -->
+<!-- 									href="#">Item voto</a></li> -->
+<!-- 								<li><a -->
+<!-- 									class="dropdown-item filtroPainelUltimaAtividadeMediaVoto" -->
+<!-- 									href="#">Voto media pessoa </a></li> -->
+<!-- 							</ul> -->
+<!-- 						</div> -->
 
-						<div class="card-body">
-							<h5 class="card-title">
-								Ultimas atividades <span class="labelAtividadeOnline"></span>
-							</h5>
+<!-- 						<div class="card-body"> -->
+<!-- 							<h5 class="card-title"> -->
+<!-- 								Ultimas atividades <span class="labelAtividadeOnline"></span> -->
+<!-- 							</h5> -->
 
-							<div class="activity listaAtividades"></div>
+<!-- 							<div class="activity listaAtividades"></div> -->
 
-						</div>
-					</div>
+<!-- 						</div> -->
+<!-- 					</div> -->
 					<!-- End Recent Activity -->
 					
 					<!-- Recent Activity -->
@@ -1157,87 +1446,25 @@ function updateData() {
 
 					<div class="card">
 						<div class="card-body">
+							<h5 class="card-title">Geral</h5>
+
+							<!-- Radar Chart -->
+							<div id="pieChart"></div>
+
+							<script>
+				              </script>
+
+						</div>
+					</div>
+					
+					<div class="card">
+						<div class="card-body">
 							<h5 class="card-title">Radar Votacao - Geral</h5>
 
 							<!-- Radar Chart -->
 							<div id="radarChart"></div>
 
 							<script>
-	              
-				              var categoriesItemRadar = [];
-			        		  var seriesItemRadar = [];
-			        			
-			                  var idEventoParam = (new URL(location.href)).searchParams.get('idEvento');
-				  		      $.ajax({
-				  		            type: "GET",
-				  		            url: "${urlApi}/campanha/dashboardevento/"+idEventoParam+"/grafico/radar",
-				  		            success: function(data)
-				  		            {
-				  		            	categoriesItemRadar = [];
-				  		            	seriesItemRadar = [];
-				  	        			
-				  	        			var seriesItemDataRadar = {};
-				  	        			seriesItemDataRadar.name = 'Total Votos';
-				  	        			seriesItemDataRadar.data = [];
-				  	        			
-				  	        			
-				  	        			$.each(data, function(i, item) {	
-				  	        				seriesItemDataRadar.data.push(item.soma);
-				  	        				categoriesItemRadar.push(item.pesquisa);
-				  	        			});
-				  	        			
-				  	        			seriesItemRadar.push(seriesItemDataRadar);
-				  	        			
-			// 	  	        			console.log(JSON.stringify(categoriesItem));
-			// 	  	        			console.log(JSON.stringify(seriesItem));
-				  	        			
-				  		            },
-				  		            
-				  		            error: function(data)
-				  		            {
-				  		            	console.log(JSON.stringify(data))
-				  		            	$("#popupCampanhaMsgErro").html("Erro ! " + data.status);
-				  		            	$("#popupCampanhaErro").fadeIn('slow').animate({opacity: 1.0}, 900).effect("scale", { times: 1 }, 900).fadeOut('slow');
-				  		            
-				  		            }
-				  		        });
-				  		      
-				  		      
-				  		    	document.addEventListener("DOMContentLoaded", () => {
-				                  new ApexCharts(document.querySelector("#radarChart"), {
-				                	  
-				                	  stroke: {
-				                		    show: true,
-				                		    width: 2,
-				                		    colors: [],
-				                		    dashArray: 0
-				                		  },
-				                	series: seriesItemRadar,	                      
-				                    chart: {
-				                      height: 350,
-				                      type: 'radar'
-				                    },
-				                    xaxis: {
-				                      categories: categoriesItemRadar,
-				                      labels: {
-				                    	  show: true,
-				                    	  style: {
-				                    	    colors: ["#a8a8a8"],
-				                    	    fontSize: "11px",
-				                    	    fontFamily: 'Arial'
-				                    	  }
-				                    	}
-				                    },
-				                    dataLabels: {
-				                    	  enabled: true,
-				                    	  background: {
-				                    	    enabled: true,
-				                    	    borderRadius:2,
-				                    	  }
-				                    	}
-				                  }).render();
-				                });
-				                
 				              </script>
 							<!-- End Radar Chart -->
 

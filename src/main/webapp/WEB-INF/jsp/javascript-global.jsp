@@ -8,6 +8,7 @@ $(document).ajaxSend(function(event, jqxhr, settings) {
 	settings.url = settings.url.replaceAll("#(host_api)", "${urlApi}")
 	jqxhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 	jqxhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
+	
 
 	if (sessionStorage.getItem("jwtLocal")) {
 		jqxhr.setRequestHeader('X-controlado', 'true');
@@ -28,6 +29,7 @@ $.ajaxSetup(
 $(document).on('ajaxError', function(event, xhr) {
 	
 	if (xhr.status == 401 || xhr.status == 403) {
+// 		alert("Index")
 		window.location.href = "http://localhost:8080";
 	}
 	

@@ -25,6 +25,16 @@
 	              <i class="bi bi-circle"></i><span>Usuario</span>
 	            </a>
 	          </li>
+	          <li>
+	            <a href="/ensaio">
+	              <i class="bi bi-circle"></i><span>Ensaio</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="/agremiacao">
+	              <i class="bi bi-circle"></i><span>Agremiacao</span>
+	            </a>
+	          </li>
 <!-- 	          <li> -->
 <!-- 	            <a href="/comunidade"> -->
 <!-- 	              <i class="bi bi-circle"></i><span>Comunidade</span> -->

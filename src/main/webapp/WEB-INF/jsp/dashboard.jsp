@@ -49,18 +49,24 @@
 			    $(".eventos .dadosEvento").filter(
 			    		function() {
 			              $(this).toggle(
-			            		  $(this).data('nomeevento').toLowerCase().indexOf(value) > -1)
+			            		  $(this).data('nomeevento').toLowerCase().indexOf(value) > -1
+			            	      || 	  
+			            		  $(this).data('ensaio').toLowerCase().indexOf(value) > -1
+			            		  ||
+			            		  $(this).data('dataapresentacao').toLowerCase().indexOf(value) > -1
+			              
+			              )
 			    });
 			  });
 		 
-		 $("#filtroPorDescricao").on("keyup", function() {
-			    var value = $(this).val().toLowerCase();
-			    $(".eventos .dadosEvento").filter(
-			    		function() {
-			              $(this).toggle(
-			            		  $(this).data('descricao').toLowerCase().indexOf(value) > -1)
-			    });
-			  });
+// 		 $("#filtroPorDescricao").on("keyup", function() {
+// 			    var value = $(this).val().toLowerCase();
+// 			    $(".eventos .dadosEvento").filter(
+// 			    		function() {
+// 			              $(this).toggle(
+// 			            		  $(this).data('descricao').toLowerCase().indexOf(value) > -1)
+// 			    });
+// 			  });
 	});
 </script>	
 
@@ -83,7 +89,7 @@
       <h1 class='tituloDashboard'>Dashboard <label class='nomeEvento'></label></h1> <br>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
           <li class="breadcrumb-item active">Dashboard</li>
         </ol>
       </nav>
@@ -99,14 +105,14 @@
             <div class="card-body">
               <h5 class="card-title">Filtro</h5>
               	
-              	<input id="filtroPorEvento" type="text" placeholder="Nome evento...">
-              	<input id="filtroPorDescricao" type="text" placeholder="Descricao evento...">
+              	<input id="filtroPorEvento" type="text" placeholder="Filtro geral...">
+<!--               	<input id="filtroPorDescricao" type="text" placeholder="Descricao evento..."> -->
             </div>
           </div>
          
          </div>
          
-         <div class="row eventos d-flex justify-content-center"> 
+         <div class="row d-flex justify-content-center eventos"> 
          	<div class="spinner-border" role="status">
 			  <span class="sr-only">Carregando...</span>
 			</div>

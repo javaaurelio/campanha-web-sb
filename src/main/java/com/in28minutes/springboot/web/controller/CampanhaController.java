@@ -44,6 +44,6 @@ public class CampanhaController {
 		model.addAttribute("dataFim", "20/06/2024");
 		model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
 		
-		return "dashboardevento";
+		return "dashboardgraficos";
 	}
 }

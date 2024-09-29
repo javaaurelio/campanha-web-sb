@@ -17,7 +17,7 @@ import com.in28minutes.springboot.web.service.LoginService;
 
 @Controller
 @SessionAttributes("email")
-public class PainelVotacaoController {
+public class PainelVotacaoCarnavalController {
 	
 	@Autowired
 	LoginService service;
@@ -25,14 +25,15 @@ public class PainelVotacaoController {
 	@Autowired
 	ConfigParamRepository configParamRepository;
 	
-	@RequestMapping(value="/painelvotacao", method = RequestMethod.GET)
-	public String campanha(ModelMap model){
+	@RequestMapping(value="/painelvotacao_desabilitado", method = RequestMethod.GET)
+	public String campanha(ModelMap model, @RequestParam("l") String layout){
         model.addAttribute("data", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 		
         model.addAttribute("urlApi", ParametrosUtil.get("urlApi"));
+		model.addAttribute("layout", layout);
 		model.addAttribute("nomeUsuario", "Fabio");
 		model.addAttribute("perfilUsuario", "Admin");
-		return "layoutpainelvotacao-carnaval"; 
+		return "layoutpainelvotacao-"+layout; 
 	}
 	
 }

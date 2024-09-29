@@ -20,7 +20,7 @@
 		        });
 			 };
 // 		carregarQtdPreCadastro();
-		window.setInterval('carregarQtdPreCadastro()', 10000); // 10 seconds
+// 		window.setInterval('carregarQtdPreCadastro()', 10000); // 10 seconds
 		
 		
 		carregarDadosPefil();
@@ -73,7 +73,7 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="dashboard" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">Dashboard</span>
       </a>
@@ -91,18 +91,18 @@
       <ul class="d-flex align-items-center">
 
         <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
+<!--           <a class="nav-link nav-icon search-bar-toggle " href="#"> -->
+<!--             <i class="bi bi-search"></i> -->
+<!--           </a> -->
+        </li>
         
         
         <li class="nav-item dropdown">
 
-          <a class="nav-link nav-icon mostrarModalGraficoPreCadastro" href="#">
-            <i class="bi bi-person-exclamation h1"></i>
-            <span class="badge badge-number bg-success badgeQtdPreCadastro">0</span>
-          </a>
+<!--           <a class="nav-link nav-icon mostrarModalGraficoPreCadastro" href="#"> -->
+<!--             <i class="bi bi-person-exclamation h1"></i> -->
+<!--             <span class="badge badge-number bg-success badgeQtdPreCadastro">0</span> -->
+<!--           </a> -->
          
         </li><!-- End Notification Nav -->
         
