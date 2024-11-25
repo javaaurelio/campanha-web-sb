@@ -1,1 +1,13 @@
 Teste
+
+
+Construir Projeto Carnaval
+
+Docker Build e Publicar no dockerHub
+
+docker build --tag=javaaurelio/eventodashboard-springboot-web:1.13 .
+
+docker login
+
+docker push javaaurelio/eventodashboard-springboot-web
+

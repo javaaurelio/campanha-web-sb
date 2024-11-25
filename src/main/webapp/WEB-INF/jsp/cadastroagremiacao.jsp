@@ -801,7 +801,9 @@
         });
 		 
 		 $(".formularioAgremiacao" ).on("submit", function( event ) {
-	        	
+
+			    $('#bandeira-photo-add-text').val($('#iconProfileBandeiraCadastro').attr('src'));
+			 
 	        	if (!event.target.checkValidity()) {
 	        		event.preventDefault();
 	        	} else {
@@ -903,12 +905,17 @@
                 
                 <div class="col-md-12">
                      <div class="form-floating">
-                        <div class="bandeira"></div>
+                          
+<!--                          IMAGEM -->
+                         <div class="bandeira"></div> 
+<!--                          IMAGEM -->
+                          
                          <div class="pt-2 form-check">
 		                   <a href="#" class="btn btn-primary btn-sm uploadImagemBandeira" title="Upload"><i class="bi bi-upload"></i></a>
 		                   <a href="#" class="btn btn-danger btn-sm removeImagemBandeira" title="Remover"><i class="bi bi-trash"></i></a>
 		                   <a href="#" class="btn btn-success btn-sm salvarImagemBandeira" title="Salvar"><i class="bi bi-floppy"></i></a>
-                		   <input type="text" id="bandeira-photo-add" class="form-control agremiacaoBandeira" style="visibility: hidden;" required>
+                		   <input type="text" id="bandeira-photo-add-text" class="form-control agremiacaoBandeira" style="visibility: hidden;" required>
+			       		   <input type="file" id="bandeira-photo-add" class="agremiacaoBandeira" style="visibility: hidden;">
 		                   <div class="invalid-feedback">Informar uma bandeira</div>
 		                 </div>
   					 </div>

@@ -36,7 +36,7 @@ $(document).ready(function(){
                success: function(data)
                {
             	  sessionStorage.setItem('jwtLocal', data.token	);
-                  window.location.href = "http://localhost:8080/dashboard";
+                  window.location.href = "/dashboard";
                },
                
                error: function(data, as)

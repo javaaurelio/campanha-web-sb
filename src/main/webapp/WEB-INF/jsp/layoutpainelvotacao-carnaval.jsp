@@ -120,8 +120,6 @@
 	    '   </a>' +
 	    ' </li> ';
 		
-		 var hashParam = (new URL(location.href)).searchParams.get('hash');
-		
 		 carregarDadosVotacao();
 		 
 		 function carregarDadosVotacao() {

@@ -1,8 +1,12 @@
 <script>
-$(document).ready(function(){
-// 	if (!sessionStorage.getItem("jwtLocal")) {
-// 		window.location.href = "http://localhost:8080";
-// 	}
+$(document).ready(function() {
+
+	if (!sessionStorage.getItem("jwtLocal")) {
+		
+		if (!(location.href.indexOf("painelvotacao") > 0)) {
+			window.location.href = "/index";
+		}
+	}
 
 $(document).ajaxSend(function(event, jqxhr, settings) {
 	settings.url = settings.url.replaceAll("#(host_api)", "${urlApi}")
@@ -16,7 +20,6 @@ $(document).ajaxSend(function(event, jqxhr, settings) {
 	} else {
 		sessionStorage.removeItem("jwtLocal");
 	}
-
 });
 
 $.ajaxSetup(
@@ -29,13 +32,12 @@ $.ajaxSetup(
 $(document).on('ajaxError', function(event, xhr) {
 	
 	if (xhr.status == 401 || xhr.status == 403) {
-// 		alert("Index")
-		window.location.href = "http://localhost:8080";
+		window.location.href = "/index";
 	}
 	
 	if  (xhr.statusText=='error' && xhr.status == 0) {
 		Swal.fire({
-  		  title: "Falha na conexao.",
+  		  title: "Falha na conexão.",
   		  text: "",
   		  icon: "error"
 	  	});
@@ -59,7 +61,7 @@ $(document).on('ajaxError', function(event, xhr) {
 			if (result.isConfirmed) {
 				sessionStorage.removeItem("jwtLocal");
 				sessionStorage.removeItem("jwtLocal");
-				window.location.href = "http://localhost:8080";
+				window.location.href = "/index";
 			} else if (result.isDenied) {
 				//Swal.fire("Operacao cancelada", "", "info");
 			}
