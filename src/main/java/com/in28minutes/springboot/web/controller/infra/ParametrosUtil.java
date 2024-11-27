@@ -41,7 +41,7 @@ public class ParametrosUtil {
 		if (valor == null) {
 			valor = configParamRepositoryStatic.findAllByNome(param).getValor();
 			
-			if (valor == null && param.equals("urlApi")) {
+			if ((valor == null || valor.contains("localhost")) && param.equals("urlApi")) {
 				valor = "https://campanha-api-sb-3ce83a806918.herokuapp.com";
 			}	
 
