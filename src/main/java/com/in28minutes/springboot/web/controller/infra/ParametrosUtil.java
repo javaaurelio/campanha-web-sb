@@ -40,6 +40,11 @@ public class ParametrosUtil {
 		String valor = cache.get(param);
 		if (valor == null) {
 			valor = configParamRepositoryStatic.findAllByNome(param).getValor();
+			
+			if (valor == null && param.equals("urlApi")) {
+				valor = "https://campanha-api-sb-3ce83a806918.herokuapp.com";
+			}	
+
 			cache.put(param, valor);
 		}		 
 		return cache.get(param);
